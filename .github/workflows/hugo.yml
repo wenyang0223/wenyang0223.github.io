@@ -1,0 +1,41 @@
+# 工作流名稱
+name: Hugo 網站自動部署
+
+# 觸發條件：當程式碼推入到 main 分支時觸發
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest 
+
+    steps:
+      # 1. 取得程式碼
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # 2. 安裝 Hugo 環境 (包含 extended: true 的版本)
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true # 確保安裝 Extended 版本來編譯 Sass/SCSS
+
+      # 3. 執行 Hugo 建置 (Build)
+      - name: Build Hugo Site
+        # 假設 config.toml 在根目錄
+        run: hugo --minify 
+
+      # 4. 部署靜態檔案到 gh-pages 分支
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public        
+          publish_branch: gh-pages     
+          cname: ''
