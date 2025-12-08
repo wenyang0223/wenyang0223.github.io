@@ -1,0 +1,8 @@
+enable : true
+gallery:
+  - image : "images/gallery/7.jpg"
+  - image : "images/gallery/8.jpg"
+  - image : "images/gallery/9.jpg"
+  - image : "images/gallery/10.jpg"
+  - image : "images/gallery/11.jpg"
+  - image : "images/gallery/12.jpg"

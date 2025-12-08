@@ -1,0 +1,91 @@
+/*!------------------------------------------------------------------
+[MAIN STYLESHEET]
+
+PROJECT:	Project Name
+VERSION:	Versoin Number
+-------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------
+[TABLE OF CONTENTS]
+-------------------------------------------------------------------*/
+
+@import 'variables';
+
+@import 'mixins';
+
+@import 'typography';
+
+@import 'buttons';
+
+@import 'common';
+
+@import 'templates/navigation.scss';
+
+@import 'templates/main.scss';
+
+@import'timeline.scss';
+
+/* 調整右側 Category 區塊行距 */
+.col-lg-3 .widget:nth-of-type(2) ul.list-unstyled li {
+    margin-bottom: 16px;  /* li 之間距離，可改數字 */
+  }
+
+/* 側欄 Category 清單字體大小 */
+.sidebar .widget .widget-title + ul.list-unstyled li a,
+.col-lg-3 .widget .widget-title + ul.list-unstyled li a {
+  font-size: 18px;   /* ← 你要的大小 */
+  font-weight: 550;  /* 可選 */
+}
+
+/* 精準針對首頁文章列表 Category */
+body.home .post-meta a.text-primary {
+    font-size: 30px !important;
+    font-weight: 600 !important;
+  }
+
+/* 單篇文章或首頁文章 Category */
+.text-primary {
+    font-size: 18px !important;   /* 調整字體大小 */
+    font-weight: 600 !important;  /* 加粗 */
+    text-decoration: none !important;
+    margin-right: 8px;            /* 每個 category 之間留點距離 */
+  }
+  
+  .text-primary:hover {
+    color: darken(#007bff, 10%) !important; /* hover 顏色 */
+    font-weight: 700 !important;
+  }
+  
+/* 單篇文章 Category 與標題間距 */
+.col-lg-10.mx-auto > .text-primary {
+    font-size: 27px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    margin-right: 8px;
+    display: inline-block;
+    margin-bottom: 0.3rem;  /* 與標題間距 */
+  }
+  
+  .col-lg-10.mx-auto > h2 {
+    margin-top: 1rem;     /* 如果需要可再調整 */
+  }
+  
+/* Footer 文字簡化調整 */
+footer {
+    font-size: 18px !important;
+    font-weight: 300 !important;
+  
+    h6 {
+      font-weight: 700 !important;
+    }
+  
+    a {
+      font-weight: 550 !important;
+      text-decoration: none;
+  
+      &:hover {
+        color: $primary-color !important;
+      }
+    }
+  }
+  

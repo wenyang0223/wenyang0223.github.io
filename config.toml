@@ -1,0 +1,102 @@
+######################## default configuration ####################
+baseURL = "https://wenyang0223.github.io"
+languageCode = "zh-tw"
+title = "聆聽的河流｜閱讀・書寫・心理・電影"
+theme = "liva-hugo"
+summaryLength = "10"
+paginate = 6
+disqusShortname = "ling-ting-teng-tong-bywen-yang-wen-yang"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+############################# Plugins ##############################
+[params.plugins]
+
+  # CSS Plugins
+  [[params.plugins.css]]
+  URL = "plugins/bootstrap/bootstrap.min.css"
+  [[params.plugins.css]]
+  URL = "plugins/slick/slick.css"
+  [[params.plugins.css]]
+  URL = "plugins/themify-icons/themify-icons.css"
+  [[params.plugins.css]]
+  URL = "plugins/venobox/venobox.css"
+
+  # JS Plugins
+  [[params.plugins.js]]
+  URL = "plugins/jQuery/jquery.min.js"
+  [[params.plugins.js]]
+  URL = "plugins/bootstrap/bootstrap.min.js"
+  [[params.plugins.js]]
+  URL = "plugins/slick/slick.min.js"
+  [[params.plugins.js]]
+  URL = "plugins/venobox/venobox.min.js"
+  [[params.plugins.js]]
+  URL = "plugins/search/fuse.min.js"
+  [[params.plugins.js]]
+  URL = "plugins/search/mark.js"
+  [[params.plugins.js]]
+  URL = "plugins/search/search.js"
+
+
+############################## navigation ###############################
+[menu]
+
+  # main menu
+  [[menu.main]]
+  name = "Home"
+  URL = "blog"
+  weight = 1
+
+  [[menu.main]]
+  name = "About"
+  URL = "about"
+  weight = 2
+
+
+  # footer menu
+ [[menu.footer]]
+  name = "About"
+  URL = "about"
+  weight = 2
+
+#################### default parameters ################################
+[params]
+logo = "images/logo_ver3.png"
+home = "Home"
+# Meta data
+description = "聆聽的河流｜閱讀・書寫・心理・電影"
+author = "揚毛 Yang-Mao"
+
+# Contact Information
+email = "wenyang5566@gmail.com"
+location = "Taipei, Taiwan"
+# copyright
+copyright = "| copyright &copy; 2020 [Themefisher](https://themefisher.com) All Rights Reserved |"
+
+  # Preloader
+  [params.preloader]
+  enable = true
+  preloader = "" # use .png , .svg or .gif format
+
+  # search
+  [params.search]
+  enable = true
+
+# cookies
+[params.cookies]
+enable = true
+expire_days = 2
+
+
+############################# social site ########################
+[[params.social]]
+title = "Facebook"
+icon = "ti-facebook" # themify icon : https://themify.me/themify-icons
+link = "https://www.facebook.com/profile.php?id=100000266878039"
+
+[[params.social]]
+title = "Instagram"
+icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
+link = "https://www.instagram.com/wenyang_ouo/"
