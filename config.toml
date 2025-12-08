@@ -4,7 +4,9 @@ languageCode = "zh-tw"
 title = "聆聽的河流｜閱讀・書寫・心理・電影"
 theme = "liva-hugo"
 summaryLength = "10"
-paginate = 6
+[pagination]
+  pagerSize = 6 
+  # 數字請替換成您原本 paginate = 後面的值
 disqusShortname = "ling-ting-teng-tong-bywen-yang-wen-yang"
 
 [outputs]
@@ -100,3 +102,9 @@ link = "https://www.facebook.com/profile.php?id=100000266878039"
 title = "Instagram"
 icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
 link = "https://www.instagram.com/wenyang_ouo/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      # 設置為 true 以允許在 Markdown 檔案中嵌入原始 HTML
+      unsafe = true
