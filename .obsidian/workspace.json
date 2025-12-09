@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "a374a0df9b27c87a",
+        "id": "43b52158cf48710c",
         "type": "tabs",
         "children": [
           {
-            "id": "fcd2f7eebbd32e05",
+            "id": "a9ea0ada7b74fbf3",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "blog/凝視日常/蜷縮、停滯、暗之惡魔.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新分頁"
+              "title": "蜷縮、停滯、暗之惡魔"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "blog/凝視日常/蜷縮、停滯、暗之惡魔.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "反向連結"
+              "title": "蜷縮、停滯、暗之惡魔 的反向連結"
             }
           },
           {
@@ -181,6 +186,7 @@
   "active": "2e4fa8b7d4bcc2b9",
   "lastOpenFiles": [
     "template/Hugo寫作模板.md",
+    "blog/凝視日常/蜷縮、停滯、暗之惡魔.md",
     "template",
     "contact/index.html",
     "contact/index.xml",
