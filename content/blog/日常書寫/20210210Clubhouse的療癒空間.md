@@ -1,24 +1,15 @@
 ---
-title: "Clubhouse的療癒空間：從獨白轉為對話，在對話中產生共鳴"
+title: Clubhouse的療癒空間：從獨白轉為對話，在對話中產生共鳴
 date: 2021-02-10T10:07:47+08:00
 draft: false
-
-# post thumb
-image: "https://miro.medium.com/max/1808/1*bg2bkUDCbNrauTk9KKRMLQ.jpeg"
-
-# meta description
-description: "起初，大多數人都站在「分享個人經驗」的角度發言，包括遭受性侵、復原、與創傷相處、或是陪伴受害者的經驗；而隨著越來越多人開始自我揭露，很神奇地，每個人的經驗多少都能夠回應彼此，「共鳴」也因此產生。在共鳴中，大量關於身體感受的抽象經驗得以被同理，當有人說出自己「不被他人理解」的感受時，也能夠在這房間中被接住。"
-
-# taxonomies
-categories: 
-  - "日常書寫"
+image: images/日常書寫/Clubhouse的療癒空間.png
+description: 起初，大多數人都站在「分享個人經驗」的角度發言，包括遭受性侵、復原、與創傷相處、或是陪伴受害者的經驗；而隨著越來越多人開始自我揭露，很神奇地，每個人的經驗多少都能夠回應彼此，「共鳴」也因此產生。在共鳴中，大量關於身體感受的抽象經驗得以被同理，當有人說出自己「不被他人理解」的感受時，也能夠在這房間中被接住。
+categories:
+  - 日常書寫
 tags:
-  - "日常書寫"
-  - "Clubhouse"
-
-
-# post type
-type: "post"
+  - 日常書寫
+  - Clubhouse
+type: post
 ---
 
 今天（2/8）聽了一下午柏偉開的房間，我發現Clubhouse平台創造了豐富的連結以及具有療癒作用的空間，我也**見證了一場充滿意義的對話，感受到「對話精神」如何藉由Clubhouse實踐**。
