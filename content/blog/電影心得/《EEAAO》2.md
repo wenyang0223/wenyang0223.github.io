@@ -120,4 +120,4 @@ Evelyn最終向Joy說，她們之間有某種連結，無論在哪個宇宙她�
 ---
 最後，我真的很愛Joy出場的無厘頭、充滿驚喜的片段。
 
-![](images/電影/EEAAO3.jpg)
+![](/images/電影/EEAAO3.jpg)
