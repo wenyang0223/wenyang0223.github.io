@@ -11,9 +11,9 @@ description: "我想我見證的是，一個真正容許負面情緒存在、失
 
 # taxonomies
 categories: 
-  - "凝視日常"
+  - "日常書寫"
 tags:
-  - "凝視日常"
+  - "日常書寫"
   - "Clubhouse"
 
 # post type

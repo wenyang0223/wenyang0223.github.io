@@ -4,16 +4,16 @@ date: 2021-08-17T10:07:47+08:00
 draft: false
 
 # post thumb
-image: "images/凝視日常/成為自己.jpg"
+image: "images/日常書寫/成為自己.jpg"
 
 # meta description
 description: "Becoming自己的過程是一輩子的課題，意外發現過去接觸的書和課程能夠串連起來，共同指向同一條路，用不同角度去理解「找回自己」這麽抽象、深奧的概念。總的來說，我相信每個人的人生中必會面臨創傷和成癮的課題，若沒有發覺其中的智慧，就有可能深陷其中；相反地，循著自己身上情緒的線索，會發現人的運作是存在基本原理、法則的。"
 
 # taxonomies
 categories: 
-  - "凝視日常"
+  - "日常書寫"
 tags:
-  - "凝視日常"
+  - "日常書寫"
 
 # post type
 type: "post"

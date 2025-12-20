@@ -11,9 +11,9 @@ description: "起初，大多數人都站在「分享個人經驗」的角度發
 
 # taxonomies
 categories: 
-  - "凝視日常"
+  - "日常書寫"
 tags:
-  - "凝視日常"
+  - "日常書寫"
   - "Clubhouse"
 
 
