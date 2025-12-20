@@ -220,56 +220,37 @@
 
 
 /* markdown style */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
+
 .content {
-  * {
-    font-family: 'Noto Sans TC', sans-serif;
-    font-family: 'Open Sans', sans-serif;
+  // 針對內容所有元素：英文數字用 Open Sans, 中文用 Noto Sans
+  &, * {
+    font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
     font-size: 20px;
     color: #1c1c1c;
-    margin-top:0.55rem;
+    margin-top: 0.55rem;
     margin-bottom: 25px;
+    line-height: 1.7;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  // 標題設定
+  h1, h2, h3, h4, h5, h6 {
     margin-bottom: 10px;
+    font-weight: 700;
   }
-  h1{
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem; 
-  }
-  h2{
-    font-size: 2rem;
-    margin-bottom: 1.5rem; 
-  }
-  h3{
-    font-size: 1.75rem;
-    margin-bottom: 1rem; 
-  }
-  h4{
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem; 
-  }
-  h5{
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem; 
-  }
-  h6{
-    font-size: 1rem;
-    margin-bottom: 0.75rem; 
-  }
+  h1 { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+  h3 { font-size: 1.75rem; margin-bottom: 1rem; }
+  h4 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  h5 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+  h6 { font-size: 1rem; margin-bottom: 0.75rem; }
+
   ol {
     padding-left: 20px;
   }
 
   ul {
     padding-left: 0;
-
     li {
       position: relative;
       font-size: 18px;
@@ -295,14 +276,12 @@
     width: 100%;
     max-width: 100%;
     margin-bottom: 1rem;
-
     border: 1px solid #dee2e6;
 
-    th,
-    td {
+    th, td {
       padding: .75rem;
       vertical-align: top;
-      border: 1px solid #dee2e6
+      border: 1px solid #dee2e6;
     }
 
     thead {
@@ -311,17 +290,15 @@
 
     tbody {
       background: $gray;
-
       td {
         text-align: left !important;
       }
     }
   }
 
-
   blockquote {
     padding: 18px;
-    background:rgba(255, 113, 113, 0.13);;
+    background: rgba(255, 113, 113, 0.13);
     border-left: 3px solid #b1afaf;
 
     p {
@@ -330,7 +307,6 @@
       font-style: italic !important;
     }
   }
-
 
   pre {
     padding: 10px 20px;
@@ -345,7 +321,6 @@
 
   a {
     color: #1c1c1c;
-
     &:hover {
       text-decoration: underline;
     }
@@ -358,7 +333,5 @@
     border-radius: 3px;
     color: $text-color-dark;
   }
-
-}
-
+} // 這是關閉 .content 的括號，非常重要
 /* /markdown style */
