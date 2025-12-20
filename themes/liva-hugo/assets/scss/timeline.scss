@@ -1,7 +1,10 @@
-@import url(http://fonts.googleapis.com/css?family=Raleway:400,900);
+/* 1. 更改字體導入連結，加入 Open Sans 和 Noto Sans TC */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
 
-body{
-  font-family: 'Raleway', sans-serif;
+/* 2. 修改 body 設定 */
+body {
+  /* 英文數字優先使用 Open Sans，中文使用 Noto Sans TC */
+  font-family: 'Open Sans', 'Noto Sans TC', sans-serif;
   color: #333;
 }
 
