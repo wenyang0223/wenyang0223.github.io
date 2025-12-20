@@ -218,58 +218,38 @@
   max-width: 165px;
 }
 
-
-/* 1. 引入字體：確保載入 Noto Sans TC 與 Open Sans */
+/* 1. 引入字體 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
 
-/* markdown style */
+/* 2. 內容內文樣式 */
 .content {
+  /* 針對 content 下的所有子元素設定字體與間距 */
   * {
-    /* 英文優先用 Open Sans，中文找不到英文時會自動跳到 Noto Sans TC */
     font-family: 'Open Sans', 'Noto Sans TC', sans-serif;
-    
-    /* 針對您的設定優化 */
     font-size: 20px;
-    line-height: 1.7;    /* 稍微增加行高，讓中文長文閱讀更舒服 */
+    line-height: 1.7;
     color: #1c1c1c;
     margin-top: 0.55rem;
     margin-bottom: 25px;
-    
-    /* 修正之前的覆蓋問題：只保留這一行 font-family */
   }
-}
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+
+  /* 3. 標題樣式（放在 content 裡面確保只影響文章內容） */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', 'Noto Sans TC', sans-serif; /* 標題也建議同步字體 */
+    font-weight: 700;
     margin-bottom: 10px;
+    color: #000; /* 標題通常顏色深一點比較好看 */
   }
-  h1{
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem; 
-  }
-  h2{
-    font-size: 2rem;
-    margin-bottom: 1.5rem; 
-  }
-  h3{
-    font-size: 1.75rem;
-    margin-bottom: 1rem; 
-  }
-  h4{
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem; 
-  }
-  h5{
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem; 
-  }
-  h6{
-    font-size: 1rem;
-    margin-bottom: 0.75rem; 
-  }
+
+  h1 { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+  h3 { font-size: 1.75rem; margin-bottom: 1rem; }
+  h4 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  h5 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+  h6 { font-size: 1rem; margin-bottom: 0.75rem; }
+
+} /* 確保這裡有一個大括號關閉 .content */
+
   ol {
     padding-left: 20px;
   }
