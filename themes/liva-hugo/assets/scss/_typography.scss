@@ -1,5 +1,9 @@
-/*  typography */
-@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700&display=swap');
+/* typography */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
+
+// 定義字體變數（確保主題引用這兩個變數）
+$primary-font: 'Open Sans', 'Noto Sans TC', sans-serif;
+$body-font: 'Open Sans', 'Noto Sans TC', sans-serif;
 
 body {
   line-height: 0.9;
