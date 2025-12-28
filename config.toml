@@ -109,12 +109,5 @@ link = "https://www.instagram.com/wenyang_ouo/"
       # 設置為 true 以允許在 Markdown 檔案中嵌入原始 HTML
       unsafe = true
 
-[markup.goldmark.renderer]
-  unsafe = true
-
-[permalinks]
-  # 這樣會強迫 Hugo 按照你的資料夾結構產生網址
-  blog = "/blog/:section/:title/"
-  
 disablePathToLower = true  # 保持網址與檔案大小寫一致
 
