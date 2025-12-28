@@ -103,13 +103,19 @@ title = "Instagram"
 icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
 link = "https://www.instagram.com/wenyang_ouo/"
 
+# --- 核心路徑設定 (放在最外層) ---
+uglyURLs = true
+disablePathToLower = true
+removePathAccents = false
+
+# --- Markdown 解析設定 ---
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+    [markup.goldmark.parser]
+      attribute = true
+  # 這是讓 Hugo 自動處理 .md 連結的關鍵
   [markup.goldmark.renderHooks.link]
     enableDefault = true
 
-# 為了確保中文路徑在 GitHub 不會 404，加上這兩行
-disablePathToLower = true
-removePathAccents = false
