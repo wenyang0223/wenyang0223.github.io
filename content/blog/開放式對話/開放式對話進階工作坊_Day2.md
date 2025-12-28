@@ -1,7 +1,7 @@
 ---
 title: 開放式對話進階工作坊Day 2
 date: 2020-11-15
-draft: true
+draft: false
 image: images/講座筆記/開放式對話/開放式對話.jpg
 description:
 categories:
@@ -10,7 +10,7 @@ categories:
 tags:
   - 開放式對話
   - 講座筆記
-type:
+type: post
 ---
 ##### 講座名稱：開放式對話進階工作坊
 
@@ -43,7 +43,7 @@ type:
 
 ---
 
-![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeyfrRc85vIV0rMEXRxIctjct8ulkoJuFEgNY575PZBks0lB3kRIEJiIssohbVXXnRIjeDWW8YeopWowdqyfPtJwfo8yXcjuFl88ZWOCfNJZIzUe3CFJQMQGoFCdup-2Pq0IC4urYQBXDgpFood690XMCs?key=7TAO03rLFRTunQsU_XLv_A)
+![](/images/講座筆記/開放式對話進階/0013.jpg)
 
 ### 【精神疾病是文化建構的】
 
@@ -67,7 +67,10 @@ type:
 
 ---
 
-### 【技術重要還是態度重要？】![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXc3cxPXEPR8jrSidvFzceWSOBvfPfurUmKsSnoaAQxBXI-wAw6e6X5x_n920F4mrkkTAbERo7uxq5g34zTX4JAvTCXL9ADrpfT3R7rHrrrC6eNbrPy2J9yvd6s5-znuehjhd87c-l9gmn5viDWA28XqY6c?key=7TAO03rLFRTunQsU_XLv_A)
+### 【技術重要還是態度重要？】
+
+
+![](/images/講座筆記/開放式對話進階/0014.jpg)
 
   
 
@@ -84,12 +87,11 @@ type:
   
 
 ---
-
-![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcuKnFs99pDUuxM2kS2fRYm8QbVAUFPJc0nXfcrlutGBLP6cXx6kbOIl5hIjpP8jfbu99ukdTJJzFTVsZ9PAWKAVg0zhqwzumLB9o6VlxLMHnkKEaioNaq9GwY7rXyWn71llv6_1Gt4Do1_uE7gSM5yvJs?key=7TAO03rLFRTunQsU_XLv_A)
-
 ### 【同盟Alliance ＆ 共謀Coalition】
 
-  
+![](/images/講座筆記/開放式對話進階/0015.jpg)
+
+![](/images/講座筆記/開放式對話進階/0016.jpg)
 
 家族治療會進到很多不同關係，今天講的是最簡單的，其他都是排列組合或是人數上的差別。
 
@@ -227,9 +229,11 @@ Satir學派說要做一致性溝通，但共謀就是各種不一致：「我愛
 
 ●可以留意加入之後哪些地方有不一樣，帶來了什麼？
 
-●第四輪活泉夥伴擔任入家團隊:![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcgVMy8winVxKsek6lyHMlZUmn8ULKavEfA41mkLWDnxpo6hZT_uJnpgEpALZVIKxpASwBlfQ0XHiGMPXT5qEjVTEM0Vjf3iSNBFZnbagUKRASI03zXQVjdYRnJXDpM6dSFjbb4QZf_UFlt8G8C9_n6CA?key=7TAO03rLFRTunQsU_XLv_A)
+●第四輪活泉夥伴擔任入家團隊
 
-  
+
+![](/images/講座筆記/開放式對話進階/IMG_8948.JPG)
+
 
 自我介紹、為何申請
 
@@ -429,7 +433,7 @@ A：看嚴重程度，嚴重當然就會反思。不嚴重就檢查一下夥伴�
 
 ---
 
-![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcFv9OGLUb3rYMTu9QmUBmG8WgSWDdpMYSPrHsnMGcv_iNQ3D1SradNVimDIMaOkbrjGpof-e5ezzU7x3bvi0dJC3Sfkop5dM9T7OVOpvxWpQhyYBU9PfLNV9H1rifPpiGBp2ybBFtI4GwHL1szMiSRoMQ?key=7TAO03rLFRTunQsU_XLv_A)
+![](/images/講座筆記/開放式對話進階/0017.jpg)
 
 ### 【直陳意義、象徵意義】
 
@@ -607,7 +611,9 @@ Y感到焦慮時會越來越敏感，越不敢出門。爸爸其實希望為這�
 
 ---
 
-### 【講解案家】![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfeq5jIHqezN6m6mny-3GiUZ8xWDq-da_Xwyh-lc9O93NlhiD1vwQvhgg8_HCK_UZquFlFgKdQ8yfMyBCEO1-zpOlmpnyrboYMtzm9l4B3JbIBvc34iW1Y9wOs3FxDgyymfcZDuxLo8tlRRwdG04bKhTmE?key=7TAO03rLFRTunQsU_XLv_A)
+### 【講解案家】
+
+![](/images/講座筆記/開放式對話進階/IMG_8968.JPG)
 
 主訴：無法出門、很多聲音、別人在看。
 
