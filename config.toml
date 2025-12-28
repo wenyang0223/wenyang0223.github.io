@@ -108,3 +108,6 @@ link = "https://www.instagram.com/wenyang_ouo/"
     [markup.goldmark.renderer]
       # 設置為 true 以允許在 Markdown 檔案中嵌入原始 HTML
       unsafe = true
+
+
+disablePathToLower = true  # 保持網址與檔案大小寫一致
