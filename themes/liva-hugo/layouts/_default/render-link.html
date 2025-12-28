@@ -1,2 +1,9 @@
 {{- $u := urls.Parse .Destination -}}
-<a href="{{ if (strings.HasSuffix $u.Path ".md") }}{{ (.Page.GetPage $u.Path).RelPermalink }}{{ else }}{{ .Destination | safeURL }}{{ end }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if strings.HasPrefix .Destination "http" }} target="_blank" rel="noopener"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- $dest := .Destination -}}
+{{- if (strings.HasSuffix $u.Path ".md") -}}
+  {{- $page := .Page.GetPage $u.Path -}}
+  {{- if $page -}}
+    {{- $dest = $page.RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+<a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
