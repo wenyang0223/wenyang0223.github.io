@@ -1,9 +1,18 @@
 {{- $u := urls.Parse .Destination -}}
 {{- $dest := .Destination -}}
 {{- if (strings.HasSuffix $u.Path ".md") -}}
+  {{/* 1. 先嘗試用相對路徑找頁面 */}}
   {{- $page := .Page.GetPage $u.Path -}}
+  
+  {{/* 2. 如果找不到，嘗試用絕對路徑找 */}}
+  {{- if not $page -}}
+    {{- $page = site.GetPage (strings.TrimPrefix "content/" $u.Path) -}}
+  {{- end -}}
+  
+  {{/* 3. 如果找到了，就把連結替換成正確的網址 */}}
   {{- if $page -}}
     {{- $dest = $page.RelPermalink -}}
   {{- end -}}
 {{- end -}}
+
 <a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
