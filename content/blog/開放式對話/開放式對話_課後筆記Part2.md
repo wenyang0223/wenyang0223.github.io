@@ -1,5 +1,5 @@
 ---
-title: 開放式對話（Open Dialogue）課後筆記Part2
+title: 開放式對話（Open Dialogue）課後筆記part2
 date: 2020-08-22
 draft: false
 image: images/講座筆記/開放式對話課後筆記/開放式對話課後筆記14.jpg
@@ -151,6 +151,6 @@ type: post
 ---
 ## 延伸閱讀
 
-[開放式對話_課後筆記Part1](blog/開放式對話/開放式對話_課後筆記Part1.md)
+[開放式對話_課後筆記part1](開放式對話_課後筆記part1.md)
 
-[開放式對話_課後筆記Part2](blog/開放式對話/開放式對話_課後筆記Part2.md)
+[開放式對話_課後筆記part2](開放式對話_課後筆記part2.md)
