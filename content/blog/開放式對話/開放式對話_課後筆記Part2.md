@@ -21,7 +21,7 @@ type: post
 ##### 講師：郝柏瑋心理師
 
 ---
-## 相關文章：
+#### 相關文章：
 
 [開放式對話_課後筆記Part1](開放式對話_課後筆記Part1.md)
 
@@ -163,7 +163,7 @@ type: post
 最後，講師推薦這本書來學習更多關於開放式對話（Open Dialogue）的概念。附上連結：[https://reurl.cc/avrbZY](https://reurl.cc/avrbZY)
 
 ---
-## 相關文章：
+#### 相關文章：
 
 [開放式對話_課後筆記Part1](開放式對話_課後筆記Part1.md)
 
