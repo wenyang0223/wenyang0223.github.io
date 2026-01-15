@@ -119,3 +119,8 @@ removePathAccents = false
   [markup.goldmark.renderHooks.link]
     enableDefault = true
 
+[frontmatter]
+  date = ["date", "lastmod", "publishDate"] # 讀取順序
+  
+# 這是關鍵：讓 Hugo 接受簡單的日期格式並自動補時區
+timeZone = "Asia/Taipei"
