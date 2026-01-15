@@ -119,8 +119,9 @@ removePathAccents = false
   [markup.goldmark.renderHooks.link]
     enableDefault = true
 
-[frontmatter]
-  date = ["date", "lastmod", "publishDate"] # 讀取順序
-  
-# 這是關鍵：讓 Hugo 接受簡單的日期格式並自動補時區
+# 讓 Hugo 知道如果沒寫時間，預設就是當天凌晨，且時區是台灣/香港
 timeZone = "Asia/Taipei"
+
+[frontmatter]
+  # 讓 Hugo 自動把檔案最後修改時間當作更新時間，你連 lastmod 都不用寫
+  lastmod = [":fileModTime", "lastmod", "date"]
