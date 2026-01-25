@@ -17,7 +17,8 @@
   {{ hugo.Generator }}
 
   <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ .Site.BaseURL }}sitemap.xml">
-
+  <link rel="canonical" href="{{ .Permalink }}">
+  
   {{ "" | safeHTML }}
   {{ range .Site.Params.plugins.css }}
   <link rel="stylesheet" href="{{ .URL | absURL }} ">
