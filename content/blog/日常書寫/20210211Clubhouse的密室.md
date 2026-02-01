@@ -8,7 +8,6 @@ categories:
   - 日常書寫
 tags:
   - 日常書寫
-  - Clubhouse
 type: post
 ---
 
