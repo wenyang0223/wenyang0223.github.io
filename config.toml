@@ -47,7 +47,7 @@ disqusShortname = "ling-ting-teng-tong-bywen-yang-wen-yang"
 
   # main menu
   [[menu.main]]
-  name = "Home"
+  name = "首頁"
   URL = "blog"
   weight = 1
 
@@ -125,3 +125,14 @@ timeZone = "Asia/Taipei"
 [frontmatter]
   # 讓 Hugo 自動把檔案最後修改時間當作更新時間，你連 lastmod 都不用寫
   lastmod = [":fileModTime", "lastmod", "date"]
+
+####taxonomies
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+
+topic = "topics"
+form = "forms"
+thinker = "thinkers"
+series = "series"
