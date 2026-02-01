@@ -5,7 +5,7 @@ title = "聆聽的河流｜閱讀・書寫・心理・電影"
 theme = "liva-hugo"
 summaryLength = "10"
 [pagination]
-  pagerSize = 6 
+  pagerSize = 15 
   # 數字請替換成您原本 paginate = 後面的值
 disqusShortname = "ling-ting-teng-tong-bywen-yang-wen-yang"
 
