@@ -8,7 +8,6 @@ categories:
   - 電影心得
 tags:
   - 電影心得
-  - 紀錄片心得
 type: post
 ---
 
