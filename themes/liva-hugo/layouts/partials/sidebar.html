@@ -36,13 +36,13 @@
   </div>
 
   <div class="widget">
-    <h4 class="widget-title">個人空間</h4>
+    <h4 class="widget-title">個人反思</h4>
     {{- if isset .Site.Taxonomies "series" }}
       {{- if not (eq (len .Site.Taxonomies.series) 0) }}
       <ul class="list-unstyled">
         {{- range $name, $items := .Site.Taxonomies.series }}
         <li class="mb-2">
-          <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" 
+          <a href="{{ `series/` | relLangURL }}{{ $name | urlize | lower }}" 
              class="d-flex align-items-center position-relative" 
              style="justify-content: center;">
             
@@ -66,7 +66,7 @@
       <ul class="list-unstyled">
         {{- range $name, $items := .Site.Taxonomies.highlights }}
         <li class="mb-2">
-          <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" 
+          <a href="{{ `highlights/` | relLangURL }}{{ $name | urlize | lower }}" 
              class="d-flex align-items-center position-relative" 
              style="justify-content: center;">
             
@@ -90,7 +90,7 @@
       <ul class="list-unstyled">
         {{- range $name, $items := .Site.Taxonomies.topics }}
         <li class="mb-2">
-          <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" 
+          <a href="{{ `topics/` | relLangURL }}{{ $name | urlize | lower }}" 
              class="d-flex align-items-center position-relative" 
              style="justify-content: center;">
             
@@ -114,7 +114,7 @@
       <ul class="list-unstyled">
         {{- range $name, $items := .Site.Taxonomies.clubhouse }}
         <li class="mb-2">
-          <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" 
+          <a href="{{ `clubhouse/` | relLangURL }}{{ $name | urlize | lower }}" 
              class="d-flex align-items-center position-relative" 
              style="justify-content: center;">
             
@@ -138,7 +138,7 @@
       <ul class="list-unstyled">
         {{- range $name, $items := .Site.Taxonomies.projects }}
         <li class="mb-2">
-          <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" 
+          <a href="{{ `projects/` | relLangURL }}{{ $name | urlize | lower }}" 
              class="d-flex align-items-center position-relative" 
              style="justify-content: center;">
             
