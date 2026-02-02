@@ -5,12 +5,12 @@ draft: false
 image: images/講座筆記/開放式對話進階/0001.jpg
 description:
 categories:
-  - 開放式對話
   - 講座筆記
 tags:
   - 開放式對話
   - 講座筆記
 type: post
+topics: 開放式對話
 ---
 ##### 講座名稱：開放式對話進階工作坊
 
