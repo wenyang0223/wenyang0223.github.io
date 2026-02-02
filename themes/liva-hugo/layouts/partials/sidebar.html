@@ -60,6 +60,30 @@
   </div>
 
   <div class="widget">
+    <h4 class="widget-title">精選文章</h4>
+    {{- if isset .Site.Taxonomies "highlights" }}
+      {{- if not (eq (len .Site.Taxonomies.highlights) 0) }}
+      <ul class="list-unstyled">
+        {{- range $name, $items := .Site.Taxonomies.highlights }}
+        <li class="mb-2">
+          <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" 
+             class="d-flex align-items-center position-relative" 
+             style="justify-content: center;">
+            
+            <span>{{ $name | title | humanize }}</span>
+        
+            <small class="text-muted position-absolute" style="right: 0;">
+              ({{ len $items }})
+            </small>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+      {{- end }}
+    {{- end }}
+  </div>
+
+  <div class="widget">
     <h4 class="widget-title">主題文章</h4>
     {{- if isset .Site.Taxonomies "topics" }}
       {{- if not (eq (len .Site.Taxonomies.topics) 0) }}
