@@ -4,20 +4,35 @@
         <img src="{{ .Params.Image | absURL }}" class="card-img-top" alt="{{ .Title | markdownify }}">
         {{ end }}
         <div class="card-body px-0">
-        {{ range .Params.Categories }}
-        <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}"
-            class="text-primary">{{ . | title | humanize }}</a>
-        {{ end }}
-        <a href="{{ .Permalink }}" class="h5 d-block my-3">{{ .Title | markdownify }}</a>
-        <div class="mb-3 post-meta">
-            <span>By {{ .Site.Params.Author }}</span>
-            {{ if not .Params.HideDate }}
-            <span class="border-bottom border-primary px-2 mx-1"></span>
-            <span>{{ .PublishDate.Format "2006-01-02" }}</span>
+            {{ range .Params.Categories }}
+            <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}"
+                class="text-primary">{{ . | title | humanize }}</a>
             {{ end }}
-        </div>
-        <p class="card-text">{{ .Description }}</p>
-        <a href="{{ .Permalink }}" class="btn btn-outline-primary">read more</a>
+        
+            {{ with .Params.clubhouse }}
+                {{ if $.Params.categories }}<span class="mx-1">|</span>{{ end }}
+                {{ if (reflect.IsSlice .) }}
+                    {{ range . }}
+                    <a href="{{ `clubhouse/` | relLangURL }}{{ . | urlize | lower }}"
+                        class="text-info font-weight-bold">{{ . }}</a>
+                    {{ end }}
+                {{ else }}
+                    <a href="{{ `clubhouse/` | relLangURL }}{{ . | urlize | lower }}"
+                        class="text-info font-weight-bold">{{ . }}</a>
+                {{ end }}
+            {{ end }}
+        
+            <a href="{{ .Permalink }}" class="h5 d-block my-3">{{ .Title | markdownify }}</a>
+            
+            <div class="mb-3 post-meta">
+                <span>By {{ .Site.Params.Author }}</span>
+                {{ if not .Params.HideDate }}
+                <span class="border-bottom border-primary px-2 mx-1"></span>
+                <span>{{ .PublishDate.Format "2006-01-02" }}</span>
+                {{ end }}
+            </div>
+            <p class="card-text">{{ .Description }}</p>
+            <a href="{{ .Permalink }}" class="btn btn-outline-primary">read more</a>
         </div>
     </article>
 </div>
