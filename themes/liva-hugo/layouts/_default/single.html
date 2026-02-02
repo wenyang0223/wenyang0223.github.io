@@ -5,15 +5,23 @@
     <div class="row">
       <div class="col-lg-10 mx-auto">
         
-        {{ range .Params.Categories }}
-        <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}"
-          class="text-primary">{{ . | title | humanize }}</a>
-        {{ end }}
+        
+        <div class="post-meta mb-2">
+          {{ $taxonomies := slice "categories" "clubhouse" "topics" "series" "highlights" "projects" }}
+          {{ $isFirst := true }}
 
-        {{ range .Params.clubhouse }}
-        <span class="mx-1">|</span> <a href="{{ `clubhouse/` | relLangURL }}{{ . | urlize | lower }}"
-          class="text-info font-weight-bold">{{ . }}</a>
-        {{ end }}
+          {{ range $tax := $taxonomies }}
+            {{ with $.GetTerms $tax }}
+              {{ range . }}
+                {{ if not $isFirst }}<span class="mx-1 text-muted">|</span>{{ end }}
+                <a href="{{ .Permalink }}" class="text-primary font-weight-bold">
+                  {{ .LinkTitle }}
+                </a>
+                {{ $isFirst = false }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
 
         <h2>{{ .Title | markdownify }}</h2>
         

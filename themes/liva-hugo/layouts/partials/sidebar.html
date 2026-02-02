@@ -132,7 +132,7 @@
   </div>
 
   <div class="widget">
-    <h4 class="widget-title">專案計畫</h4>
+    <h4 class="widget-title">Projects</h4>
     {{- if isset .Site.Taxonomies "projects" }}
       {{- if not (eq (len .Site.Taxonomies.projects) 0) }}
       <ul class="list-unstyled">
@@ -170,7 +170,7 @@
   </div>
 
   <div class="widget">
-    <h4 class="widget-title">Social</h4>
+    <h4 class="widget-title">站外連結</h4>
     <ul class="list-inline social-links">
       {{ range .Site.Params.social }}
       <li class="list-inline-item"><a href="{{ .link | safeURL }}"><i class="{{ .icon }}"></i></a></li>
