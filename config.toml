@@ -135,5 +135,5 @@ tag = "tags"
 topic = "topics"
 form = "forms"
 project = "projects" # 新增：特定計畫
-series = "series"
 clubhouse = "clubhouse"  # 新增會所專屬類別
+series = "series"
