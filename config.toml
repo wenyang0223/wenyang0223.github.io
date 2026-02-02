@@ -47,7 +47,7 @@ disqusShortname = "ling-ting-teng-tong-bywen-yang-wen-yang"
 
   # main menu
   [[menu.main]]
-  name = "首頁"
+  name = "Home"
   URL = "blog"
   weight = 1
 
