@@ -134,5 +134,6 @@ tag = "tags"
 
 topic = "topics"
 form = "forms"
-thinker = "thinkers"
+project = "projects" # 新增：特定計畫
 series = "series"
+clubhouse = "clubhouse"  # 新增會所專屬類別
