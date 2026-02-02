@@ -134,6 +134,6 @@ tag = "tags"
 
 topic = "topics"
 series = "series"
-project = "projects" # 新增：特定計畫
-clubhouse = "clubhouse"  # 新增會所專屬類別
+project = "projects" 
+clubhouse = "clubhouse"  
 highlights = "highlights"
