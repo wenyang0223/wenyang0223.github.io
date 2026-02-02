@@ -11,6 +11,8 @@ tags:
 type: post
 aliases:
   - /blog/生活反思與心得/clubhouse的療癒空間/
+series:
+  - 日常書寫
 ---
 
 今天（2/8）聽了一下午柏偉開的房間，我發現Clubhouse平台創造了豐富的連結以及具有療癒作用的空間，我也**見證了一場充滿意義的對話，感受到「對話精神」如何藉由Clubhouse實踐**。
