@@ -1,51 +1,22 @@
 {{ define "main" }}
 
-
-<!-- blog post -->
 <section class="section pb-0">
   <div class="container">
     <div class="row">
       <div class="col-lg-8 mb-5 mb-lg-0">
         <div class="row">
-          {{ $paginator := .Paginate (where .Site.RegularPages "Section" "blog") }}
+          {{ $paginator := .Paginate .Site.RegularPages }}
           {{ range $paginator.Pages }}
-          <div class="col-md-6 mb-4">
-            <article class="card">
-              {{ if .Params.Image }}
-              <img src="{{ .Params.Image | absURL }}" class="card-img-top" alt="{{ .Title | markdownify }}">
-              {{ end }}
-              <div class="card-body px-0">
-                {{ range .Params.Categories }}
-                <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}"
-                  class="text-primary">{{ . | title | humanize }}</a>
-                {{ end }}
-                <a href="{{ .Permalink }}" class="h5 d-block my-3">{{ .Title | markdownify }}</a>
-                <div class="mb-3 post-meta">
-                  <span>By {{ .Site.Params.Author }}</span>
-                  {{ if not .Params.HideDate }}
-                  <span class="border-bottom border-primary px-2 mx-1"></span>
-                  <span>{{ .PublishDate.Format "2006-01-02" }}</span>
-                  {{ end }}
-                </div>
-                <p class="card-text">{{ .Description }}</p>
-                <a href="{{ .Permalink }}" class="btn btn-outline-primary">read more</a>
-              </div>
-            </article>
-          </div>
+            {{ .Render "post" }}
           {{ end }}
         </div>
       </div>
-      <!-- sidebar -->
+      
       {{ partial "sidebar.html" . }}
-      <!-- /sidebar -->
-
-      <!-- pagination -->
       <div class="col-12 mt-5">
         {{ template "_internal/pagination.html" . }}
       </div>
     </div>
   </div>
 </section>
-<!-- /blog post -->
-
 {{ end }}
