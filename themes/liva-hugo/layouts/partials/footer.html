@@ -20,63 +20,94 @@
 </section>
 {{ end }}
 
+
 <footer>
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 text-center mb-5">
-        
-      </div>
-      {{ if or  .Site.Params.mobile .Site.Params.location .Site.Params.email }}         
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
-        <ul class="list-unstyled">
-          {{ if .Site.Params.location }}           
-          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>{{ .Site.Params.location }}</li>
-          {{ end }}
-          {{ if .Site.Params.email }}           
-          <li class="mb-3"><a class="text-dark" href="mailto:{{ .Site.Params.email }}"><i
-                class="ti-email mr-3 text-primary"></i>{{ .Site.Params.email }}</a>
-          {{ end }}
-          </li>
-        </ul>
-      </div>
-      {{ end }}
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
-        <ul class="list-unstyled">
-          {{ range .Site.Params.social }}
-          <li class="mb-3"><a class="text-dark" href="{{ .link | safeURL }}">{{ .title }}</a></li>
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">閱讀＆筆記</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.categories }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
           {{ end }}
         </ul>
       </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
-        {{- if isset .Site.Taxonomies "categories" }}
-        {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
-        <ul class="list-unstyled">
-          {{- range $name, $items := .Site.Taxonomies.categories }}
-          <li class="mb-3"><a class="text-dark"
-              href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">{{ $name | title | humanize }}</a>
-          </li>
-          {{- end }}
-        </ul>
-        {{- end }}
-        {{- end }}
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
-        <ul class="list-unstyled">
-          {{ range .Site.Menus.footer }}
-          <li class="mb-3"><a class="text-dark" href="{{ .URL | absURL }}">{{ .Name }}</a></li>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">個人反思</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.series }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
           {{ end }}
         </ul>
       </div>
-      <div class="col-12 border-top py-4 text-center">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">會所模式</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.clubhouse }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">主題文章</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.topics }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">精選文章</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.highlights }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">Projects</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.projects }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 border-top mt-2 py-4 text-center">
         {{ .Site.Params.copyright | markdownify }}
       </div>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-title {
+    font-size: 0.95rem !important;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .footer-item {
+    font-size: 0.75rem !important;
+    margin-bottom: 15px; /* 縮小行距讓它更緊湊 */
+    font-weight: 400;
+
+  }
+  .footer-count {
+    font-size: 0.75rem;
+    color: #999;
+    margin-left: 3px;
+  }
+  /* 增加列表最小高度，讓下一行標題更整齊（可選） */
+  .footer-list {
+    min-height: 120px; 
+  }
+</style>
+
 
 <script>
   var indexURL = {{ "index.json" | absURL }}
