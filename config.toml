@@ -117,7 +117,7 @@ removePathAccents = false
       attribute = true
   # 這是讓 Hugo 自動處理 .md 連結的關鍵
   [markup.goldmark.renderHooks.link]
-    enableDefault = true
+   useEmbedded = "fallback"
 
 # 讓 Hugo 知道如果沒寫時間，預設就是當天凌晨，且時區是台灣/香港
 timeZone = "Asia/Taipei"

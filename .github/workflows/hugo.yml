@@ -23,7 +23,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.155.2'
           extended: true # 確保安裝 Extended 版本來編譯 Sass/SCSS
 
       # 3. 執行 Hugo 建置 (Build)
