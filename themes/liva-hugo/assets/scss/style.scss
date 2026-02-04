@@ -52,7 +52,7 @@ body.home .post-meta a.text-primary {
   }
   
   .text-primary:hover {
-    color: darken(#007bff, 10%) !important; /* hover 顏色 */
+    color: $primary-color !important; /* hover 顏色 */
     font-weight: 700 !important;
   }
   
@@ -89,3 +89,28 @@ footer {
     }
   }
   
+/* 強制文章內容裡的圖片變成正方形或接近正方形 */
+article img, 
+.post-content img, 
+.entry-content img { 
+    width: 100% !important;
+    max-width: 500px !important; /* 限制寬度，不要讓正方形太大佔滿螢幕 */
+    
+    /* 方案 A：直接設定寬高比為 1/1 (正方形) */
+    aspect-ratio: 1 / 1 !important; 
+    
+    /* 如果想要稍微長方形一點，可以改用 4/3 或 3/2 */
+    /* aspect-ratio: 4 / 3 !important; */
+
+    object-fit: cover !important; /* 確保圖片中心被保留，不會被壓扁 */
+    display: block !important;
+    margin: 20px auto !important; /* 置中 */
+    border-radius: 12px !important;
+}
+
+/* 手機版微調 */
+@media (max-width: 768px) {
+    article img, .post-content img, .entry-content img {
+        max-width: 90% !important; /* 手機上寬一點點 */
+    }
+}

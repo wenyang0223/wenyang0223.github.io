@@ -126,14 +126,18 @@ timeZone = "Asia/Taipei"
   # 讓 Hugo 自動把檔案最後修改時間當作更新時間，你連 lastmod 都不用寫
   lastmod = [":fileModTime", "lastmod", "date"]
 
+
+
+
 ####taxonomies
 
 [taxonomies]
-category = "categories"
+category = "categories"   #閱讀＆筆記
+
 tag = "tags"
 
-topic = "topics"
-series = "series"
-project = "projects" 
-clubhouse = "clubhouse"  
-highlights = "highlights"
+topic = "topics"          #主題文章
+series = "series"         #個人反思
+project = "projects"      #Projects
+clubhouse = "clubhouse"   #會所模式
+highlights = "highlights" #精選文章
