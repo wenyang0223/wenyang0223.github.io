@@ -1,15 +1,18 @@
 {{ define "main" }}
-
 <section class="section-sm">
   <div class="container pl-1 pr-4">
     <div class="row">
       <div class="col-lg-10 mx-auto">
         
-        
+        <div class="mb-4">
+          <a href="/" onclick="if(document.referrer) { window.history.back(); return false; }" class="btn-back-custom">
+            ← 返回上一頁
+          </a>
+        </div>
+
         <div class="post-meta mb-2">
           {{ $taxonomies := slice "categories" "clubhouse" "topics" "series" "highlights" "projects" }}
           {{ $isFirst := true }}
-
           {{ range $tax := $taxonomies }}
             {{ with $.GetTerms $tax }}
               {{ range . }}
@@ -41,10 +44,37 @@
           {{ .Content }}
         </div>
 
+        <hr>
+        <div class="mt-4 mb-5"> <a href="/" onclick="if(document.referrer) { window.history.back(); return false; }" class="btn-back-custom">
+            ← 返回上一頁
+          </a>
+        </div>
+
+
         {{ template "_internal/disqus.html" . }}
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  .btn-back-custom {
+    display: inline-block;
+    padding: 8px 20px;
+    background-color: transparent;
+    color: #2d3133;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .btn-back-custom:hover {
+    background-color: #f8f9fa;
+    color: $primary-color ;
+    border-color: $primary-color;
+    text-decoration: none;
+  }
+</style>
 {{ end }}
