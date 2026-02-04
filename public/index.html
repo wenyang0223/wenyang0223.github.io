@@ -1153,5 +1153,51 @@
   display: none;
 }
 </style>
-</body>
+
+
+<button id="back-to-top" title="回到頂部">⬆</button>
+
+<style>
+  #back-to-top {
+    font-size: 24px;    
+    line-height: 1;
+    display: none;  
+    position: fixed; 
+    bottom: 20px; 
+    right: 30px; 
+    z-index: 99; 
+    border: none; 
+    outline: none; 
+    background-color: #555;  
+    color: white; 
+    cursor: pointer; 
+    padding: 18px; 
+    border-radius: 10px;
+    transition: opacity 0.3s;
+  }
+
+  #back-to-top:hover {
+    background-color: #333;  
+  }
+</style>
+
+<script>
+  var mybutton = document.getElementById("back-to-top");
+
+  
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
+  }
+
+  
+  mybutton.onclick = function() {
+    window.scrollTo({top: 0, behavior: 'smooth'}); 
+  }
+</script></body>
 </html>
