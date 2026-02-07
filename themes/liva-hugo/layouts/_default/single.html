@@ -4,6 +4,23 @@
     <div class="row">
       <div class="col-lg-10 mx-auto">
         
+        <nav class="post-nav-wrapper">
+          {{ if .PrevInSection }}
+            <a class="nav-item prev" href="{{ .PrevInSection.Permalink }}">
+              <span class="nav-label">👈上一篇</span>
+              <span class="nav-title">{{ .PrevInSection.Title }}</span>
+            </a>
+          {{ else }}
+            <div class="nav-item spacer"></div> {{ end }}
+        
+          {{ if .NextInSection }}
+            <a class="nav-item next" href="{{ .NextInSection.Permalink }}">
+              <span class="nav-label">下一篇👉</span>
+              <span class="nav-title">{{ .NextInSection.Title }}</span>
+            </a>
+          {{ end }}
+        </nav>
+
         <div class="mb-4 d-flex justify-content-between align-items-center">
           <a href="/" onclick="if(document.referrer) { window.history.back(); return false; }" class="btn-back-custom">
             ← 返回上一頁
@@ -48,9 +65,9 @@
           {{ .Content }}
         </div>
 
-        <hr id="article-end">
+        <hr id="article-end" style="margin-top: 1px;">
 
-        <div class="mt-4 mb-5 d-flex justify-content-between align-items-center">
+        <div class="mt-4 mb-1 d-flex justify-content-between align-items-center">
           <a href="/" onclick="if(document.referrer) { window.history.back(); return false; }" class="btn-back-custom">
             ← 返回上一頁
           </a>
@@ -59,7 +76,23 @@
             ▲ 回到頂部
           </a>
         </div>
-
+        
+        <nav class="post-nav-wrapper">
+          {{ if .PrevInSection }}
+            <a class="nav-item prev" href="{{ .PrevInSection.Permalink }}">
+              <span class="nav-label">👈上一篇</span>
+              <span class="nav-title">{{ .PrevInSection.Title }}</span>
+            </a>
+          {{ else }}
+            <div class="nav-item spacer"></div> {{ end }}
+        
+          {{ if .NextInSection }}
+            <a class="nav-item next" href="{{ .NextInSection.Permalink }}">
+              <span class="nav-label">下一篇👉</span>
+              <span class="nav-title">{{ .NextInSection.Title }}</span>
+            </a>
+          {{ end }}
+        </nav>
 
         {{ template "_internal/disqus.html" . }}
       </div>
@@ -127,4 +160,38 @@
   .justify-content-between { justify-content: space-between !important; }
   .align-items-center { align-items: center !important; }
 </style>
+
+<style>
+  .post-nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 15px 0;
+
+  }
+  .nav-item {
+    max-width: 25%;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+  .next { text-align: right; }
+  .nav-label { font-size: 1em; color: rgb(100, 100, 100); }
+  .nav-title { font-weight:600; 
+  margin-top: 8px;
+  line-height: 1.8;      /* 調整行距，換行時才不會太擠 */
+
+  /* 核心：限制最多顯示兩行 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   /* 這裡設定「2」代表最多顯示兩行 */
+  -webkit-box-orient: vertical;
+
+  /* 處理溢出 */
+  overflow: hidden;        /* 超過兩行的部分隱藏 */
+  text-overflow: ellipsis; /* 在第二行末尾顯示 ... */
+  overflow-wrap: break-word;
+  }
+</style>
+
 {{ end }}
