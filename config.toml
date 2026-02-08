@@ -7,7 +7,7 @@ summaryLength = "10"
 [pagination]
   pagerSize = 10 
   # 數字請替換成您原本 paginate = 後面的值
-disqusShortname = "ling-ting-teng-tong-bywen-yang-wen-yang"
+
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
