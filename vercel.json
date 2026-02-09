@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/tags/閱讀書摘/:path*",
+      "destination": "/tags/書摘/:path*",
+      "permanent": true
+    }
+  ]
+}

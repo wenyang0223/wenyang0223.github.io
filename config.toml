@@ -146,3 +146,6 @@ highlights = "highlights" #精選文章
   quality = 80
   [imaging.formatOptions]
     webp = { quality = 80 }
+
+[build]
+  gc = true
