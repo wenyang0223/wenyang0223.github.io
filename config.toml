@@ -141,3 +141,8 @@ series = "series"         #個人反思
 project = "projects"      #Projects
 clubhouse = "clubhouse"   #會所模式
 highlights = "highlights" #精選文章
+
+[imaging]
+  quality = 80
+  [imaging.formatOptions]
+    webp = { quality = 80 }
