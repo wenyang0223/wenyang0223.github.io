@@ -4,9 +4,18 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6 mx-auto text-center">
-        {{ if .Params.Image }}
-        <img src="{{ .Params.Image | absURL }}" alt="" class="img-fluid d-block mx-auto rounded-circle mb-4">
+        {{ if .Params.image }}
+        {{/* 嘗試從 assets 抓取 */}}
+        {{ $img := resources.Get .Params.image }}
+        {{ if $img }}
+          {{/* 轉 WebP 邏輯 */}}
+          {{ $webp := $img.Resize (printf "%dx%d webp" $img.Width $img.Height) }}
+          <img src="{{ $webp.RelPermalink }}" class="img-fluid" alt="about-image">
+        {{ else }}
+          {{/* 如果 assets 找不到，回退到普通路徑 (static) */}}
+          <img src="{{ .Params.image | absURL }}" class="img-fluid" alt="about-image">
         {{ end }}
+      {{ end }}
         <h4 class="widget-title">{{ .Title | markdownify }}</h4>
         <div class="content">
           {{ .Content }}

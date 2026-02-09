@@ -1,8 +1,24 @@
 <div class="col-md-6 mb-4">
-    <article class="card">
-      {{ if .Params.Image }}
-      <img src="{{ .Params.Image | absURL }}" class="card-img-top" alt="{{ .Title | markdownify }}">
+  <article class="card">
+    {{ if .Params.Image }}
+      {{/* 1. 取得圖片資源（處理開頭斜線問題） */}}
+      {{- $src := strings.TrimPrefix "/" .Params.Image -}}
+      {{- $img := resources.Get $src -}}
+
+      {{ if $img }}
+        {{/* 2. 轉檔為 WebP 並縮小尺寸到 600px，首頁載入更快 */}}
+        {{- $webp := $img.Resize "600x webp" -}}
+        <a href="{{ .Permalink }}">
+          <img src="{{ $webp.RelPermalink }}" class="card-img-top" alt="{{ .Title | markdownify }}">
+        </a>
+      {{ else }}
+        {{/* 3. 備案：如果 assets 找不到，回退到普通路徑防止破圖 */}}
+        <a href="{{ .Permalink }}">
+          <img src="{{ .Params.Image | absURL }}" class="card-img-top" alt="{{ .Title | markdownify }}">
+        </a>
       {{ end }}
+    {{ end }}
+
       <div class="card-body px-0">
         
         {{ range .Params.Categories }}
