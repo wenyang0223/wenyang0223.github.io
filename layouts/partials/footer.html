@@ -83,7 +83,49 @@
       </div>
     </div>
   </div>
-</footer>
+  <footer style="background: transparent;">
+    {{ if .IsHome }}
+      {{ if .Site.Data.gallery.enable }}
+        {{ with .Site.Data.gallery }}
+        <div class="footer-gallery pt-5">
+          <div class="container-fluid">
+            <div class="text-center mb-4">
+              <h4 class="widget-title">My Gallery</h4>
+            </div>
+            <div class="row no-gutters align-items-center justify-content-center">
+              {{ range .gallery }}
+                {{- $src := strings.TrimPrefix "/" .image -}}
+                {{- $img := resources.Get $src -}}
+                
+                <div class="col-lg-2 col-md-3 col-sm-4 col-6 px-1 mb-2">
+                  {{ if $img }}
+                    {{- $webp := $img.Resize "600x webp" -}} {{/* 圖片變大，Resize 也要加大才清晰 */}}
+                    <a href="{{ $img.RelPermalink }}" class="venobox" data-gall="footer-gallery">
+                      <img class="img-fluid rounded w-100" src="{{ $webp.RelPermalink }}" alt="gallery" style="transition: .3s;">
+                    </a>
+                  {{ else }}
+                    <a href="{{ .image | absURL }}" class="venobox" data-gall="footer-gallery">
+                      <img class="img-fluid rounded w-100" src="{{ .image | absURL }}" alt="gallery">
+                    </a>
+                  {{ end }}
+                </div>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-12 border-top mt-4 py-4 text-center">
+          {{ .Site.Params.copyright | markdownify }}
+        </div>
+      </div>
+    </div>
+  </footer>
+
 
 <style>
   .footer-title {

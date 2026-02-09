@@ -4,17 +4,26 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6 mx-auto text-center">
-        {{ if .Params.image }}
-        {{/* 嘗試從 assets 抓取 */}}
-        {{ $img := resources.Get .Params.image }}
-        {{ if $img }}
-          {{/* 轉 WebP 邏輯 */}}
-          {{ $webp := $img.Resize (printf "%dx%d webp" $img.Width $img.Height) }}
-          <img src="{{ $webp.RelPermalink }}" class="img-fluid" alt="about-image">
-        {{ else }}
-          {{/* 如果 assets 找不到，回退到普通路徑 (static) */}}
-          <img src="{{ .Params.image | absURL }}" class="img-fluid" alt="about-image">
-        {{ end }}
+        {{ if .Params.Image }}
+        {{/* 1. 從 assets 抓取並轉 WebP */}}
+        {{- $src := strings.TrimPrefix "/" .Params.Image -}}
+        {{- $img := resources.Get $src -}}
+        
+        <div class="mb-4"> {{/* 確保圖片自成一行，不跟文字擠在一起 */}}
+          {{ if $img }}
+            {{- $webp := $img.Process "webp" -}}
+            <img src="{{ $webp.RelPermalink }}" 
+                 class="img-fluid rounded-circle" 
+                 style="width: 400px; height: 400px; object-fit: cover;" 
+                 alt="{{ .Title }}">
+          {{ else }}
+            {{/* 備案：若 assets 找不到，讀取原本路徑 */}}
+            <img src="{{ .Params.Image | absURL }}" 
+                 class="img-fluid rounded-circle" 
+                 style="width: 400px; height: 400px; object-fit: cover;" 
+                 alt="{{ .Title }}">
+          {{ end }}
+        </div>
       {{ end }}
         <h4 class="widget-title">{{ .Title | markdownify }}</h4>
         <div class="content">
@@ -60,27 +69,37 @@
           </li>
         </ul>
       </div>
-    </div>
-  </div>
-</section>
+
+    </div> </div> </div> </section>
 
 {{ if .Site.Data.gallery.enable }}
 {{ with .Site.Data.gallery }}
-<section>
-  <div class="container-fluid px-0">
-    <div class="text-center">
-      <h4 class="widget-title">My Gallery</h4>
-    </div>
-    <div class="row no-gutters">
-      {{ range .gallery }}
-      <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-        <a href="{{ .image | absURL}}" class="venobox" data-gall="gallery"><img class="img-fluid w-100"
-            src="{{ .image | absURL}}" alt=""></a>
-      </div>
-      {{ end }}
-    </div>
+<section class="section-sm pb-0">
+<div class="container-fluid px-0">
+  <div class="text-center">
+    <h4 class="widget-title">My Gallery</h4>
   </div>
+  <div class="row no-gutters">
+    {{ range .gallery }}
+      {{- $src := strings.TrimPrefix "/" .image -}}
+      {{- $img := resources.Get $src -}}
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+        {{ if $img }}
+          {{- $webp := $img.Resize "400x webp" -}}
+          <a href="{{ $img.RelPermalink }}" class="venobox" data-gall="gallery">
+            <img class="img-fluid w-100" src="{{ $webp.RelPermalink }}" alt="gallery-img">
+          </a>
+        {{ else }}
+          <a href="{{ .image | absURL }}" class="venobox" data-gall="gallery">
+            <img class="img-fluid w-100" src="{{ .image | absURL }}" alt="gallery-img">
+          </a>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</div>
 </section>
+<br><br><br><br>
 {{ end }}
 {{ end }}
 
