@@ -11,47 +11,44 @@
   {{ "" | safeHTML }}
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  {{ "<!-- mobile responsive meta -->" | safeHTML }}
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  {{ "" | safeHTML }}
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}">
   {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
   {{ hugo.Generator }}
 
-  {{ "<!-- plugins -->" | safeHTML }}
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ .Site.BaseURL }}sitemap.xml">
+  <link rel="canonical" href="{{ .Permalink }}">
+  
+  {{ "" | safeHTML }}
   {{ range .Site.Params.plugins.css }}
   <link rel="stylesheet" href="{{ .URL | absURL }} ">
   {{ end }}
 
-  {{ "<!-- Main Stylesheet -->" | safeHTML }}
+  {{ "" | safeHTML }}
   {{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
   <link rel="stylesheet" href="{{ $styles.Permalink }}" media="screen">
 
-  {{ "<!--Favicon-->" | safeHTML }}
+  {{ "" | safeHTML }}
   <link rel="shortcut icon" href="{{ `images/favicon.png` | absURL }} " type="image/x-icon">
   <link rel="icon" href="{{ `images/favicon.png` | absURL }} " type="image/x-icon">
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9L49HVNL4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P9L49HVNL4');
+  </script>
 
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9L49HVNL4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-P9L49HVNL4');
-</script>
+  {{ "" | safeHTML }}
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .content, .content *, .post-meta, .post-meta * {
+      font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
+    }
+  </style>
 
 </head>
-
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  .content, .content *, .post-meta, .post-meta * {
-    font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
-  }
-  
-  /* 針對標題 */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
-  }
-</style>

@@ -1,0 +1,78 @@
+{{ define "main" }}
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mx-auto text-center">
+        {{ if .Params.Image }}
+        <img src="{{ .Params.Image | absURL }}" alt="" class="img-fluid d-block mx-auto rounded-circle mb-4">
+        {{ end }}
+        <h4 class="widget-title">{{ .Title | markdownify }}</h4>
+        <div class="content">
+          {{ .Content }}
+        </div>
+        <h4 class="widget-title">Experience</h4>
+        <ul class="timeline">
+          <!-- Item 1 -->
+          <li>
+            <div class="direction-r">
+              <div class="flag-wrapper">
+                <span class="hexa"></span>
+                <span class="flag">師大公領系
+                </span>
+                <span class="time-wrapper"><span class="time">Sep 2015</span></span>
+              </div>
+              <div class="desc">2019年畢業於國立臺灣師範大學公民教育與活動領導學系。</div>
+            </div>
+          </li>
+        
+          <!-- Item 2 -->
+          <li>
+            <div class="direction-l">
+              <div class="flag-wrapper">
+                <span class="hexa"></span>
+                <span class="flag">人生百味</span>
+                <span class="time-wrapper"><span class="time">Aug 2018</span></span>
+              </div>
+              <div class="desc">大三下學期。</div>
+            </div>
+          </li>
+        
+          <!-- Item 3 -->
+          <li>
+            <div class="direction-r">
+              <div class="flag-wrapper">
+                <span class="hexa"></span>
+                <span class="flag">東吳社工研究所</span>
+                <span class="time-wrapper"><span class="time">May 2025</span></span>
+              </div>
+              <div class="desc">2025年畢業，蟹足腫患者的病痛經驗研究</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ if .Site.Data.gallery.enable }}
+{{ with .Site.Data.gallery }}
+<section>
+  <div class="container-fluid px-0">
+    <div class="text-center">
+      <h4 class="widget-title">My Gallery</h4>
+    </div>
+    <div class="row no-gutters">
+      {{ range .gallery }}
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+        <a href="{{ .image | absURL}}" class="venobox" data-gall="gallery"><img class="img-fluid w-100"
+            src="{{ .image | absURL}}" alt=""></a>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+{{ end }}

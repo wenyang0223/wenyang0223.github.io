@@ -1,0 +1,18 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+
+{{- if strings.HasSuffix $u.Path ".md" -}}
+  {{- $page := .Page.GetPage $u.Path -}}
+  {{- if $page -}}
+    {{- $href = $page.RelPermalink -}}
+  {{- else -}}
+    {{/* 備用方案：如果相對路徑找不到，試著去掉 .md 找 */}}
+    {{- $path := strings.TrimSuffix ".md" $u.Path -}}
+    {{- $page = .Page.GetPage $path -}}
+    {{- if $page -}}
+      {{- $href = $page.RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if strings.HasPrefix .Destination "http" }} target="_blank" rel="noopener"{{ end }}>{{ .Text | safeHTML }}</a>

@@ -1,11 +1,31 @@
-{{/* 直接抓取原本 static 裡的路徑，保證不會破圖 */}}
+{{/* 1. 清理路徑並嘗試取得圖片資源 */}}
+{{- $src := strings.TrimPrefix "/" .Destination -}}
+{{- $img := resources.Get $src -}}
+
 <div class="image-aspect-ratio-container">
-  <img src="{{ .Destination | safeURL }}" 
-       alt="{{ .Text }}" 
-       title="{{ .Title }}" 
-       loading="lazy" 
-       class="unified-post-img">
+  {{- if $img -}}
+    {{/* 2. 成功抓到圖：自動生成 WebP */}}
+    {{- $webp := $img.Resize (printf "%dx%d webp" $img.Width $img.Height) -}}
+    <picture>
+      <source srcset="{{ $webp.RelPermalink }}" type="image/webp">
+      {{/* 這裡保留你原本的 class 和 lazy loading */}}
+      <img src="{{ $img.RelPermalink }}" 
+           alt="{{ .Text }}" 
+           title="{{ .Title }}" 
+           loading="lazy" 
+           class="unified-post-img">
+    </picture>
+  {{- else -}}
+    {{/* 3. 如果在 assets 找不到（可能還在 static），就用原始路徑顯示 */}}
+    <img src="{{ .Destination | safeURL }}" 
+         alt="{{ .Text }}" 
+         title="{{ .Title }}" 
+         loading="lazy" 
+         class="unified-post-img">
+  {{- end -}}
 </div>
+
+{{/* 4. 這裡可以保留你的 CSS 樣式 */}}
 
 <style>
   /* 這裡控制圖片的外框比例 */

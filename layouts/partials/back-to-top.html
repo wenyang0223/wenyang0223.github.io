@@ -1,0 +1,45 @@
+<button id="back-to-top" title="回到頂部">⬆</button>
+
+<style>
+  #back-to-top {
+    font-size: 24px;   /* 調整這個數字，數字越大箭頭越大 */
+    line-height: 1;
+    display: none; /* 預設隱藏 */
+    position: fixed; 
+    bottom: 20px; 
+    right: 30px; 
+    z-index: 99; 
+    border: none; 
+    outline: none; 
+    background-color: #555; /* 按鈕顏色 */
+    color: white; 
+    cursor: pointer; 
+    padding: 18px; 
+    border-radius: 10px;
+    transition: opacity 0.3s;
+  }
+
+  #back-to-top:hover {
+    background-color: #333; /* 懸停顏色 */
+  }
+</style>
+
+<script>
+  var mybutton = document.getElementById("back-to-top");
+
+  // 當使用者向下滾動 20px 時，顯示按鈕
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
+  }
+
+  // 點擊後回到頂部
+  mybutton.onclick = function() {
+    window.scrollTo({top: 0, behavior: 'smooth'}); // 平滑滾動
+  }
+</script>

@@ -1,0 +1,169 @@
+{{ if .Site.Params.newsletter.enable }}
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto text-center">
+        <h2>{{ .Site.Params.newsletter.title | markdownify }}</h2>
+        <p class="text-light px-md-5 py-4 border-left border-right border-primary">
+          {{ .Site.Params.newsletter.content | markdownify }}</p>
+        <form action="#" class="row justify-content-center">
+          <div class="input-group col-md-8">
+            <input type="text" class="form-control" placeholder="Your Email Address">
+            <div class="input-group-append">
+              <button class="input-group-text btn btn-primary">Subscribe</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">閱讀＆筆記</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.categories }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">個人反思</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.series }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">會所模式</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.clubhouse }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">主題文章</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.topics }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">精選文章</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.highlights }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 class="text-primary  mb-3 footer-title">Projects</h4>
+        <ul class="list-unstyled footer-list">
+          {{ range .Site.Taxonomies.projects }}
+          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 border-top mt-2 py-4 text-center">
+        {{ .Site.Params.copyright | markdownify }}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-title {
+    font-size: 0.95rem !important;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  
+  .footer-item {
+    font-size: 0.75rem !important;
+    margin-bottom: 15px; /* 縮小行距讓它更緊湊 */
+    font-weight: 300;
+
+  }
+  .footer-count {
+    font-size: 0.75rem;
+    color: rgb(132, 132, 132);
+    margin-left: 3px;
+  }
+  /* 增加列表最小高度，讓下一行標題更整齊（可選） */
+  .footer-list {
+    min-height: 120px; 
+  }
+</style>
+
+
+<script>
+  var indexURL = {{ "index.json" | absURL }}
+</script>
+
+{{ "<!-- JS Plugins -->" | safeHTML }}
+{{ range .Site.Params.plugins.js}}
+<script src="{{ .URL | absURL }}"></script>
+{{ end }}
+{{ "<!-- Main Script -->" | safeHTML }}
+{{ $script := resources.Get "js/script.js" | minify}}
+<script src="{{ $script.Permalink }}"></script>
+
+
+<!-- cookie -->
+{{ if site.Params.cookies.enable }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+<div id="js-cookie-box" class="cookie-box cookie-box-hide">
+	This site uses cookies. By continuing to use this website, you agree to their use. <span id="js-cookie-button" class="btn btn-sm btn-primary ml-2">I Accept</span>
+</div>
+<script>
+	(function ($) {
+		const cookieBox = document.getElementById('js-cookie-box');
+		const cookieButton = document.getElementById('js-cookie-button');
+		if (!Cookies.get('cookie-box')) {
+			cookieBox.classList.remove('cookie-box-hide');
+			cookieButton.onclick = function () {
+				Cookies.set('cookie-box', true, {
+					expires: {{ site.Params.cookies.expire_days }}
+				});
+				cookieBox.classList.add('cookie-box-hide');
+			};
+		}
+	})(jQuery);
+</script>
+
+<!-- cookie style -->
+<style>
+.cookie-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 9999;
+  padding: 1rem 2rem;
+  background: rgb(71, 71, 71);
+  transition: all .75s cubic-bezier(.19, 1, .22, 1);
+  color: #fdfdfd;
+}
+
+.cookie-box-hide {
+  display: none;
+}
+</style>
+{{ end }}
+
+{{ partial "back-to-top.html" . }}

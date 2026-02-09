@@ -1,0 +1,43 @@
+{{- $img := resources.Get .Destination -}}
+
+<div class="image-aspect-ratio-container">
+  {{- if $img -}}
+    {{/* 成功抓到圖 */}}
+    <p style="color: green;">成功抓到資源！</p> 
+    {{- $webp := $img.Resize (printf "%dx%d webp" $img.Width $img.Height) -}}
+    <picture>
+      <source srcset="{{ $webp.RelPermalink }}" type="image/webp">
+      <img src="{{ $img.RelPermalink }}" class="unified-post-img">
+    </picture>
+  {{- else -}}
+    {{/* 抓不到圖 */}}
+    <p style="color: red;">警告：Hugo 在 assets 找不到這張圖：{{ .Destination }}</p>
+    <img src="{{ .Destination | safeURL }}" class="unified-post-img">
+  {{- end -}}
+</div>
+
+<style>
+  /* 這裡控制圖片的外框比例 */
+  .image-aspect-ratio-container {
+    width: 100%;
+    max-width: 800px;  /* 你可以設定最大寬度 */
+    margin: 1.5rem auto;
+    overflow: hidden;
+    border-radius: 8px; /* 圓角（選配） */
+  }
+
+  .unified-post-img {
+    width: 100%;
+    height: 450px;     /* 強制所有圖片高度統一 */
+    object-fit: cover; /* 關鍵：裁切中心，不壓扁圖片 */
+    object-position: center;
+    display: block;
+  }
+
+  /* 手機版自動縮小高度，避免太佔空間 */
+  @media (max-width: 768px) {
+    .unified-post-img {
+      height: 250px;
+    }
+  }
+</style>
