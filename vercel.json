@@ -2,14 +2,27 @@
     "cleanUrls": true,
     "trailingSlash": false,
     "redirects": [
+      // 之前的 tag redirect（如果還要保留）
       {
         "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98",
-        "destination": "/tags/書摘",
+        "destination": "/tags/%E6%9B%B8%E6%91%98",
         "permanent": true
       },
       {
         "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/",
-        "destination": "/tags/書摘/",
+        "destination": "/tags/%E6%9B%B8%E6%91%98/",
+        "permanent": true
+      },
+  
+      // 新：一次性處理所有 閱讀心得 文章的前綴變更
+      {
+        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/:slug",
+        "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97:slug",
+        "permanent": true
+      },
+      {
+        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/:slug/",
+        "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97:slug/",
         "permanent": true
       }
     ]
