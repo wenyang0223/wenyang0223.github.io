@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://wenyang0223.github.io"
+baseURL = "https://wenyang.vercel.app/"
 languageCode = "zh-tw"
 title = "聆聽的河流｜閱讀・書寫・心理・電影"
 theme = "liva-hugo"
