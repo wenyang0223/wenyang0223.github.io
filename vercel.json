@@ -13,13 +13,13 @@
         "permanent": true
       },
       {
-        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E5%89%B2%E8%85%95%E7%9A%84%E8%AA%98%E6%83%91%E5%81%9C%E6%AD%A2%E8%87%AA%E6%88%91%E5%82%B7%E5%AE%B3",
-        "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E5%89%B2%E8%85%95%E7%9A%84%E8%AA%98%E6%83%91%E5%81%9C%E6%AD%A2%E8%87%AA%E6%88%91%E5%82%B7%E5%AE%B3/",
+        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/:slug",
+        "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97:slug/",
         "permanent": true
       },
       {
-        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E5%89%B2%E8%85%95%E7%9A%84%E8%AA%98%E6%83%91%E5%81%9C%E6%AD%A2%E8%87%AA%E6%88%91%E5%82%B7%E5%AE%B3/",
-        "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E5%89%B2%E8%85%95%E7%9A%84%E8%AA%98%E6%83%91%E5%81%9C%E6%AD%A2%E8%87%AA%E6%88%91%E5%82%B7%E5%AE%B3/",
+        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/:slug/",
+        "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97:slug/",
         "permanent": true
       }
     ]
