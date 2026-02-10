@@ -1,23 +1,13 @@
 {
     "redirects": [
       {
-        "source": "/debug-test",
-        "destination": "/tags/書摘/",
+        "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%AE/:path*",
+        "destination": "/tags/%E6%9B%B8%E6%91%AE/:path*",
         "permanent": true
       },
       {
-        "source": "/tags/閱讀書摘",
-        "destination": "/tags/書摘/",
-        "permanent": true
-      },
-      {
-        "source": "/tags/閱讀書摘/:path*",
-        "destination": "/tags/書摘/:path*",
-        "permanent": true
-      },
-      {
-        "source": "/tags/閱讀書摘/",
-        "destination": "/tags/書摘/",
+        "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%AE",
+        "destination": "/tags/%E6%9B%B8%E6%91%AE",
         "permanent": true
       }
     ]
