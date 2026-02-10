@@ -11,16 +11,6 @@
         "source": "/tags/閱讀書摘/",
         "destination": "/tags/書摘/",
         "permanent": true
-      },
-      {
-        "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98",
-        "destination": "/tags/書摘",
-        "permanent": true
-      },
-      {
-        "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/",
-        "destination": "/tags/書摘/",
-        "permanent": true
       }
     ]
   }
