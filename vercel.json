@@ -8,12 +8,12 @@
         "permanent": true
       },
       {
-        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/:slug",
+        "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/(?!%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97)(?P<slug>.+)",
         "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97:slug",
         "permanent": true
       },
       {
-        "source": "/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/:slug",
+        "source": "/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/(?!%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97)(?P<slug>.+)",
         "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97:slug",
         "permanent": true
       }
