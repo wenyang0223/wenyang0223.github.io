@@ -8,8 +8,8 @@
         "permanent": true
       },
       {
-        "source": "/categories/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/:slug*",
-        "destination": "/categories/%E6%9B%B8%E6%91%98/:slug*",
+        "source": "/categories/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/:path*",
+        "destination": "/categories/%E6%9B%B8%E6%91%98/:path*",
         "permanent": true
       },
       {
