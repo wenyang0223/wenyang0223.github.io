@@ -144,6 +144,11 @@
       "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E8%B7%9F%E4%B8%80%E6%A3%B5%E6%A8%B9%E8%81%8A%E5%A4%A9",
       "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E8%B7%9F%E4%B8%80%E6%A3%B5%E6%A8%B9%E8%81%8A%E5%A4%A9%E8%81%BD%E4%BB%96%E7%9A%84%E4%BA%BA%E7%94%9F%E5%93%B2%E5%AD%B8%E6%BA%9D%E9%80%9A%E5%B8%AB%E7%9A%8437%E5%A0%82%E6%A4%8D%E7%89%A9%E7%99%82%E7%99%92%E9%80%9A%E5%BF%83%E8%AA%B2",
       "permanent": true
+    },
+    {
+      "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E8%A6%8B%E4%BD%9B%E6%AE%BA%E4%BD%9B",
+      "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E8%A6%8B%E4%BD%9B%E6%AE%BA%E4%BD%9B",
+      "permanent": true
     }
   ]
 }
