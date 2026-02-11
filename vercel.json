@@ -134,6 +134,11 @@
       "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E5%9C%96%E9%A8%B0%E8%88%87%E7%A6%81%E5%BF%8C",
       "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E5%9C%96%E9%A8%B0%E8%88%87%E7%A6%81%E5%BF%8C",
       "permanent": true
+    },
+    {
+      "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E6%93%81%E6%8A%B1%E9%99%B0%E5%BD%B1",
+      "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E6%93%81%E6%8A%B1%E9%99%B0%E5%BD%B1",
+      "permanent": true
     }
   ]
 }
