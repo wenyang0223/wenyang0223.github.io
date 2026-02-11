@@ -27,6 +27,16 @@
 見佛殺佛(還是有問題)
 
 
+第三條
+
+    {
+      "source": "/categories/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/:path*",
+      "destination": "/categories/%E6%9B%B8%E6%91%98/:path*",
+      "permanent": true
+    },
+    
+
+####
 原網址：/blog/閱讀心得/找回家庭的療癒力-多世代家族治療 
 跳轉到：/blog/閱讀心得/閱讀心得找回家庭的療癒力多世代家族治療
 類型：永久重定向 (301)
