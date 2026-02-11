@@ -131,13 +131,8 @@
       "permanent": true
     },
     {
-      "source": "/blog/閱讀心得/圖騰與禁忌閱讀筆記",
-      "destination": "/blog/閱讀心得/閱讀心得圖騰與禁忌",
-      "permanent": true
-    },
-    {
-      "source": "/blog/閱讀心得/擁抱陰影從對立謠向相對",
-      "destination": "/blog/閱讀心得/閱讀心得擁抱陰影從對立謠走向相對",
+      "source": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E5%9C%96%E9%A8%B0%E8%88%87%E7%A6%81%E5%BF%8C",
+      "destination": "/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E5%9C%96%E9%A8%B0%E8%88%87%E7%A6%81%E5%BF%8C",
       "permanent": true
     }
   ]
