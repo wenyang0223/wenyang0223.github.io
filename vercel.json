@@ -289,6 +289,11 @@
       "source": "/categories/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/:path*",
       "destination": "/categories/%E6%9B%B8%E6%91%98/:path*",
       "permanent": true
+    },
+    {
+      "source": "/blog/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/%E8%81%86%E8%81%BD%E7%96%BC%E7%97%9B2",
+      "destination": "/blog/%E6%9B%B8%E6%91%98/%E6%9B%B8%E6%91%98%E8%81%86%E8%81%BD%E7%96%BC%E7%97%9B",
+      "permanent": true
     }
   ]
 }
