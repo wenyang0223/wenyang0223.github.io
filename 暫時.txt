@@ -35,11 +35,7 @@
       "destination": "/blog/%E6%9B%B8%E6%91%98/%E6%9B%B8%E6%91%98$1",
       "permanent": true
     },
-    {
-      "source": "/categories/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/:path*",
-      "destination": "/categories/%E6%9B%B8%E6%91%98/:path*",
-      "permanent": true
-    },
+
 
 ####
 原網址：/blog/閱讀心得/找回家庭的療癒力-多世代家族治療 
@@ -67,9 +63,7 @@
 原網址：
 跳轉到：
 
-原網址：/blog/閱讀書摘/成為一個人
-跳轉到：/blog/成為一個人/書摘成為一個人
-類型：永久重定向 (301)
+
 
     {
       "source": 
