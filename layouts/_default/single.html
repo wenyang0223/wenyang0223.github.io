@@ -69,9 +69,9 @@
             <picture>
               <source srcset="{{ $webp.RelPermalink }}" type="image/webp">
               <img src="{{ $img.RelPermalink }}" 
-                   class="img-fluid w-100" 
-                   style="height: 450px; object-fit: cover; border-radius: 8px;" 
-                   alt="{{ .Title }}">
+              class="img-fluid" 
+              style="width: auto; max-width: 80%; height: auto; border-radius: 8px; display: block; margin: 0 auto;" 
+              alt="{{ .Title }}">
             </picture>
           {{ else }}
             {{/* 3. 失敗：顯示原始路徑（保證不破圖） */}}

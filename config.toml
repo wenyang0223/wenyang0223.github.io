@@ -144,6 +144,7 @@ highlights = "highlights" #精選文章
 
 [imaging]
   quality = 80
+  autoOrient = true  # <--- 加上這一行，這是解決「橫向」的終極開關
   [imaging.formatOptions]
     webp = { quality = 80 }
 
