@@ -116,8 +116,18 @@
           {{ end }}
         </nav>
 
-        {{ template "_internal/disqus.html" . }}
-      </div>
+
+      </div> <div class="col-lg-10 mx-auto">
+        <div id="waline" style="margin-top: 1rem;"></div>
+      <script type="module">
+        import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+        init({
+          el: '#waline',
+          serverURL: 'https://wenyang.vercel.app',
+          pageview: false,
+          reaction: false,
+        });
+      </script>
     </div>
   </div>
 </section>
