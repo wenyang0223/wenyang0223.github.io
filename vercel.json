@@ -298,11 +298,11 @@
     }
       ],
       "rewrites": [
-        { "source": "/(.*)", "destination": "/" },
+      { "source": "/ui/(.*)", "destination": "/api/ui/$1" },
 
-        { "source": "/ui/:path*", "destination": "/ui/$1" },
-      
-        { "source": "/api/:path*", "destination": "/api/$1" }
+      { "source": "/api/(.*)", "destination": "/api/$1" },
+
+      { "source": "/(.*)", "destination": "/" }
       ],
       "headers": [
         {
