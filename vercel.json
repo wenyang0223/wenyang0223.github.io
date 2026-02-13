@@ -294,6 +294,29 @@
       ],
       "destination": "https://wenyang.vercel.app/$1",
       "permanent": true
+    },
+    {
+      "rewrites": [
+        {
+          "source": "/ui/(.*)",
+          "destination": "/api/ui/$1"
+        },
+        {
+          "source": "/(.*)",
+          "destination": "/api"
+        }
+      ],
+      "headers": [
+        {
+          "source": "/favicon.ico",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
