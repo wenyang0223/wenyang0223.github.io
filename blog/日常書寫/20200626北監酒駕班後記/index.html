@@ -12,7 +12,7 @@
 </a><a href=javascript:void(0) onclick='window.scrollTo({top:0,behavior:"smooth"})' class=btn-back-custom>▲ 回到頂部</a></div><nav class=post-nav-wrapper><a class="nav-item prev" href=https://wenyang.vercel.app/blog/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97%E5%A4%B1%E6%8E%A7%E7%9A%84%E6%AD%A3%E5%90%91%E6%80%9D%E8%80%83/><span class=nav-label>👈上一篇</span>
 <span class=nav-title>閱讀心得｜《失控的正向思考》</span>
 </a><a class="nav-item next" href=https://wenyang.vercel.app/blog/%E6%97%A5%E5%B8%B8%E6%9B%B8%E5%AF%AB/20200702%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%99%82%E9%96%93%E7%9A%84%E5%AD%98%E5%9C%A8/><span class=nav-label>下一篇👉</span>
-<span class=nav-title>如何理解時間的存在？</span></a></nav><style>.wl-meta .wl-browser{display:none!important}.wl-meta .wl-os{display:none!important}:root{--waline-font-size:25px;--waline-white:#fff;--waline-light-grey:#999;--waline-dark-grey:#666;--waline-theme-color:rgba(111, 202, 209, 82);--waline-active-color:#00eeffda;--waline-color:#444;--waline-bg-color:#fff;--waline-bg-color-light:#f8f8f8;--waline-bg-color-hover:#f0f0f0;--waline-border-color:#ddd;--waline-disable-bg-color:#f8f8f8;--waline-disable-color:#bbb;--waline-code-bg-color:#282c34;--waline-bq-color:#f0f0f0;--waline-avatar-size:3.25rem;--waline-m-avatar-size:calc(var(--waline-avatar-size) * 9 / 13);--waline-badge-color:#3498db;--waline-badge-font-size:0.775em;--waline-info-bg-color:#f8f8f8;--waline-info-color:#999;--waline-info-font-size:0.625em;--waline-border:1px solid var(--waline-border-color);--waline-avatar-radius:50%;--waline-box-shadow:none}</style></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
+<span class=nav-title>如何理解時間的存在？</span></a></nav><style>.wl-meta .wl-browser{display:none!important}.wl-meta .wl-os{display:none!important}#waline .wl-action[aria-label*=Markdown],#waline .wl-action[title*=Markdown],#waline .wl-action.wl-markdown{display:none!important}#waline .wl-header input,#waline .wl-header input[name=nick],#waline .wl-header input[name=mail]{font-size:20px!important;font-weight:100!important;font-family:inherit!important}#waline .wl-header label{font-weight:900!important}#waline .wl-editor{display:flex!important;flex-direction:column!important;gap:0!important;min-height:180px!important;max-height:250px!important;padding:0!important;padding-bottom:2px!important;font-size:22px!important;overflow-y:auto!important;resize:vertical}:root{--waline-font-size:25px;--waline-white:#fff;--waline-light-grey:#999;--waline-dark-grey:#666;--waline-theme-color:rgba(111, 202, 209, 82);--waline-active-color:#3ae6f3da;--waline-color:#444;--waline-bg-color:#fff;--waline-bg-color-light:#f8f8f8;--waline-bg-color-hover:#f0f0f0;--waline-border-color:#ddd;--waline-disable-bg-color:#f8f8f8;--waline-disable-color:#bbb;--waline-code-bg-color:#282c34;--waline-bq-color:#f0f0f0;--waline-avatar-size:3.25rem;--waline-m-avatar-size:calc(var(--waline-avatar-size) * 9 / 13);--waline-badge-color:#3498db;--waline-badge-font-size:0.775em;--waline-info-bg-color:#f8f8f8;--waline-info-color:#999;--waline-info-font-size:0.625em;--waline-border:1px solid var(--waline-border-color);--waline-avatar-radius:50%;--waline-box-shadow:none;--waline-editor-min-height:60px}</style></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
         import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
         init({
           el: '#waline',
@@ -21,6 +21,15 @@
           path: window.location.pathname.replace(/\/$/, ''),
           pageview: true,
           reaction: false,
+          locale: {
+              placeholder: '歡迎任何回饋與討論...', 
+              nick: '如何稱呼呢？',      
+              mail: 'Email',  
+              submit: '留言'
+      
+      
+      
+    },
           meta: ['nick', 'mail'],
           site: {
             name: '聆聽的河流｜閱讀・書寫・心理・電影', 
