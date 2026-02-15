@@ -122,7 +122,15 @@
           {{ end }}
         </nav>
 
-
+        <style>
+          /* 这里的变量会覆盖 Waline 的默认样式 */
+          :root {
+            --waline-theme-color: $primary-color;     /* 比如改为和你网站风格一致的棕色 */
+            --waline-active-color: #dc0000;    /* 激活状态的颜色 */
+            --waline-badge-radius: 4px;        /* 徽章圆角 */
+            --waline-border-radius: 8px;       /* 整体圆角 */
+          }
+        </style>
 
       </div> <div class="col-lg-10 mx-auto">
         <div id="waline" style="margin-top: 1rem;"></div>
@@ -131,6 +139,7 @@
         init({
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
+          dark: 'auto',
           path: window.location.pathname.replace(/\/$/, ''),
           pageview: true,
           reaction: false,
