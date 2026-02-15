@@ -124,7 +124,7 @@
         init({
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
-          path: window.location.pathname,
+          path: '{{ .Permalink | replace .Site.BaseURL "" | safeJS }}',  // Hugo 直接輸出正確 pathname
           pageview: false,
           reaction: false,
         });
