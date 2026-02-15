@@ -130,15 +130,15 @@
           #waline .wl-action[title*="Markdown"],
           #waline .wl-action.wl-markdown { display: none !important;}
           #waline .wl-header input, 
-#waline .wl-header input[name='nick'], 
-#waline .wl-header input[name='mail'] {
-    font-size: 20px !important;
-    font-weight: 100 !important; /* 使用最粗的等級 */
-    font-family: inherit !important;
-}
-#waline .wl-header label {
-    font-weight: 900 !important;
-}
+          #waline .wl-header input[name='nick'], 
+          #waline .wl-header input[name='mail'] { /* 如何稱呼、電子信箱輸入 字加粗 */
+              font-size: 20px !important;
+              font-weight: 100 !important; 
+              font-family: inherit !important;
+              }
+          #waline .wl-header label { /* 如何稱呼、電子信箱字加粗 */
+              font-weight: 900 !important;
+              }
           #waline .wl-editor {
     display: flex !important;
     flex-direction: column !important;
@@ -162,7 +162,7 @@
 
   /* 主题色 */
   --waline-theme-color: rgba(111, 202, 209, 82);
-  --waline-active-color: #3ae6f3da;
+  --waline-active-color: #54ebf5da;
 
   /* 布局颜色 */
   --waline-color: #444;
