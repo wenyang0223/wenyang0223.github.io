@@ -27,11 +27,12 @@
 </a><a href=javascript:void(0) onclick='window.scrollTo({top:0,behavior:"smooth"})' class=btn-back-custom>▲ 回到頂部</a></div><nav class=post-nav-wrapper><a class="nav-item prev" href=https://wenyang.vercel.app/blog/%E6%97%A5%E5%B8%B8%E6%9B%B8%E5%AF%AB/20221028%E5%9C%98%E9%AB%94/><span class=nav-label>👈上一篇</span>
 <span class=nav-title>20221028團體</span>
 </a><a class="nav-item next" href=https://wenyang.vercel.app/blog/%E6%97%A5%E5%B8%B8%E6%9B%B8%E5%AF%AB/20221114%E9%97%9C%E6%96%BC%E8%87%AA%E6%88%91%E6%8F%AD%E9%9C%B2/><span class=nav-label>下一篇👉</span>
-<span class=nav-title>關於自我揭露</span></a></nav></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
+<span class=nav-title>關於自我揭露</span></a></nav><style>:root{--waline-theme-color:$primary-color;--waline-active-color:#dc0000;--waline-badge-radius:4px;--waline-border-radius:8px}</style></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
         import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
         init({
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
+          dark: 'auto',
           path: window.location.pathname.replace(/\/$/, ''),
           pageview: true,
           reaction: false,

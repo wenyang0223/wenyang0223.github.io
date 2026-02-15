@@ -15,11 +15,12 @@
 </a><a href=javascript:void(0) onclick='window.scrollTo({top:0,behavior:"smooth"})' class=btn-back-custom>▲ 回到頂部</a></div><nav class=post-nav-wrapper><a class="nav-item prev" href=https://wenyang.vercel.app/blog/%E9%9B%BB%E5%BD%B1%E5%BF%83%E5%BE%97/%E7%84%A1%E4%BA%BA%E8%83%BD%E6%80%AA%E7%BD%AA%E6%89%8D%E6%98%AF%E6%9C%80%E7%97%9B%E8%8B%A6%E7%9A%84/><span class=nav-label>👈上一篇</span>
 <span class=nav-title>《橫山家之味》:無人能怪罪才是最痛苦的</span>
 </a><a class="nav-item next" href=https://wenyang.vercel.app/blog/%E9%9B%BB%E5%BD%B1%E5%BF%83%E5%BE%97/%E9%98%BF%E9%BC%BB/><span class=nav-label>下一篇👉</span>
-<span class=nav-title>《阿鼻》</span></a></nav></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
+<span class=nav-title>《阿鼻》</span></a></nav><style>:root{--waline-theme-color:$primary-color;--waline-active-color:#dc0000;--waline-badge-radius:4px;--waline-border-radius:8px}</style></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
         import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
         init({
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
+          dark: 'auto',
           path: window.location.pathname.replace(/\/$/, ''),
           pageview: true,
           reaction: false,

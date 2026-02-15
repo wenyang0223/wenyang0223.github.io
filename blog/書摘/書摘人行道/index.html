@@ -10,11 +10,12 @@
 </a><a href=javascript:void(0) onclick='window.scrollTo({top:0,behavior:"smooth"})' class=btn-back-custom>▲ 回到頂部</a></div><nav class=post-nav-wrapper><a class="nav-item prev" href=https://wenyang.vercel.app/blog/%E6%9B%B8%E6%91%98/%E6%9B%B8%E6%91%98%E7%96%BE%E7%97%85%E7%9A%84%E9%9A%B1%E5%96%BB/><span class=nav-label>👈上一篇</span>
 <span class=nav-title>書摘｜《疾病的隱喻》</span>
 </a><a class="nav-item next" href=https://wenyang.vercel.app/blog/%E6%9B%B8%E6%91%98/%E6%9B%B8%E6%91%98%E5%A6%82%E4%BD%95%E8%AC%80%E6%AE%BA%E4%B8%80%E5%BA%A7%E5%9F%8E%E5%B8%82/><span class=nav-label>下一篇👉</span>
-<span class=nav-title>書摘｜《如何謀殺一座城市》</span></a></nav></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
+<span class=nav-title>書摘｜《如何謀殺一座城市》</span></a></nav><style>:root{--waline-theme-color:$primary-color;--waline-active-color:#dc0000;--waline-badge-radius:4px;--waline-border-radius:8px}</style></div><div class="col-lg-10 mx-auto"><div id=waline style=margin-top:1rem></div><script type=module>
         import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
         init({
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
+          dark: 'auto',
           path: window.location.pathname.replace(/\/$/, ''),
           pageview: true,
           reaction: false,
