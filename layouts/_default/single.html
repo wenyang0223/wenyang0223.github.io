@@ -126,8 +126,7 @@
           /* 这里的变量会覆盖 Waline 的默认样式 */
           :root {
   /* 字体大小 */
-  --waline-font-size: 16px;
-
+   --waline-font-size: 20px;
   /* 常规颜色 */
   --waline-white: #fff;
   --waline-light-grey: #999;
@@ -167,29 +166,7 @@
   --waline-border: 1px solid var(--waline-border-color);
   --waline-avatar-radius: 50%;
   --waline-box-shadow: none;
-}
 
-/* 根据用户设置 ↓ */
-darkmode-selector {
-  /* 常规颜色 */
-  --waline-white: #000;
-  --waline-light-grey: #666;
-  --waline-dark-grey: #999;
-
-  /* 布局颜色 */
-  --waline-color: #888;
-  --waline-bg-color: #1e1e1e;
-  --waline-bg-color-light: #272727;
-  --waline-border-color: #333;
-  --waline-disable-bg-color: #444;
-  --waline-disable-color: #272727;
-
-  /* 特殊颜色 */
-  --waline-bq-color: #272727;
-
-  /* 其他颜色 */
-  --waline-info-bg-color: #272727;
-  --waline-info-color: #666;
           }
         </style>
 
@@ -200,7 +177,7 @@ darkmode-selector {
         init({
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
-          dark: 'auto',
+          dark: 'false',
           path: window.location.pathname.replace(/\/$/, ''),
           pageview: true,
           reaction: false,
