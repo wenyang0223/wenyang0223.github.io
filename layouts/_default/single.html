@@ -89,6 +89,12 @@
 
         <hr id="article-end" style="margin-top: 1px;">
 
+        <div style="margin: 1.2rem 0; font-size: 0.95em; color: #666;">
+          <div>👀 本頁瀏覽量： <span class="waline-pageview-count"></span> 次</div>
+          
+          <div style="margin-top: 0.8rem;">🏠 主頁瀏覽量： <span class="waline-pageview-count" data-path="/"></span> 次</div>
+        </div>
+
         <div class="mt-4 mb-1 d-flex justify-content-between align-items-center">
           <a href="/" onclick="if(document.referrer) { window.history.back(); return false; }" class="btn-back-custom">
             ← 返回上一頁
@@ -117,6 +123,7 @@
         </nav>
 
 
+
       </div> <div class="col-lg-10 mx-auto">
         <div id="waline" style="margin-top: 1rem;"></div>
       <script type="module">
@@ -125,7 +132,7 @@
           el: '#waline',
           serverURL: 'https://wenyang-waline.vercel.app',
           path: window.location.pathname.replace(/\/$/, ''),
-          pageview: false,
+          pageview: true,
           reaction: false,
           site: {
             name: '聆聽的河流｜閱讀・書寫・心理・電影', 
