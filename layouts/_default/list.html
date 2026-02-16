@@ -24,5 +24,16 @@
   </div>
 </section>
 <!-- /blog post -->
+<!-- Waline 瀏覽量初始化 -->
 
+<script type="module">
+  import { pageviewCount } from 'https://unpkg.com/@waline/client@v3/dist/pageview.js';
+
+  pageviewCount({
+    serverURL: 'https://wenyang-waline.vercel.app',
+    path: window.location.pathname,  // 記錄當前頁面的瀏覽量
+    update: true
+  });
+</script>
 {{ end }}
+
