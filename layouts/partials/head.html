@@ -64,4 +64,12 @@
     }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+  
+  {{ if not .Params.featured_image }}
+  {{ $firstImage := findRE `<img.*?src=["'](.*?)["'].*?>` .Content 1 }}
+  {{ with index $firstImage 0 }}
+    {{ $src := replaceRE `.*src=["'](.*?)["'].*` `$1` . }}
+    <img src="{{ $src | safeURL }}" data-pagefind-meta="image[src]" style="display:none;">
+  {{ end }}
+{{ end }}
 </head>

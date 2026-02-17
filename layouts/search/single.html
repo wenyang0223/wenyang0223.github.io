@@ -10,8 +10,25 @@
           window.addEventListener('DOMContentLoaded', function() {
             new PagefindUI({
               element: "#search",
-              showImages: false
+              showImages: true,
+              openFilters: false,
+              resetStyles: false,
+              excerptLength: 20,
+              ranking: {
+                termFrequency: 1.0,
+                spreading: 1.5,
+                termSaturation: 1.4,
+                termSimilarity: 0.8
+              }
             });
+          });
+
+          document.addEventListener('click', function(e) {
+            const link = e.target.closest('.pagefind-ui__result-link');
+            if (link) {
+              e.preventDefault();
+              window.open(link.href, '_blank');
+            }
           });
         </script>
       </div>
