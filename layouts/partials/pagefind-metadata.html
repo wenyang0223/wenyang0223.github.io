@@ -1,0 +1,35 @@
+{{/* 自動判斷頁面類型並注入 Pagefind metadata，無需改 front matter */}}
+{{ $searchType := "unknown" }}
+
+{{ if .IsHome }}
+  {{ $searchType = "home" }}
+{{ else if eq .Kind "page" }}
+  {{ $searchType = "page" }}
+{{ else if eq .Kind "section" }}
+  {{ $searchType = "section" }}
+{{ else if eq .Kind "taxonomy" }}
+  {{ if eq .Data.Plural "tags" }}
+    {{ $searchType = "tag" }}
+  {{ else if eq .Data.Plural "categories" }}
+    {{ $searchType = "category" }}
+  {{ else }}
+    {{ $searchType = "taxonomy" }}
+  {{ end }}
+{{ else if eq .Kind "term" }}
+  {{ $searchType = "term" }}
+{{ else if eq .Kind "single" }}
+  {{/* 文章頁預設為 post/blog */}}
+  {{ $searchType = "post" }}
+  {{/* 如果 front matter 有 type 就優先用 */}}
+  {{ with .Params.type }}
+    {{ $searchType = . }}
+  {{ end }}
+{{ end }}
+
+{{/* 注入 meta 給 Pagefind */}}
+<meta data-pagefind-meta="search_type[content]" content="{{ $searchType }}">
+
+{{/* 可選：如果想額外過濾其他屬性，例如 section 名稱 */}}
+{{ if .Section }}
+  <meta data-pagefind-meta="section[content]" content="{{ .Section }}">
+{{ end }}

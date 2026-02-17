@@ -1,16 +1,15 @@
 {
-  "name": "user",
+  "name": "your-hugo-site",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
+  "private": true,
+  "description": "Hugo site with Pagefind search",
+  "scripts": {
+    "build": "npm install && hugo --gc --minify && npx pagefind --site public --output-subdir ../static/pagefind",
+    "search-index": "npx pagefind --site public --output-subdir ../static/pagefind"
+  },
+  "devDependencies": {
     "pagefind": "^1.4.0"
   },
-  "scripts": {
-    "build": "hugo && npx pagefind --site public"
-  },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "license": "ISC"
 }

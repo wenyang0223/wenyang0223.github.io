@@ -5,24 +5,41 @@
       <div class="col-lg-10">
         <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
         <script src="/pagefind/pagefind-ui.js"></script>
+        
+        <h1 style="margin-bottom: 2rem;">站內搜尋</h1>
         <div id="search"></div>
+
         <script>
           window.addEventListener('DOMContentLoaded', function() {
-            new PagefindUI({
+            // 初始化 Pagefind UI
+            const pf = new PagefindUI({
               element: "#search",
-              showImages: true,
-              openFilters: false,
+              showImages: true,        // 啟動縮圖顯示
+              openFilters: false,      // 預設折疊過濾面板
               resetStyles: false,
-              excerptLength: 20,
-              ranking: {
-                termFrequency: 1.0,
-                spreading: 1.5,
-                termSaturation: 1.4,
-                termSimilarity: 0.8
+              excerptLength: 30,       // 摘要長度稍微增加
+              
+              // 1. 中文化設定
+              translations: {
+                placeholder: "輸入關鍵字搜尋...",
+                zero_results: "找不到相關內容 😔",
+                loading: "搜尋中...",
+                search_button: "搜尋",
+                clear_button: "清除"
+              },
+
+              // 2. 自動修正縮圖路徑（避免圖片破圖）
+              processResult: function (result) {
+                if (result.meta.image && !result.meta.image.startsWith('http')) {
+                  // 自動補全網站網址，確保縮圖顯示正常
+                  result.meta.image = window.location.origin + result.meta.image;
+                }
+                return result;
               }
             });
           });
 
+          // 3. 點擊結果在新分頁開啟
           document.addEventListener('click', function(e) {
             const link = e.target.closest('.pagefind-ui__result-link');
             if (link) {
