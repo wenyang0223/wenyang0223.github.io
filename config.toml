@@ -34,6 +34,7 @@ summaryLength = "10"
   URL = "plugins/slick/slick.min.js"
   [[params.plugins.js]]
   URL = "plugins/venobox/venobox.min.js"
+  
   [[params.plugins.js]]
   URL = "plugins/search/fuse.min.js"
   [[params.plugins.js]]
@@ -77,14 +78,14 @@ location = "Taipei, Taiwan"
 # copyright
 copyright = "| copyright &copy; 2020 [Themefisher](https://themefisher.com) All Rights Reserved |"
 
-  # Preloader
-  [params.preloader]
-  enable = true
-  preloader = "" # use .png , .svg or .gif format
+# Preloader
+[params.preloader]
+enable = true
+preloader = "" # use .png , .svg or .gif format
 
-  # search
-  [params.search]
-  enable = true
+# search
+[params.search]
+enable = false
 
 # cookies
 [params.cookies]

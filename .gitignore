@@ -3,3 +3,5 @@
 public/
 PublishDir/ 
 hugo.exe
+static/pagefind/
+node_modules/

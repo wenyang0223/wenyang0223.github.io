@@ -1,7 +1,11 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "hugo --gc --minify && npx -y pagefind --site public",
+  "outputDirectory": "public",
+  "framework": "hugo",
   "cleanUrls": true,
   "trailingSlash": false,
-  
+
   "redirects": [
     {
       "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98",
@@ -299,10 +303,7 @@
       ],
       "rewrites": [
         { "source": "/api/:path*", "destination": "/api/:path*" },
-
-        { "source": "/ui/:path*", "destination": "/api/ui/:path*" },
-      
-        { "source": "/(.*)", "destination": "/" }
+        { "source": "/ui/:path*", "destination": "/api/ui/:path*" }
       ],
       "headers": [
         {
@@ -316,3 +317,4 @@
         }
   ]
 }
+
