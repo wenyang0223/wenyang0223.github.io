@@ -43,11 +43,13 @@
           </li>
           {{ end }}
           {{ end }}
-        </ul>
 
-        <a href="{{ "/search" | absURL }}" class="nav-link ml-lg-2 search-icon" title="搜尋">
-          <i class="ti-search"></i>
-        </a>
+
+          <a href="{{ "/search" | absURL }}" class="nav-link search-icon" title="搜尋">
+            <i class="ti-search"></i>
+          </a>
+        </li>
+      </ul>
 
         {{ if .Site.Params.navButton.enable }}
         {{ "<!-- get start btn -->" | safeHTML }}
@@ -62,16 +64,31 @@
   <style>
     .search-icon {
       color: #000 !important;
+      margin-right: 1rem !important;
+      padding-left: 1rem !important;
+      font-size: 18px;
+
     }
     
     .search-icon:hover {
       color: rgba(111, 202, 209, 82) !important;
     }
     
-    .search-icon.active {
-      color: var(--primary-color) !important;
-    }
-    </style>
+/* Home - 保持原樣 */
+.navbar-nav .nav-item:first-child .nav-link {
+  font-size: 18px;
+  margin-left: 0rem !important;
+
+}
+
+/* About - 調整左右間距 */
+.navbar-nav .nav-item:nth-child(2) .nav-link {
+  font-size: 18px;
+  margin-right: 0rem !important;
+
+}
+
+  </style>
 
 </header>
 {{ "<!-- /navigation -->" | safeHTML }}

@@ -1,4 +1,6 @@
 {{ define "main" }}
+
+
 <section class="section">
   <div class="container">
     <div class="row justify-content-center">
@@ -18,7 +20,13 @@
               openFilters: false,      // 預設折疊過濾面板
               resetStyles: false,
               excerptLength: 30,       // 摘要長度稍微增加
-              
+
+              ranking: {
+                termFrequency: 1.0,
+                spreading: 1.5,
+                termSaturation: 1.4,
+                termSimilarity: 0.8,  // 從 0.8 改成 0.5，更模糊
+              },
               // 1. 中文化設定
               translations: {
                 placeholder: "輸入關鍵字搜尋...",
@@ -26,7 +34,7 @@
                 loading: "搜尋中...",
                 search_button: "搜尋",
                 clear_button: "清除"
-              },
+                },
 
               // 2. 自動修正縮圖路徑（避免圖片破圖）
               processResult: function (result) {
