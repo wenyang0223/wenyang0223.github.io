@@ -211,3 +211,84 @@
 {{ end }}
 
 {{ partial "back-to-top.html" . }}
+
+<script>
+ 
+const API_BASE = 'https://wenyang-counters-and-likes.vercel.app/api/counter';
+
+function spawnRabbits(container, originX, originY) {
+  const count = 30;
+  for (let i = 0; i < count; i++) {
+    const rabbit = document.createElement('span');
+    rabbit.className = 'rabbit';
+    rabbit.textContent = '🐇';
+
+    const angle = (360 / count) * i + (Math.random() * 20 - 10);
+    const distance = 400 + Math.random() * 300;
+    const initialOffset = 0.12 + Math.random() * 0.08;  // 12%~20%，還是避免擠團
+    const rad = (angle * Math.PI) / 180;
+    const dx = Math.cos(rad) * distance;
+    const dy = Math.sin(rad) * distance;
+
+    rabbit.style.setProperty('--dx', dx + 'px');
+    rabbit.style.setProperty('--dy', dy + 'px');
+    rabbit.style.left = (originX - 10) + 'px';
+    rabbit.style.top  = (originY - 10) + 'px';
+
+// 動畫時間統一拉長，讓遠的兔子飛得到
+rabbit.style.animationDuration = '1.8s';  // 全固定 1.8s（或 1.6 + Math.random()*0.5 也行）
+rabbit.style.animationDelay    = (Math.random() * 0.01) + 's';  // 0~50ms
+
+    container.appendChild(rabbit);
+    setTimeout(() => rabbit.remove(), 5000);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.counters').forEach(container => {
+    const slug = container.dataset.slug;
+    if (!slug) return;
+
+    const viewsEl = container.querySelector('#views-count');
+    const likesEl = container.querySelector('#likes-count');
+    const likeBtn = container.querySelector('.like-btn');
+
+    if (!viewsEl || !likesEl || !likeBtn) return;
+
+    fetch(`${API_BASE}?slug=${encodeURIComponent(slug)}`)
+      .then(r => r.json())
+      .then(data => {
+        viewsEl.textContent = data.views;
+        likesEl.textContent = data.likes;
+      })
+      .catch(err => {
+        viewsEl.textContent = '—';
+        likesEl.textContent = '—';
+      });
+
+    likeBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        const res = await fetch(`${API_BASE}?slug=${encodeURIComponent(slug)}&action=like`, {
+          method: 'POST',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'omit'
+        });
+
+        if (!res.ok) throw new Error(`POST 失敗，狀態碼 ${res.status}`);
+
+        const data = await res.json();
+        likesEl.textContent = data.likes;
+
+        const rect = container.getBoundingClientRect();
+        spawnRabbits(container, e.clientX - rect.left, e.clientY - rect.top);
+
+      } catch (err) {
+        console.error('[按讚] 錯誤：', err.message);
+        alert('按讚失敗：' + (err.message || '未知錯誤'));
+      }
+    });
+  });
+});
+</script>
