@@ -45,8 +45,8 @@
           {{ end }}
         </ul>
 
-        <a href="{{ "/search" | absURL }}" class="nav-link ml-lg-2" title="搜尋">
-          <i class="ti-search" style="color: inherit;"></i>
+        <a href="{{ "/search" | absURL }}" class="nav-link ml-lg-2 search-icon" title="搜尋">
+          <i class="ti-search"></i>
         </a>
 
         {{ if .Site.Params.navButton.enable }}
@@ -57,5 +57,21 @@
       </div>
     </nav>
   </div>
+
+
+  <style>
+    .search-icon {
+      color: #000 !important;
+    }
+    
+    .search-icon:hover {
+      color: rgba(111, 202, 209, 82) !important;
+    }
+    
+    .search-icon.active {
+      color: var(--primary-color) !important;
+    }
+    </style>
+
 </header>
 {{ "<!-- /navigation -->" | safeHTML }}

@@ -22,7 +22,7 @@
               // 1. 中文化設定
               translations: {
                 placeholder: "輸入關鍵字搜尋...",
-                zero_results: "找不到相關內容 😔",
+                zero_results: "找不到相關內容🐇🐇🐇",
                 loading: "搜尋中...",
                 search_button: "搜尋",
                 clear_button: "清除"
@@ -52,4 +52,73 @@
     </div>
   </div>
 </section>
+
+
+<style>
+  /* 讓 Pagefind 的搜尋框和結果適配 Bootstrap 主題 */
+  .pagefind-ui__search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .pagefind-ui__search-input:focus {
+    outline: none;
+    border-color: rgba(111, 202, 209, 82);
+  }
+  
+  .pagefind-ui__result {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .pagefind-ui__result-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pagefind-ui__result-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .pagefind-ui__result-link:hover {
+    color: black;
+    text-decoration: underline;
+  }
+  
+  .pagefind-ui__result-excerpt {
+    color: #6c757d;
+    margin: 0;
+  }
+  
+  .pagefind-ui__result-excerpt mark {
+    background-color: #fff3cd;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.2rem;
+  }
+  
+  /* 如果有標籤和分類 */
+  .pagefind-ui__result-tags {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .pagefind-ui__button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  .pagefind-ui__button:hover {
+    background-color: #0056b3;
+  }
+  </style>
+
 {{ end }}
