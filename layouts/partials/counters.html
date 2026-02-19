@@ -2,7 +2,7 @@
 <div class="counters" data-slug="{{ .File.ContentBaseName | urlize }}">
   <span class="views">👀 本頁瀏覽量 <span id="views-count">0</span> 次</span>
   <button class="like-btn" aria-label="噴兔子">
-    <span class="like-icon">🐇</span>
+    <img src="/images/mao_3.png" class="like-icon" alt="讚">
     <span id="likes-count">0</span>
   </button>
 </div>
@@ -16,13 +16,13 @@
 
   .views {
     color: #666;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   #views-count, #likes-count {
     font-weight: bold;
     color: #333;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .like-btn {
@@ -30,22 +30,24 @@
     border: none;
     cursor: pointer;
     padding: 2px 6px;
-    font-size: 0.9rem;   /* 數字大小 */
+    font-size: 0.7rem;   /* 數字大小 */
     line-height: 0;
     vertical-align: 0.1em;
   }
 
   /* 關鍵：單獨控制 emoji 大小 */
   .like-icon {
-    font-size: 0.8rem;     /* ← 改這裡調整愛心大小 */
-    line-height: 1;
+    width: 3em;    /* ← 調整大小 */
+  height: 2.5rem;
+
     vertical-align: middle;
   }
 
   /* 飛出的兔子 */
   .rabbit {
   position: absolute;
-  font-size: 1.1rem;
+  width: 4rem;
+  height: 4rem;
   pointer-events: none;
   z-index: 10000;
   line-height: 1;
@@ -55,17 +57,8 @@
 }
 
 @keyframes burst {
-  0% {
-    transform: translate(0, 0) scale(0.6) rotate(0deg);
-    opacity: 0;
-  }
-  40% {  /* 過衝後快速回到正常大小 + 開始往外移動 */
-    transform: translate(calc(var(--dx) * 0.25), calc(var(--dy) * 0.25)) scale(1.1) rotate(10deg);
-    opacity: 1;
-  }
-  100% {  /* 後段拉長，讓你看得到噴遠 */
-    transform: translate(var(--dx), var(--dy)) scale(0.8) rotate(-15deg);
-    opacity: 0;
-  }
+  0%   { transform: translate(0, 0) scale(1.0); opacity: 1; }
+  60%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.7); opacity: 0; }
 }
 </style>

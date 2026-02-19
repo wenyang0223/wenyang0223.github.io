@@ -78,6 +78,7 @@ location = "Taipei, Taiwan"
 # copyright
 copyright = "| copyright &copy; 2020 [Themefisher](https://themefisher.com) All Rights Reserved |"
 
+
 # Preloader
 [params.preloader]
 enable = true

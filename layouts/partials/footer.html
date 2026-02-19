@@ -130,6 +130,7 @@
 
 
 <style>
+
   .footer-title {
     font-size: 0.95rem !important;
     font-weight: 400;
@@ -221,7 +222,12 @@ function spawnRabbits(container, originX, originY) {
   for (let i = 0; i < count; i++) {
     const rabbit = document.createElement('span');
     rabbit.className = 'rabbit';
-    rabbit.textContent = '🐇';
+    const img = document.createElement('img');
+img.src = '/images/mao_3.png';  // ← 換成你的圖片路徑
+img.style.width = '2.25rem';
+img.style.height = '2.5rem';
+
+rabbit.appendChild(img);
 
     const angle = (360 / count) * i + (Math.random() * 20 - 10);
     const distance = 400 + Math.random() * 300;

@@ -89,20 +89,9 @@
 
         <hr id="article-end" style="margin-top: 1px;">
 
-        <div class="article-stats" style="margin: 1.5rem 0 2rem 0; display: flex !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; font-size: 0.95em; color: #666;">
-
-          <div>
-          <div>👀 本頁瀏覽量： <span class="waline-pageview-count"></span> 次</div>
-          <div style="margin-top: 0.8rem;">
-            🏠 首頁瀏覽量： 
-            <span class="waline-pageview-count" 
-                  data-path="/" 
-                  data-update="false"></span> 次
-          </div>
+        <div style="text-align: right; margin: 0 0 -0.5rem 0;">
+          {{ partial "counters.html" . }}
         </div>
-
-        {{ partial "counters.html" . }}
-      </div>
 
         <div class="mt-4 mb-1 d-flex justify-content-between align-items-center">
           <a href="/" onclick="if(document.referrer) { window.history.back(); return false; }" class="btn-back-custom">
