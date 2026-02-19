@@ -103,7 +103,12 @@ link = "https://www.facebook.com/profile.php?id=100000266878039"
 [[params.social]]
 title = "Instagram"
 icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
-link = "https://www.instagram.com/wenyang_ouo/"
+link = "https://www.instagram.com/wenyang_ouo"
+
+[[params.social]]
+title = "Gravatar"
+icon = "ti-thumb-up" # themify icon : https://themify.me/themify-icons
+link = "https://gravatar.com/enthusiastically4d7178ae68"
 
 # --- 核心路徑設定 (放在最外層) ---
 uglyURLs = true
