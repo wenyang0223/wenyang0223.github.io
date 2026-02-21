@@ -1,0 +1,18 @@
+{{ $slug := .File.ContentBaseName }}
+{{ if eq $slug "index" }}
+  {{ $slug = .File.Dir | path.Base }}
+{{ end }}
+
+{{ $related := index .Site.Data.related $slug }}
+{{ if $related }}
+<section class="related-posts">
+  <h3>你可能也有興趣</h3>
+  <ul>
+    {{ range $related }}
+    <li>
+      <a href="{{ .url }}">{{ .title }}</a>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}
