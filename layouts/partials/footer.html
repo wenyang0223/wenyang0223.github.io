@@ -223,7 +223,7 @@ function spawnRabbits(container, originX, originY) {
     const rabbit = document.createElement('span');
     rabbit.className = 'rabbit';
     const img = document.createElement('img');
-img.src = '/images/mao_3.png';  // ← 換成你的圖片路徑
+img.src = '/images/mao_3.gif';  // ← 換成你的圖片路徑
 img.style.width = '2.25rem';
 img.style.height = '2.5rem';
 
@@ -246,7 +246,7 @@ rabbit.style.animationDuration = '1.8s';  // 全固定 1.8s（或 1.6 + Math.ran
 rabbit.style.animationDelay    = (Math.random() * 0.01) + 's';  // 0~50ms
 
     container.appendChild(rabbit);
-    setTimeout(() => rabbit.remove(), 5000);
+    setTimeout(() => rabbit.remove(), 6000);
   }
 }
 
