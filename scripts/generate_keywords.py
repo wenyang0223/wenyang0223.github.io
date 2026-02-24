@@ -4,7 +4,7 @@ import glob
 import re
 import time
 import frontmatter
-from google import genai
+import google.generativeai as genai
 
 # ========================
 # 配置
