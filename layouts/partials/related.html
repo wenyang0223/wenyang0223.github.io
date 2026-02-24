@@ -14,13 +14,18 @@
       const cats = {{ with .Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }};
       const searchTerms = [...ai_kw, ...cats].join(" ");
 
+      console.log("🔍 搜尋關鍵字:", searchTerms); // 偵錯用
+
       try {
           if (typeof pagefind === 'undefined') {
-              window.pagefind = await import("/_pagefind/pagefind.js");
+              console.log("📦 載入 Pagefind...");
+              window.pagefind = await import("/pagefind/pagefind.js");
           }
 
           // 2. 執行搜尋
           const search = await window.pagefind.search(searchTerms);
+          console.log("📊 搜尋結果數量:", search.results.length);
+
           let results = await Promise.all(
               search.results
                   .filter(r => !r.url.includes(currentUrl))
@@ -28,9 +33,10 @@
                   .map(r => r.data())
           );
 
-          // 3. 【保底機制】如果相關度搜尋結果不足 2 篇，改抓全站最新文章 (或是隨機)
+          // 3. 保底機制
           if (results.length < 2) {
-              const allSite = await window.pagefind.search(""); // 空字串等於抓所有文章
+              console.log("⚠️ 相關文章不足，使用保底機制");
+              const allSite = await window.pagefind.search("");
               const fallback = await Promise.all(
                   allSite.results
                       .filter(r => !r.url.includes(currentUrl))
@@ -40,17 +46,25 @@
               results = fallback;
           }
 
+          console.log("✅ 最終顯示:", results.length, "篇");
+
           // 4. 渲染
           if (results.length > 0) {
               results.forEach(page => {
                   const card = document.createElement('a');
                   card.href = page.url;
-                  card.style.cssText = "display:block; padding:12px; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:#333; font-size:0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02);";
+                  card.style.cssText = "display:block; padding:12px; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:#333; font-size:0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: transform 0.2s;";
+                  card.onmouseenter = () => card.style.transform = "translateY(-2px)";
+                  card.onmouseleave = () => card.style.transform = "translateY(0)";
                   card.innerHTML = `<strong>${page.meta.title}</strong>`;
                   list.appendChild(card);
               });
               section.style.display = 'block';
+          } else {
+              console.log("❌ 沒有可顯示的文章");
           }
-      } catch (e) { console.log("Pagefind not ready yet"); }
+      } catch (e) { 
+          console.error("❌ Pagefind 錯誤:", e);
+      }
   });
 </script>
