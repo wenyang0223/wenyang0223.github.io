@@ -1,8 +1,3 @@
-<section id="related-posts-section" class="related-wrapper" style="display:none; margin: 2rem 0; padding: 1.5rem; background: #fcfcfc; border-radius: 12px; border: 1px solid #eee;">
-  <h3 style="margin-top:0; font-size: 1.1rem; color: #444;">💡 延伸閱讀</h3>
-  <div id="related-posts-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;"></div>
-</section>
-
 <script>
   document.addEventListener('DOMContentLoaded', async () => {
       const list = document.getElementById('related-posts-list');
@@ -14,57 +9,51 @@
       const cats = {{ with .Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }};
       const searchTerms = [...ai_kw, ...cats].join(" ");
 
-      console.log("🔍 搜尋關鍵字:", searchTerms); // 偵錯用
-
       try {
           if (typeof pagefind === 'undefined') {
-              console.log("📦 載入 Pagefind...");
               window.pagefind = await import("/pagefind/pagefind.js");
           }
 
           // 2. 執行搜尋
           const search = await window.pagefind.search(searchTerms);
-          console.log("📊 搜尋結果數量:", search.results.length);
-
-          let results = await Promise.all(
-              search.results
-                  .filter(r => !r.url.includes(currentUrl))
-                  .slice(0, 3)
-                  .map(r => r.data())
+          
+          // 修正點：先執行 .slice 取前幾名，再 map 成 data，最後才過濾
+          // 這樣可以確保我們是在有資料的情況下進行 includes 檢查
+          const results = await Promise.all(
+              search.results.slice(0, 5).map(r => r.data())
           );
 
-          // 3. 保底機制
-          if (results.length < 2) {
-              console.log("⚠️ 相關文章不足，使用保底機制");
-              const allSite = await window.pagefind.search("");
+          // 3. 過濾掉自己，並取前 3 名
+          let filteredResults = results.filter(page => {
+              // 增加安全檢查，確保 page 和 page.url 存在
+              return page && page.url && !page.url.includes(currentUrl);
+          }).slice(0, 3);
+
+          // 4. 【保底機制】如果相關度結果不足，抓全站最新
+          if (filteredResults.length < 1) {
+              const allSite = await window.pagefind.search(""); 
               const fallback = await Promise.all(
-                  allSite.results
-                      .filter(r => !r.url.includes(currentUrl))
-                      .slice(0, 3)
-                      .map(r => r.data())
+                  allSite.results.slice(0, 4).map(r => r.data())
               );
-              results = fallback;
+              filteredResults = fallback.filter(page => 
+                  page && page.url && !page.url.includes(currentUrl)
+              ).slice(0, 3);
           }
 
-          console.log("✅ 最終顯示:", results.length, "篇");
-
-          // 4. 渲染
-          if (results.length > 0) {
-              results.forEach(page => {
+          // 5. 渲染
+          if (filteredResults.length > 0) {
+              list.innerHTML = ''; // 清空內容
+              filteredResults.forEach(page => {
                   const card = document.createElement('a');
                   card.href = page.url;
-                  card.style.cssText = "display:block; padding:12px; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:#333; font-size:0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: transform 0.2s;";
-                  card.onmouseenter = () => card.style.transform = "translateY(-2px)";
-                  card.onmouseleave = () => card.style.transform = "translateY(0)";
+                  card.style.cssText = "display:block; padding:12px; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:#333; font-size:0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02);";
                   card.innerHTML = `<strong>${page.meta.title}</strong>`;
                   list.appendChild(card);
               });
               section.style.display = 'block';
-          } else {
-              console.log("❌ 沒有可顯示的文章");
           }
       } catch (e) { 
-          console.error("❌ Pagefind 錯誤:", e);
+          console.error("Pagefind error:", e); 
       }
   });
 </script>
