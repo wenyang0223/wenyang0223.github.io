@@ -1,17 +1,24 @@
 ---
-title: 開放式對話進階工作坊Day 2
+ai_keywords:
+- 精神疾病
+- 開放式對話
+- 家庭動力
+- 關係受苦
+- 治療實踐
+categories:
+- 講座筆記
 date: 2020-11-15
+description: null
 draft: false
 image: images/講座筆記/開放式對話進階/0001.jpg
-description:
-categories:
-  - 講座筆記
 tags:
-  - 開放式對話
-  - 講座筆記
-type: post
+- 開放式對話
+- 講座筆記
+title: 開放式對話進階工作坊Day 2
 topics: 開放式對話
+type: post
 ---
+
 ##### 講座名稱：開放式對話進階工作坊
 
 ##### 日期：2020年11月14-15日

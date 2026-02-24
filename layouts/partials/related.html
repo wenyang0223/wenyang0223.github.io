@@ -1,18 +1,56 @@
-{{ $slug := .File.ContentBaseName }}
-{{ if eq $slug "index" }}
-  {{ $slug = .File.Dir | path.Base }}
-{{ end }}
-
-{{ $related := index .Site.Data.related $slug }}
-{{ if $related }}
-<section class="related-posts">
-  <h3>你可能也有興趣</h3>
-  <ul>
-    {{ range $related }}
-    <li>
-      <a href="{{ .url }}">{{ .title }}</a>
-    </li>
-    {{ end }}
-  </ul>
+<section id="related-posts-section" class="related-wrapper" style="display:none; margin: 2rem 0; padding: 1.5rem; background: #fcfcfc; border-radius: 12px; border: 1px solid #eee;">
+  <h3 style="margin-top:0; font-size: 1.1rem; color: #444;">💡 延伸閱讀</h3>
+  <div id="related-posts-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;"></div>
 </section>
-{{ end }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+      const list = document.getElementById('related-posts-list');
+      const section = document.getElementById('related-posts-section');
+      const currentUrl = window.location.pathname;
+
+      // 1. 取得搜尋關鍵字
+      const ai_kw = {{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}[]{{ end }};
+      const cats = {{ with .Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }};
+      const searchTerms = [...ai_kw, ...cats].join(" ");
+
+      try {
+          if (typeof pagefind === 'undefined') {
+              window.pagefind = await import("/_pagefind/pagefind.js");
+          }
+
+          // 2. 執行搜尋
+          const search = await window.pagefind.search(searchTerms);
+          let results = await Promise.all(
+              search.results
+                  .filter(r => !r.url.includes(currentUrl))
+                  .slice(0, 3)
+                  .map(r => r.data())
+          );
+
+          // 3. 【保底機制】如果相關度搜尋結果不足 2 篇，改抓全站最新文章 (或是隨機)
+          if (results.length < 2) {
+              const allSite = await window.pagefind.search(""); // 空字串等於抓所有文章
+              const fallback = await Promise.all(
+                  allSite.results
+                      .filter(r => !r.url.includes(currentUrl))
+                      .slice(0, 3)
+                      .map(r => r.data())
+              );
+              results = fallback;
+          }
+
+          // 4. 渲染
+          if (results.length > 0) {
+              results.forEach(page => {
+                  const card = document.createElement('a');
+                  card.href = page.url;
+                  card.style.cssText = "display:block; padding:12px; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:#333; font-size:0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02);";
+                  card.innerHTML = `<strong>${page.meta.title}</strong>`;
+                  list.appendChild(card);
+              });
+              section.style.display = 'block';
+          }
+      } catch (e) { console.log("Pagefind not ready yet"); }
+  });
+</script>

@@ -85,12 +85,15 @@
         
         <div class="content mb-5">
           {{ .Content }}
-
+        </div>
 
 
         <hr id="article-end" style="margin-top: 1px;">
 
-        <div style="text-align: right; margin: 0 0 -0.5rem 0;">
+        <div style="text-align: left; margin: 0 0 -0.5rem 0;">
+          {{ partial "related.html" . }}
+
+        </div><div style="text-align: right; margin: 0 0 -0.5rem 0;">
           {{ partial "counters.html" . }}
         </div>
 

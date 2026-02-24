@@ -1,23 +1,20 @@
 ---
-title: "《Rhythm + Flow》：嘻哈是化痛苦為力量反擊的語言"
-date: 2021-08-01T10:07:47+08:00
+ai_keywords:
+- 痛苦轉化
+- 反擊壓迫
+- 藝術創作
+- 嘻哈文化
+- 饒舌真實性
+categories:
+- 電影心得
+date: 2021-08-01 10:07:47+08:00
+description: 嘻哈或饒舌所說的「真實性Real」究竟是什麼意思呢？我覺得不只是做自己、成為自己、不在乎他人眼光而已。真實性關乎著痛苦得以用其他的形式被詮釋，受苦者不再被痛苦宰制，而能用自身的創意、勇氣去對抗世界所認為受苦者該有的形象。
 draft: false
-
-# post thumb
-image: "images/電影/Rhythm + Flow.jpg"
-
-# meta description
-description: "嘻哈或饒舌所說的「真實性Real」究竟是什麼意思呢？我覺得不只是做自己、成為自己、不在乎他人眼光而已。真實性關乎著痛苦得以用其他的形式被詮釋，受苦者不再被痛苦宰制，而能用自身的創意、勇氣去對抗世界所認為受苦者該有的形象。"
-
-# taxonomies
-categories: 
-  - "電影心得"
+image: images/電影/Rhythm + Flow.jpg
 tags:
-  - "電影心得"
-
-
-# post type
-type: "post"
+- 電影心得
+title: 《Rhythm + Flow》：嘻哈是化痛苦為力量反擊的語言
+type: post
 ---
 
 看完《Rhythm + Flow》之後，再回頭比較《大嘻哈時代》，實在覺得兩者詮釋的嘻哈不太一樣。

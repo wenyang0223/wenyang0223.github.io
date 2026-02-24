@@ -14,11 +14,11 @@ if not api_key:
     raise ValueError("請設定環境變數 GEMINI_API_KEY")
 
 client = genai.Client(api_key=api_key)
-model_name = "gemini-2.0-flash-lite"
+model_name = "gemini-2.5-flash-lite"
 
 CONTENT_DIR = "content/blog/**/*.md"
 CACHE_FILE = "data/keywords_cache.json"   # 存已處理過的 slug
-SLEEP_BETWEEN = 5    # 每次 API 呼叫間隔秒數（免費版建議 5）
+SLEEP_BETWEEN = 10    # 每次 API 呼叫間隔秒數（免費版建議 5）
 MAX_RETRY = 3        # 失敗最多重試幾次
 
 # ========================

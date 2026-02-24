@@ -1,0 +1,62 @@
+name: Deploy Hugo Site with AI & Pagefind
+
+on:
+  push:
+    branches: [ main ]  # 當你 push 到 main 分支時啟動
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python Dependencies
+        run: pip install python-frontmatter google-generativeai
+
+      # 1. 執行 AI 腳本補齊標籤
+      - name: Run AI Keyword Generator
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/generate_keywords.py
+
+      # 2. 如果 AI 改了檔案，自動 Commit 回去你的 Repo
+      - name: Commit AI Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "AI: Update keywords" && git push)
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. 編譯網站
+      - name: Build Website
+        run: hugo --minify
+
+      # 4. 建立 Pagefind 索引
+      - name: Pagefind Indexing
+        run: npx pagefind --site public
+
+      # 5. 部署到 GitHub Pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
