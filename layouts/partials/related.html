@@ -26,47 +26,23 @@
             return shuffled;
         };
   
-        // 解析並規範化分類資料
-        const parseTerms = (val) => {
+        const toArray = (val) => {
             if (!val) return [];
-            
-            // 如果已經是陣列，直接處理
-            if (Array.isArray(val)) {
-                return val.flat().filter(v => v && typeof v === 'string');
-            }
-            
-            // 如果是字串，嘗試解析
-            if (typeof val === 'string') {
-                // 移除可能的 JSON 格式包裝
-                let cleaned = val.trim();
-                if (cleaned.startsWith('[') && cleaned.endsWith(']')) {
-                    try {
-                        const parsed = JSON.parse(cleaned);
-                        if (Array.isArray(parsed)) {
-                            return parsed.filter(v => v && typeof v === 'string');
-                        }
-                    } catch (e) {
-                        // 解析失敗，當作普通字串
-                    }
-                }
-                return [cleaned];
-            }
-            
+            if (Array.isArray(val)) return val;
+            if (typeof val === 'string') return [val];
             return [];
         };
   
-        // 直接從 Hugo 模板獲取資料
-        const ai_kw = parseTerms({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const categories = parseTerms({{ with .Params.categories }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const series = parseTerms({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const topics = parseTerms({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const projects = parseTerms({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const clubhouse = parseTerms({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const tags = parseTerms({{ with .Params.tags }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const ai_kw = toArray({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const categories = toArray({{ with .Params.categories }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const series = toArray({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const topics = toArray({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const projects = toArray({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const clubhouse = toArray({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const tags = toArray({{ with .Params.tags }}{{ . | jsonify }}{{ else }}null{{ end }});
   
-        console.log("📌 當前文章資訊 (解析後):");
+        console.log("📌 當前文章資訊:");
         console.log("  - Clubhouse:", clubhouse);
-        console.log("  - Projects:", projects);
         console.log("  - Series:", series);
   
         try {
@@ -84,23 +60,10 @@
                     return [];
                 }
                 
-                // 確保是純字串陣列，並組合成搜尋詞
-                const searchTerm = terms
-                    .filter(t => t && typeof t === 'string')
-                    .map(t => t.trim())
-                    .join(" ");
-                
-                if (!searchTerm) {
-                    console.log(`⏭️ ${label}: 跳過（搜尋詞為空）`);
-                    return [];
-                }
-                
-                console.log(`🎯 ${label}: 搜尋 "${searchTerm}"`);
+                console.log(`🎯 ${label}: 搜尋 "${terms.join(" ")}"`);
                 
                 try {
-                    const search = await window.pagefind.search(searchTerm);
-                    console.log(`  📊 原始結果: ${search.results.length} 篇`);
-                    
+                    const search = await window.pagefind.search(terms.join(" "));
                     const data = await Promise.all(search.results.map(r => r.data()));
                     
                     // 過濾當前頁面和重複
@@ -126,7 +89,7 @@
                     // 標記已使用的 URL
                     shuffled.forEach(page => seenUrls.add(normalizeUrl(page.url)));
                     
-                    console.log(`  ✅ 過濾後: ${shuffled.length} 篇（已隨機打亂）`);
+                    console.log(`  ✅ 找到 ${shuffled.length} 篇，已隨機打亂`);
                     return shuffled;
                 } catch (err) {
                     console.error(`  ❌ ${label} 搜尋失敗:`, err);
@@ -181,6 +144,7 @@
                         return pageNormalizedUrl !== currentNormalizedUrl && !seenUrls.has(pageNormalizedUrl);
                     });
                     
+                    // 🎲 隨機打亂保底結果
                     const shuffled = shuffleArray(filtered);
                     filtered.forEach(page => seenUrls.add(normalizeUrl(page.url)));
                     results.push(...shuffled);
@@ -198,7 +162,28 @@
                 console.log(`  ${i + 1}. ${r.meta.title}`);
             });
   
-
+            // 清理標題
+            const cleanTitle = (title) => {
+                if (!title) return '';
+                let cleaned = title;
+                const siteNames = ['聆聽的河流｜閱讀・書寫・心理・電影', '聆聽的河流'];
+                const separators = ['|', '｜', ' - ', '–', '—'];
+                
+                for (const sep of separators) {
+                    if (cleaned.includes(sep)) {
+                        const parts = cleaned.split(sep);
+                        for (const part of parts) {
+                            const trimmed = part.trim();
+                            if (!siteNames.some(name => trimmed.includes(name))) {
+                                cleaned = trimmed;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return cleaned.trim();
+            };
+  
             // 渲染
             if (results.length > 0) {
                 results.forEach(page => {
