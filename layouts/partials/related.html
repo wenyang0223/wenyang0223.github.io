@@ -9,15 +9,22 @@
         const section = document.getElementById('related-posts-section');
         const currentUrl = window.location.pathname;
         
-        // 規範化 URL（移除結尾斜線，統一比對）
+        // 規範化 URL
         const normalizeUrl = (url) => {
             return url.replace(/\/$/, '').toLowerCase();
         };
         
         const currentNormalizedUrl = normalizeUrl(currentUrl);
         
-        console.log("📍 當前頁面 URL:", currentUrl);
-        console.log("📍 規範化後:", currentNormalizedUrl);
+        // 隨機打亂陣列
+        const shuffleArray = (array) => {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        };
   
         const toArray = (val) => {
             if (!val) return [];
@@ -57,9 +64,9 @@
                 
                 try {
                     const search = await window.pagefind.search(terms.join(" "));
-                    const data = await Promise.all(search.results.slice(0, 20).map(r => r.data()));
+                    const data = await Promise.all(search.results.map(r => r.data()));
                     
-                    // 嚴格過濾當前頁面
+                    // 過濾當前頁面和重複
                     const filtered = data.filter(page => {
                         const pageNormalizedUrl = normalizeUrl(page.url);
                         const isCurrentPage = pageNormalizedUrl === currentNormalizedUrl;
@@ -70,16 +77,20 @@
                             return false;
                         }
                         if (isDuplicate) {
-                            console.log(`  ⛔ 跳過重複: ${page.meta.title}`);
                             return false;
                         }
                         
-                        seenUrls.add(pageNormalizedUrl);
                         return true;
                     });
                     
-                    console.log(`  ✅ 找到 ${filtered.length} 篇有效文章`);
-                    return filtered;
+                    // 🎲 隨機打亂結果
+                    const shuffled = shuffleArray(filtered);
+                    
+                    // 標記已使用的 URL
+                    shuffled.forEach(page => seenUrls.add(normalizeUrl(page.url)));
+                    
+                    console.log(`  ✅ 找到 ${shuffled.length} 篇，已隨機打亂`);
+                    return shuffled;
                 } catch (err) {
                     console.error(`  ❌ ${label} 搜尋失敗:`, err);
                     return [];
@@ -127,14 +138,17 @@
                 console.log("🎯 策略 8: 最新文章（保底）");
                 try {
                     const allSite = await window.pagefind.search("");
-                    const fallback = await Promise.all(allSite.results.slice(0, 20).map(r => r.data()));
+                    const fallback = await Promise.all(allSite.results.map(r => r.data()));
                     const filtered = fallback.filter(page => {
                         const pageNormalizedUrl = normalizeUrl(page.url);
                         return pageNormalizedUrl !== currentNormalizedUrl && !seenUrls.has(pageNormalizedUrl);
                     });
+                    
+                    // 🎲 隨機打亂保底結果
+                    const shuffled = shuffleArray(filtered);
                     filtered.forEach(page => seenUrls.add(normalizeUrl(page.url)));
-                    results.push(...filtered);
-                    console.log(`  ✅ 補充 ${filtered.length} 篇`);
+                    results.push(...shuffled);
+                    console.log(`  ✅ 補充 ${shuffled.length} 篇（已隨機）`);
                 } catch (err) {
                     console.error("  ❌ 保底搜尋失敗:", err);
                 }
@@ -145,7 +159,7 @@
   
             console.log("✅ 最終推薦 3 篇:");
             results.forEach((r, i) => {
-                console.log(`  ${i + 1}. ${r.meta.title} (${r.url})`);
+                console.log(`  ${i + 1}. ${r.meta.title}`);
             });
   
             // 清理標題
