@@ -1,6 +1,6 @@
-<section id="related-posts-section" class="related-wrapper" style="display:none; margin: 2rem 0; padding: 1.5rem; background: #fcfcfc; border-radius: 12px; border: 1px solid #eee;">
-    <h3 style="margin-top:0; font-size: 1.1rem; color: #444;">💡 延伸閱讀</h3>
-    <div id="related-posts-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;"></div>
+<section id="related-posts-section" class="related-wrapper" style="display:none; margin: 2rem 0; padding: 1.2rem; background: #f8f9fa; border-radius: 10px; border: 1px solid #e0e0e0;">
+    <h3 style="margin-top:0; margin-bottom: 0.8rem; font-size: 0.95rem; color: #555; font-weight: 600;">💡 延伸閱讀</h3>
+    <div id="related-posts-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem;"></div>
   </section>
   
   <script>
@@ -9,13 +9,22 @@
         const section = document.getElementById('related-posts-section');
         const currentUrl = window.location.pathname;
   
-        // 1. 取得搜尋關鍵字
+        // 取得當前文章的所有分類
         const ai_kw = {{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const cats = {{ with .Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const searchTerms = [...ai_kw, ...cats].join(" ");
+        const categories = {{ with .Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }};
+        const series = {{ with .Params.series }}{{ . | jsonify }}{{ else }}[]{{ end }};
+        const topics = {{ with .Params.topics }}{{ . | jsonify }}{{ else }}[]{{ end }};
+        const projects = {{ with .Params.projects }}{{ . | jsonify }}{{ else }}[]{{ end }};
+        const clubhouse = {{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}[]{{ end }};
+        const tags = {{ with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }};
   
-        console.log("🔍 搜尋關鍵字:", searchTerms);
-        console.log("📍 當前頁面:", currentUrl);
+        console.log("📌 當前文章資訊:");
+        console.log("  - Series:", series);
+        console.log("  - Clubhouse:", clubhouse);
+        console.log("  - Topics:", topics);
+        console.log("  - Projects:", projects);
+        console.log("  - Categories:", categories);
+        console.log("  - AI Keywords:", ai_kw);
   
         try {
             if (typeof pagefind === 'undefined') {
@@ -23,47 +32,115 @@
                 window.pagefind = await import("/pagefind/pagefind.js");
             }
   
-            // 2. 執行搜尋
-            const search = await window.pagefind.search(searchTerms);
-            console.log("📊 搜尋結果數量:", search.results.length);
+            let results = [];
+            const seenUrls = new Set([currentUrl]);
   
-            // 3. 先取得所有結果的 data，然後過濾
-            let allResults = await Promise.all(
-                search.results.slice(0, 10).map(r => r.data())
-            );
-            
-            console.log("📄 所有結果:", allResults.map(r => r.url));
-  
-            // 過濾掉當前頁面
-            let results = allResults
-                .filter(page => !page.url.includes(currentUrl))
-                .slice(0, 3);
-  
-            console.log("✅ 過濾後:", results.map(r => r.url));
-  
-            // 4. 保底機制
-            if (results.length < 2) {
-                console.log("⚠️ 相關文章不足，使用保底機制");
-                const allSite = await window.pagefind.search("");
-                const fallbackData = await Promise.all(
-                    allSite.results.slice(0, 10).map(r => r.data())
+            // 輔助函數：搜尋並過濾
+            const searchAndFilter = async (terms, label) => {
+                if (!terms || terms.length === 0) return [];
+                console.log(`🎯 ${label}: 搜尋 "${terms.join(" ")}"`);
+                const search = await window.pagefind.search(terms.join(" "));
+                const data = await Promise.all(
+                    search.results.slice(0, 15).map(r => r.data())
                 );
-                results = fallbackData
-                    .filter(page => !page.url.includes(currentUrl))
-                    .slice(0, 3);
+                const filtered = data.filter(page => !seenUrls.has(page.url));
+                filtered.forEach(page => seenUrls.add(page.url));
+                console.log(`  → 找到 ${filtered.length} 篇`);
+                return filtered;
+            };
+  
+            // 推薦策略（按優先順序）
+            
+            // 1. 同系列（個人反思系列）
+            if (results.length < 3 && series.length > 0) {
+                const found = await searchAndFilter(series, "策略 1: 同系列");
+                results.push(...found);
             }
   
-            console.log("✅ 最終顯示:", results.length, "篇");
+            // 2. 同 Clubhouse 分類（會所工作日誌等）
+            if (results.length < 3 && clubhouse.length > 0) {
+                const found = await searchAndFilter(clubhouse, "策略 2: 同 Clubhouse");
+                results.push(...found);
+            }
   
-            // 5. 渲染
+            // 3. 同 Projects
+            if (results.length < 3 && projects.length > 0) {
+                const found = await searchAndFilter(projects, "策略 3: 同 Projects");
+                results.push(...found);
+            }
+  
+            // 4. 同 Topics（主題文章）
+            if (results.length < 3 && topics.length > 0) {
+                const found = await searchAndFilter(topics, "策略 4: 同 Topics");
+                results.push(...found);
+            }
+  
+            // 5. 同 Categories（閱讀＆筆記等）
+            if (results.length < 3 && categories.length > 0) {
+                const found = await searchAndFilter(categories, "策略 5: 同 Categories");
+                results.push(...found);
+            }
+  
+            // 6. AI 關鍵字相關
+            if (results.length < 3 && ai_kw.length > 0) {
+                const found = await searchAndFilter(ai_kw, "策略 6: AI 關鍵字");
+                results.push(...found);
+            }
+  
+            // 7. 同標籤
+            if (results.length < 3 && tags.length > 0) {
+                const found = await searchAndFilter(tags.slice(0, 3), "策略 7: 同標籤");
+                results.push(...found);
+            }
+  
+            // 8. 保底：最新文章
+            if (results.length < 3) {
+                console.log("🎯 策略 8: 最新文章（保底）");
+                const allSite = await window.pagefind.search("");
+                const fallback = await Promise.all(
+                    allSite.results.slice(0, 10).map(r => r.data())
+                );
+                const filtered = fallback.filter(page => !seenUrls.has(page.url));
+                results.push(...filtered);
+            }
+  
+            // 只取前 3 篇
+            results = results.slice(0, 3);
+  
+            console.log("✅ 最終推薦 3 篇:");
+            results.forEach((r, i) => {
+                console.log(`  ${i + 1}. ${r.meta.title}`);
+            });
+  
+            // 渲染
             if (results.length > 0) {
                 results.forEach(page => {
                     const card = document.createElement('a');
                     card.href = page.url;
-                    card.style.cssText = "display:block; padding:12px; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:#333; font-size:0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: transform 0.2s;";
-                    card.onmouseenter = () => card.style.transform = "translateY(-2px)";
-                    card.onmouseleave = () => card.style.transform = "translateY(0)";
-                    card.innerHTML = `<strong>${page.meta.title}</strong>`;
+                    card.style.cssText = `
+                        display: block;
+                        padding: 10px 12px;
+                        background: #fff;
+                        border: 1px solid #e8e8e8;
+                        border-radius: 6px;
+                        text-decoration: none;
+                        color: #444;
+                        font-size: 0.85rem;
+                        line-height: 1.4;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                        transition: all 0.2s ease;
+                    `;
+                    card.onmouseenter = () => {
+                        card.style.transform = "translateY(-2px)";
+                        card.style.boxShadow = "0 3px 8px rgba(0,0,0,0.1)";
+                        card.style.borderColor = "#d0d0d0";
+                    };
+                    card.onmouseleave = () => {
+                        card.style.transform = "translateY(0)";
+                        card.style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
+                        card.style.borderColor = "#e8e8e8";
+                    };
+                    card.innerHTML = `<strong style="font-weight: 500;">${page.meta.title}</strong>`;
                     list.appendChild(card);
                 });
                 section.style.display = 'block';
