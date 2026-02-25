@@ -198,28 +198,7 @@
                 console.log(`  ${i + 1}. ${r.meta.title}`);
             });
   
-            // 清理標題
-            const cleanTitle = (title) => {
-                if (!title) return '';
-                let cleaned = title;
-                const siteNames = ['聆聽的河流｜閱讀・書寫・心理・電影', '聆聽的河流'];
-                const separators = ['|', '｜', ' - ', '–', '—'];
-                
-                for (const sep of separators) {
-                    if (cleaned.includes(sep)) {
-                        const parts = cleaned.split(sep);
-                        for (const part of parts) {
-                            const trimmed = part.trim();
-                            if (!siteNames.some(name => trimmed.includes(name))) {
-                                cleaned = trimmed;
-                                break;
-                            }
-                        }
-                    }
-                }
-                return cleaned.trim();
-            };
-  
+
             // 渲染
             if (results.length > 0) {
                 results.forEach(page => {
