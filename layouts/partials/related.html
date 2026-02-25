@@ -9,14 +9,21 @@
         const section = document.getElementById('related-posts-section');
         const currentUrl = window.location.pathname;
   
-        // 取得當前文章的所有分類
-        const ai_kw = {{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const categories = {{ with .Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const series = {{ with .Params.series }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const topics = {{ with .Params.topics }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const projects = {{ with .Params.projects }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const clubhouse = {{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}[]{{ end }};
-        const tags = {{ with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }};
+        // 取得並規範化所有分類（確保都是陣列）
+        const toArray = (val) => {
+            if (!val) return [];
+            if (Array.isArray(val)) return val;
+            if (typeof val === 'string') return [val];
+            return [];
+        };
+  
+        const ai_kw = toArray({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const categories = toArray({{ with .Params.categories }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const series = toArray({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const topics = toArray({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const projects = toArray({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const clubhouse = toArray({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const tags = toArray({{ with .Params.tags }}{{ . | jsonify }}{{ else }}null{{ end }});
   
         console.log("📌 當前文章資訊:");
         console.log("  - Series:", series);
@@ -37,58 +44,68 @@
   
             // 輔助函數：搜尋並過濾
             const searchAndFilter = async (terms, label) => {
-                if (!terms || terms.length === 0) return [];
+                if (!Array.isArray(terms) || terms.length === 0) {
+                    console.log(`⏭️ ${label}: 跳過（無資料）`);
+                    return [];
+                }
+                
                 console.log(`🎯 ${label}: 搜尋 "${terms.join(" ")}"`);
-                const search = await window.pagefind.search(terms.join(" "));
-                const data = await Promise.all(
-                    search.results.slice(0, 15).map(r => r.data())
-                );
-                const filtered = data.filter(page => !seenUrls.has(page.url));
-                filtered.forEach(page => seenUrls.add(page.url));
-                console.log(`  → 找到 ${filtered.length} 篇`);
-                return filtered;
+                
+                try {
+                    const search = await window.pagefind.search(terms.join(" "));
+                    const data = await Promise.all(
+                        search.results.slice(0, 15).map(r => r.data())
+                    );
+                    const filtered = data.filter(page => !seenUrls.has(page.url));
+                    filtered.forEach(page => seenUrls.add(page.url));
+                    console.log(`  ✅ 找到 ${filtered.length} 篇`);
+                    return filtered;
+                } catch (err) {
+                    console.error(`  ❌ ${label} 搜尋失敗:`, err);
+                    return [];
+                }
             };
   
             // 推薦策略（按優先順序）
             
-            // 1. 同系列（個人反思系列）
-            if (results.length < 3 && series.length > 0) {
+            // 1. 同系列
+            if (results.length < 3) {
                 const found = await searchAndFilter(series, "策略 1: 同系列");
                 results.push(...found);
             }
   
-            // 2. 同 Clubhouse 分類（會所工作日誌等）
-            if (results.length < 3 && clubhouse.length > 0) {
+            // 2. 同 Clubhouse 分類
+            if (results.length < 3) {
                 const found = await searchAndFilter(clubhouse, "策略 2: 同 Clubhouse");
                 results.push(...found);
             }
   
             // 3. 同 Projects
-            if (results.length < 3 && projects.length > 0) {
+            if (results.length < 3) {
                 const found = await searchAndFilter(projects, "策略 3: 同 Projects");
                 results.push(...found);
             }
   
-            // 4. 同 Topics（主題文章）
-            if (results.length < 3 && topics.length > 0) {
+            // 4. 同 Topics
+            if (results.length < 3) {
                 const found = await searchAndFilter(topics, "策略 4: 同 Topics");
                 results.push(...found);
             }
   
-            // 5. 同 Categories（閱讀＆筆記等）
-            if (results.length < 3 && categories.length > 0) {
+            // 5. 同 Categories
+            if (results.length < 3) {
                 const found = await searchAndFilter(categories, "策略 5: 同 Categories");
                 results.push(...found);
             }
   
             // 6. AI 關鍵字相關
-            if (results.length < 3 && ai_kw.length > 0) {
+            if (results.length < 3) {
                 const found = await searchAndFilter(ai_kw, "策略 6: AI 關鍵字");
                 results.push(...found);
             }
   
             // 7. 同標籤
-            if (results.length < 3 && tags.length > 0) {
+            if (results.length < 3) {
                 const found = await searchAndFilter(tags.slice(0, 3), "策略 7: 同標籤");
                 results.push(...found);
             }
@@ -96,12 +113,17 @@
             // 8. 保底：最新文章
             if (results.length < 3) {
                 console.log("🎯 策略 8: 最新文章（保底）");
-                const allSite = await window.pagefind.search("");
-                const fallback = await Promise.all(
-                    allSite.results.slice(0, 10).map(r => r.data())
-                );
-                const filtered = fallback.filter(page => !seenUrls.has(page.url));
-                results.push(...filtered);
+                try {
+                    const allSite = await window.pagefind.search("");
+                    const fallback = await Promise.all(
+                        allSite.results.slice(0, 10).map(r => r.data())
+                    );
+                    const filtered = fallback.filter(page => !seenUrls.has(page.url));
+                    results.push(...filtered);
+                    console.log(`  ✅ 補充 ${filtered.length} 篇`);
+                } catch (err) {
+                    console.error("  ❌ 保底搜尋失敗:", err);
+                }
             }
   
             // 只取前 3 篇
@@ -148,7 +170,7 @@
                 console.log("❌ 沒有可顯示的文章");
             }
         } catch (e) { 
-            console.error("❌ Pagefind 錯誤:", e);
+            console.error("❌ Pagefind 整體錯誤:", e);
         }
     });
   </script>
