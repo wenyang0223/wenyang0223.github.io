@@ -134,6 +134,12 @@
                 console.log(`  ${i + 1}. ${r.meta.title}`);
             });
   
+            // 清理標題函數：移除網站名稱
+            const cleanTitle = (title) => {
+                // 移除 " | 網站名稱" 格式
+                return title.split('|')[0].trim();
+            };
+
             // 渲染
             if (results.length > 0) {
                 results.forEach(page => {
