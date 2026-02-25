@@ -26,29 +26,48 @@
             return shuffled;
         };
   
-        // 確保轉換成陣列且展平
-        const toArray = (val) => {
+        // 解析並規範化分類資料
+        const parseTerms = (val) => {
             if (!val) return [];
+            
+            // 如果已經是陣列，直接處理
             if (Array.isArray(val)) {
-                // 展平陣列，避免巢狀
                 return val.flat().filter(v => v && typeof v === 'string');
             }
-            if (typeof val === 'string') return [val];
+            
+            // 如果是字串，嘗試解析
+            if (typeof val === 'string') {
+                // 移除可能的 JSON 格式包裝
+                let cleaned = val.trim();
+                if (cleaned.startsWith('[') && cleaned.endsWith(']')) {
+                    try {
+                        const parsed = JSON.parse(cleaned);
+                        if (Array.isArray(parsed)) {
+                            return parsed.filter(v => v && typeof v === 'string');
+                        }
+                    } catch (e) {
+                        // 解析失敗，當作普通字串
+                    }
+                }
+                return [cleaned];
+            }
+            
             return [];
         };
   
-        const ai_kw = toArray({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const categories = toArray({{ with .Params.categories }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const series = toArray({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const topics = toArray({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const projects = toArray({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const clubhouse = toArray({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const tags = toArray({{ with .Params.tags }}{{ . | jsonify }}{{ else }}null{{ end }});
+        // 直接從 Hugo 模板獲取資料
+        const ai_kw = parseTerms({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const categories = parseTerms({{ with .Params.categories }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const series = parseTerms({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const topics = parseTerms({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const projects = parseTerms({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const clubhouse = parseTerms({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const tags = parseTerms({{ with .Params.tags }}{{ . | jsonify }}{{ else }}null{{ end }});
   
-        console.log("📌 當前文章資訊:");
+        console.log("📌 當前文章資訊 (解析後):");
         console.log("  - Clubhouse:", clubhouse);
+        console.log("  - Projects:", projects);
         console.log("  - Series:", series);
-        console.log("  - AI Keywords:", ai_kw);
   
         try {
             if (typeof pagefind === 'undefined') {
@@ -65,9 +84,16 @@
                     return [];
                 }
                 
-                // 確保 terms 是字串陣列
-                const cleanTerms = terms.filter(t => t && typeof t === 'string');
-                const searchTerm = cleanTerms.join(" ");
+                // 確保是純字串陣列，並組合成搜尋詞
+                const searchTerm = terms
+                    .filter(t => t && typeof t === 'string')
+                    .map(t => t.trim())
+                    .join(" ");
+                
+                if (!searchTerm) {
+                    console.log(`⏭️ ${label}: 跳過（搜尋詞為空）`);
+                    return [];
+                }
                 
                 console.log(`🎯 ${label}: 搜尋 "${searchTerm}"`);
                 
