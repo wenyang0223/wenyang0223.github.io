@@ -26,9 +26,13 @@
             return shuffled;
         };
   
+        // 確保轉換成陣列且展平
         const toArray = (val) => {
             if (!val) return [];
-            if (Array.isArray(val)) return val;
+            if (Array.isArray(val)) {
+                // 展平陣列，避免巢狀
+                return val.flat().filter(v => v && typeof v === 'string');
+            }
             if (typeof val === 'string') return [val];
             return [];
         };
@@ -44,6 +48,7 @@
         console.log("📌 當前文章資訊:");
         console.log("  - Clubhouse:", clubhouse);
         console.log("  - Series:", series);
+        console.log("  - AI Keywords:", ai_kw);
   
         try {
             if (typeof pagefind === 'undefined') {
@@ -60,10 +65,16 @@
                     return [];
                 }
                 
-                console.log(`🎯 ${label}: 搜尋 "${terms.join(" ")}"`);
+                // 確保 terms 是字串陣列
+                const cleanTerms = terms.filter(t => t && typeof t === 'string');
+                const searchTerm = cleanTerms.join(" ");
+                
+                console.log(`🎯 ${label}: 搜尋 "${searchTerm}"`);
                 
                 try {
-                    const search = await window.pagefind.search(terms.join(" "));
+                    const search = await window.pagefind.search(searchTerm);
+                    console.log(`  📊 原始結果: ${search.results.length} 篇`);
+                    
                     const data = await Promise.all(search.results.map(r => r.data()));
                     
                     // 過濾當前頁面和重複
@@ -89,7 +100,7 @@
                     // 標記已使用的 URL
                     shuffled.forEach(page => seenUrls.add(normalizeUrl(page.url)));
                     
-                    console.log(`  ✅ 找到 ${shuffled.length} 篇，已隨機打亂`);
+                    console.log(`  ✅ 過濾後: ${shuffled.length} 篇（已隨機打亂）`);
                     return shuffled;
                 } catch (err) {
                     console.error(`  ❌ ${label} 搜尋失敗:`, err);
@@ -144,7 +155,6 @@
                         return pageNormalizedUrl !== currentNormalizedUrl && !seenUrls.has(pageNormalizedUrl);
                     });
                     
-                    // 🎲 隨機打亂保底結果
                     const shuffled = shuffleArray(filtered);
                     filtered.forEach(page => seenUrls.add(normalizeUrl(page.url)));
                     results.push(...shuffled);
