@@ -20,9 +20,14 @@
       {{ .Title }} | {{ .Site.Title }}
     {{ end }}
   </title>
+  
+    <!-- ✨ 加在這裡：告訴 Pagefind 使用純標題 -->
+    <meta data-pagefind-meta="title" content="{{ .Title }}">
+
   {{ if .Params.ai_keywords }}
   <meta data-pagefind-filter="keywords" content="{{ delimit .Params.ai_keywords ", " }}">
 {{ end }}
+
   {{ "" | safeHTML }}
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 

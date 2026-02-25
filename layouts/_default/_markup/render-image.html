@@ -3,7 +3,7 @@
 <div class="image-aspect-ratio-container">
   {{- if $img -}}
     {{/* 成功抓到圖 */}}
-    <p style="color: green;">成功抓到圖</p> 
+     <!--<p style="color: green;">    ✨ 成功抓到圖</p> -->
     {{- $webp := $img.Resize (printf "%dx%d webp" $img.Width $img.Height) -}}
     <picture>
       <source srcset="{{ $webp.RelPermalink }}" type="image/webp">

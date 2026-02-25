@@ -139,7 +139,7 @@
                 // 移除 " | 網站名稱" 格式
                 return title.split('|')[0].trim();
             };
-
+  
             // 渲染
             if (results.length > 0) {
                 results.forEach(page => {
@@ -168,7 +168,11 @@
                         card.style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
                         card.style.borderColor = "#e8e8e8";
                     };
-                    card.innerHTML = `<strong style="font-weight: 500;">${page.meta.title}</strong>`;
+                    
+                    // 使用清理過的標題
+                    const cleanedTitle = cleanTitle(page.meta.title);
+                    card.innerHTML = `<strong style="font-weight: 500;">${cleanedTitle}</strong>`;
+                    
                     list.appendChild(card);
                 });
                 section.style.display = 'block';
