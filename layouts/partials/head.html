@@ -1,18 +1,22 @@
 <head>
   <meta charset="utf-8">
-  <script>
-    // 檢查目前的網址是否包含 github.io
-    if (window.location.hostname.includes("github.io")) {
-      var targetDomain = "https://wenyang.vercel.app";
-      // 取得當前路徑、搜尋參數與雜湊 (hash)
-      var currentPath = window.location.pathname;
-      var currentSearch = window.location.search;
-      var currentHash = window.location.hash;
-      
-      // 執行跳轉
-      window.location.replace(targetDomain + currentPath + currentSearch + currentHash);
-    }
-  </script>
+<!-- 只在 GitHub Pages 域名時加 redirect（用 JS 檢查 hostname，避免 Vercel 版 loop） -->
+<script>
+  if (window.location.hostname.includes("github.io")) {
+    var target = "https://wenyang.vercel.app" + window.location.pathname + window.location.search + window.location.hash;
+    // 優先用 meta refresh 讓 Google 看到
+    document.write('<meta http-equiv="refresh" content="0; url=' + target + '">');
+    document.write('<link rel="canonical" href="' + target + '">');
+  }
+</script>
+
+<!-- 正常 canonical（給 Vercel 版用） -->
+{{ if .IsHome }}
+  <link rel="canonical" href="https://wenyang.vercel.app/">
+{{ else }}
+  <link rel="canonical" href="https://wenyang.vercel.app{{ .RelPermalink }}">
+{{ end }}
+
   <title>
     {{ if .IsHome }}
       {{ .Site.Title }}
@@ -37,7 +41,7 @@
   {{ hugo.Generator }}
 
   <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ .Site.BaseURL }}sitemap.xml">
-  <link rel="canonical" href="{{ .Permalink }}">
+
   
   {{ "" | safeHTML }}
   {{ range .Site.Params.plugins.css }}
