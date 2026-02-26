@@ -80,20 +80,39 @@
                 }
             };
             
-            // 🔍 解析文章日期
+            // 🔍 解析文章日期（增強版 with debug）
             const parseDate = (page) => {
+                console.log(`    🔍 解析日期: ${page.meta.title}`);
+                console.log(`       - URL: ${page.url}`);
+                console.log(`       - meta.date: ${page.meta?.date}`);
+                console.log(`       - 完整 meta:`, page.meta);
+                
                 try {
-                    // 嘗試從 meta.date 取得
+                    // 方法 1: 從 meta.date 取得
                     if (page.meta?.date) {
-                        return new Date(page.meta.date);
+                        const parsed = new Date(page.meta.date);
+                        if (!isNaN(parsed.getTime())) {
+                            console.log(`       ✅ 成功解析 (meta.date): ${parsed.toISOString()}`);
+                            return parsed;
+                        } else {
+                            console.log(`       ❌ meta.date 無法解析為有效日期`);
+                        }
                     }
-                    // 嘗試從 URL 推斷 (例如 /2024/01/15/title)
+                    
+                    // 方法 2: 從 URL 推斷 (例如 /2024/01/15/title)
                     const dateMatch = page.url.match(/\/(\d{4})\/(\d{2})\/(\d{2})\//);
                     if (dateMatch) {
-                        return new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`);
+                        const parsed = new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`);
+                        console.log(`       ✅ 成功解析 (URL): ${parsed.toISOString()}`);
+                        return parsed;
+                    } else {
+                        console.log(`       ❌ URL 中無日期格式`);
                     }
+                    
+                    console.log(`       ❌ 無法解析日期`);
                     return null;
                 } catch (e) {
+                    console.log(`       ❌ 解析錯誤:`, e);
                     return null;
                 }
             };
@@ -113,11 +132,22 @@
             for (const axis of sequentialAxes) {
                 if (axis.terms.length > 0) {
                     const found = await searchAndFilter(axis.terms, `${axis.name} 軸`);
+                    
+                    console.log(`\n  🔍 開始解析 ${axis.name} 軸的 ${found.length} 篇文章日期:`);
+                    
                     if (found.length > 0) {
                         const withDates = found.map(page => ({
                             ...page,
                             parsedDate: parseDate(page)
-                        })).filter(p => p.parsedDate);
+                        })).filter(p => {
+                            if (!p.parsedDate) {
+                                console.log(`    ⚠️ 過濾掉無日期的文章: ${p.meta.title}`);
+                                return false;
+                            }
+                            return true;
+                        });
+                        
+                        console.log(`  📊 成功解析 ${withDates.length} 篇（過濾掉 ${found.length - withDates.length} 篇無日期）`);
                         
                         withDates.sort((a, b) => a.parsedDate - b.parsedDate);
                         sequentialResults[axis.name] = withDates;
@@ -132,6 +162,7 @@
                 
                 const axisArticles = sequentialResults[axisName];
                 console.log(`\n  🔍 ${axisName}: 尋找當前文章位置`);
+                console.log(`     當前日期: ${currentDate}`);
                 
                 let prevArticle = null;
                 let nextArticle = null;
@@ -147,8 +178,8 @@
                     }
                 }
                 
-                console.log(`    📍 前一篇:`, prevArticle?.meta.title || '無');
-                console.log(`    📍 後一篇:`, nextArticle?.meta.title || '無');
+                console.log(`    📍 前一篇:`, prevArticle ? `${prevArticle.meta.title} (${prevArticle.parsedDate.toISOString().split('T')[0]})` : '無');
+                console.log(`    📍 後一篇:`, nextArticle ? `${nextArticle.meta.title} (${nextArticle.parsedDate.toISOString().split('T')[0]})` : '無');
                 
                 // 優先加入後一篇
                 if (nextArticle && results.length < 3) {
