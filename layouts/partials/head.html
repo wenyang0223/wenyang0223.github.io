@@ -1,18 +1,29 @@
 <head>
   <meta charset="utf-8">
-  <script>
-    // 檢查目前的網址是否包含 github.io
-    if (window.location.hostname.includes("github.io")) {
-      var targetDomain = "https://wenyang.vercel.app";
-      // 取得當前路徑、搜尋參數與雜湊 (hash)
-      var currentPath = window.location.pathname;
-      var currentSearch = window.location.search;
-      var currentHash = window.location.hash;
-      
-      // 執行跳轉
-      window.location.replace(targetDomain + currentPath + currentSearch + currentHash);
-    }
-  </script>
+
+{{ if .IsHome }}
+  <meta http-equiv="refresh" content="0; url=https://wenyang.vercel.app/">
+{{ else }}
+  <meta http-equiv="refresh" content="0; url=https://wenyang.vercel.app{{ .RelPermalink }}">
+{{ end }}
+
+{{ if .IsHome }}
+  <link rel="canonical" href="https://wenyang.vercel.app/">
+{{ else }}
+  <link rel="canonical" href="https://wenyang.vercel.app{{ .RelPermalink }}">
+{{ end }}
+
+<!-- Noscript fallback：給沒 JS / 某些爬蟲更好的體驗 -->
+<noscript>
+  <meta http-equiv="refresh" content="0; url=https://wenyang.vercel.app{{ if not .IsHome }}{{ .RelPermalink }}{{ end }}">
+  <meta name="robots" content="noindex"> <!-- 可選：避免舊站被額外索引 -->
+  <p style="text-align:center; margin:2em;">
+    網站已遷移到 <a href="https://wenyang.vercel.app">https://wenyang.vercel.app</a>，<br>
+    正在自動跳轉… 若未自動跳轉，請點擊上方連結。
+  </p>
+</noscript>
+
+
   <title>
     {{ if .IsHome }}
       {{ .Site.Title }}
@@ -37,7 +48,6 @@
   {{ hugo.Generator }}
 
   <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ .Site.BaseURL }}sitemap.xml">
-  <link rel="canonical" href="{{ .Permalink }}">
   
   {{ "" | safeHTML }}
   {{ range .Site.Params.plugins.css }}
