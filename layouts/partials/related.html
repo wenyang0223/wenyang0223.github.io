@@ -9,9 +9,17 @@
         const section = document.getElementById('related-posts-section');
         const currentUrl = window.location.pathname;
         
-        // 規範化 URL(移除結尾斜線,統一比對)
+        // 規範化 URL(decode + 移除結尾斜線 + 統一小寫)
         const normalizeUrl = (url) => {
-            return url.replace(/\/$/, '').toLowerCase();
+            if (!url) return '';
+            try {
+                // 先 decode 處理 URL 編碼
+                const decoded = decodeURIComponent(url);
+                return decoded.replace(/\/$/, '').toLowerCase();
+            } catch (e) {
+                // 如果 decode 失敗,就直接處理
+                return url.replace(/\/$/, '').toLowerCase();
+            }
         };
         
         const currentNormalizedUrl = normalizeUrl(currentUrl);
@@ -23,8 +31,15 @@
         const isCurrentPage = (pageUrl) => {
             if (!pageUrl) return false;
 
-            const normPage = normalizeUrl(pageUrl).replace(/\/index\.html?$/, '');
-            const normCurrent = currentNormalizedUrl.replace(/\/index\.html?$/, '');
+            // 先 decode 再規範化
+            let normPage, normCurrent;
+            try {
+                normPage = decodeURIComponent(normalizeUrl(pageUrl)).replace(/\/index\.html?$/, '');
+                normCurrent = decodeURIComponent(currentNormalizedUrl).replace(/\/index\.html?$/, '');
+            } catch (e) {
+                normPage = normalizeUrl(pageUrl).replace(/\/index\.html?$/, '');
+                normCurrent = currentNormalizedUrl.replace(/\/index\.html?$/, '');
+            }
 
             // 方法1：規範化後完整比對
             if (normPage === normCurrent) {
@@ -48,7 +63,7 @@
                 return true;
             }
 
-            // 方法3：取最後有意義的 segment (slug) - 加強版
+            // 方法3：取最後有意義的 segment (slug)
             const getSlug = (path) => {
                 const parts = path
                     .replace(/\/index\.html?$/, '')
@@ -56,13 +71,7 @@
                     .split('/')
                     .filter(Boolean);
                 
-                // URL decode (處理中文等編碼)
-                const lastPart = parts[parts.length-1] || '';
-                try {
-                    return decodeURIComponent(lastPart);
-                } catch (e) {
-                    return lastPart;
-                }
+                return parts[parts.length-1] || '';
             };
 
             const pageSlug = getSlug(normPage);
