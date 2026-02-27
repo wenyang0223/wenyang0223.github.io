@@ -144,12 +144,6 @@
             
             console.log(`\n✅ 合併後共有 ${allCandidates.size} 篇候選文章`);
             
-            // Debug: 列出所有候選文章的標題
-            console.log("\n🔍 候選文章列表:");
-            Array.from(allCandidates.values()).slice(0, 15).forEach((page, i) => {
-                console.log(`  ${i + 1}. ${page.meta.title.substring(0, 50)}...`);
-            });
-            
             if (allCandidates.size > 0) {
                 const candidateArray = Array.from(allCandidates.values());
                 
@@ -161,26 +155,12 @@
                     
                     const pageContent = JSON.stringify(page).toLowerCase();
                     
-                    // Debug: 顯示當前文章和它的 filters
-                    if (index < 5) {
-                        console.log(`\n🔍 檢查文章 ${index + 1}: ${page.meta.title.substring(0, 40)}...`);
-                        console.log(`   filters:`, page.filters);
-                        console.log(`   當前 category:`, categories);
-                    }
-                    
                     // 方法 1: 檢查是否有共同的軸標籤
                     const checkAxis = (axisTags, axisName) => {
                         if (axisTags.length > 0) {
                             const hasMatch = axisTags.some(tag => {
                                 const tagLower = tag.toLowerCase();
-                                const found = pageContent.includes(tagLower);
-                                
-                                // Debug
-                                if (index < 5) {
-                                    console.log(`   檢查 ${axisName} "${tag}": ${found ? '✅ 找到' : '❌ 沒找到'}`);
-                                }
-                                
-                                return found;
+                                return pageContent.includes(tagLower);
                             });
                             if (hasMatch) {
                                 boostReason.push(`同 ${axisName}`);
@@ -255,46 +235,72 @@
                         console.log(`    ${i + 1}. 權重 ${item.weight.toFixed(1)}: ${item.page.meta.title.substring(0, 40)}...`);
                     });
                 
-                // 🎲 加權隨機選取 3 篇
-                const weightedRandomSelect = (items, count, seed) => {
+                // 🎲 選擇推薦文章:第 1 篇選最高權重,第 2-3 篇加權隨機
+                
+                // 🎲 選擇推薦文章:第 1 篇選最高權重,第 2-3 篇加權隨機
+                const selectRecommendations = (items, count, seed) => {
                     const selected = [];
                     const remaining = [...items];
                     
-                    // 簡單的偽隨機生成器
-                    let currentSeed = seed;
-                    const random = () => {
-                        currentSeed = (currentSeed * 9301 + 49297) % 233280;
-                        return currentSeed / 233280;
-                    };
+                    // 絕對排除當前文章
+                    const filtered = remaining.filter(item => {
+                        const itemUrl = normalizeUrl(item.page.url);
+                        return itemUrl !== currentNormalizedUrl;
+                    });
                     
-                    for (let i = 0; i < count && remaining.length > 0; i++) {
-                        // 計算總權重
-                        const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
+                    if (filtered.length === 0) {
+                        console.log("  ⚠️ 沒有可推薦的文章(排除自己後)");
+                        return [];
+                    }
+                    
+                    // 第 1 篇:選權重最高的
+                    filtered.sort((a, b) => b.weight - a.weight);
+                    selected.push(filtered[0].page);
+                    filtered.splice(0, 1);
+                    
+                    console.log(`  🏆 第 1 篇(最高權重): ${selected[0].meta.title.substring(0, 40)}...`);
+                    
+                    // 第 2-3 篇:加權隨機選擇
+                    if (filtered.length > 0) {
+                        // 簡單的偽隨機生成器
+                        let currentSeed = seed;
+                        const random = () => {
+                            currentSeed = (currentSeed * 9301 + 49297) % 233280;
+                            return currentSeed / 233280;
+                        };
                         
-                        // 隨機選一個數字
-                        let rand = random() * totalWeight;
+                        const remainingCount = Math.min(count - 1, filtered.length);
                         
-                        // 找到對應的項目
-                        let selectedIndex = 0;
-                        for (let j = 0; j < remaining.length; j++) {
-                            rand -= remaining[j].weight;
-                            if (rand <= 0) {
-                                selectedIndex = j;
-                                break;
+                        for (let i = 0; i < remainingCount; i++) {
+                            // 計算總權重
+                            const totalWeight = filtered.reduce((sum, item) => sum + item.weight, 0);
+                            
+                            // 隨機選一個數字
+                            let rand = random() * totalWeight;
+                            
+                            // 找到對應的項目
+                            let selectedIndex = 0;
+                            for (let j = 0; j < filtered.length; j++) {
+                                rand -= filtered[j].weight;
+                                if (rand <= 0) {
+                                    selectedIndex = j;
+                                    break;
+                                }
                             }
+                            
+                            // 選中並移除
+                            selected.push(filtered[selectedIndex].page);
+                            console.log(`  🎲 第 ${selected.length} 篇(加權隨機): ${filtered[selectedIndex].page.meta.title.substring(0, 40)}...`);
+                            filtered.splice(selectedIndex, 1);
                         }
-                        
-                        // 選中並移除
-                        selected.push(remaining[selectedIndex].page);
-                        remaining.splice(selectedIndex, 1);
                     }
                     
                     return selected;
                 };
                 
-                results = weightedRandomSelect(weighted, 3, seed);
+                results = selectRecommendations(weighted, 3, seed);
                 
-                console.log(`\n  ✅ 加權隨機選出 ${results.length} 篇推薦`);
+                console.log(`\n  ✅ 選出 ${results.length} 篇推薦 (第1篇=最高權重, 第2-3篇=加權隨機)`);
             }
             
             // 📍 保底機制:如果結果不足
