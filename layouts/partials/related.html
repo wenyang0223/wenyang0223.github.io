@@ -26,13 +26,16 @@
         };
   
         const ai_kw = toArray({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const categories = toArray({{ with .Params.categories }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const tags = toArray({{ with .Params.tags }}{{ . | jsonify }}{{ else }}null{{ end }});
         const projects = toArray({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
         const clubhouse = toArray({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
         const series = toArray({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
         const topics = toArray({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const highlights = toArray({{ with .Params.highlights }}{{ . | jsonify }}{{ else }}null{{ end }});
         
         console.log("🔑 AI Keywords:", ai_kw);
-        console.log("📂 當前軸:", { projects, clubhouse, series, topics });
+        console.log("📂 當前軸:", { categories, tags, projects, clubhouse, series, topics, highlights });
   
         try {
             if (typeof pagefind === 'undefined') {
@@ -92,58 +95,79 @@
                         // 基礎權重:Pagefind 排名越前面權重越高
                         // 第 1 篇權重 10, 第 2 篇權重 9... 第 10 篇權重 1
                         let weight = 10 - index;
+                        let boostReason = [];
                         
-                        // 檢查是否有共同的軸標籤(projects, clubhouse, series, topics)
                         const pageContent = JSON.stringify(page).toLowerCase();
-                        let hasCommonAxis = false;
                         
-                        // 如果有共同的 project 標籤
-                        if (projects.length > 0) {
-                            const hasMatch = projects.some(tag => 
-                                pageContent.includes(tag.toLowerCase())
-                            );
-                            if (hasMatch) {
-                                hasCommonAxis = true;
-                                console.log(`    🔖 同 project: ${page.meta.title.substring(0, 30)}...`);
+                        // 方法 1: 檢查是否有共同的軸標籤
+                        const checkAxis = (axisTags, axisName) => {
+                            if (axisTags.length > 0) {
+                                const hasMatch = axisTags.some(tag => 
+                                    pageContent.includes(tag.toLowerCase())
+                                );
+                                if (hasMatch) {
+                                    boostReason.push(`同 ${axisName}`);
+                                    return true;
+                                }
                             }
+                            return false;
+                        };
+                        
+                        const hasCommonAxis = 
+                            checkAxis(categories, 'category') ||
+                            checkAxis(tags, 'tag') ||
+                            checkAxis(projects, 'project') ||
+                            checkAxis(clubhouse, 'clubhouse') ||
+                            checkAxis(series, 'series') ||
+                            checkAxis(topics, 'topics') ||
+                            checkAxis(highlights, 'highlights');
+                        
+                        // 方法 2: 檢查 AI Keywords 相似度
+                        // 提取推薦文章的 AI Keywords (可能在 meta 或 filters 中)
+                        let pageKeywords = [];
+                        try {
+                            // 從 page.filters 或 page.meta 中找 ai_keywords
+                            const filtersStr = JSON.stringify(page.filters || {});
+                            const metaStr = JSON.stringify(page.meta || {});
+                            const combinedStr = filtersStr + metaStr;
+                            
+                            // 嘗試匹配 JSON 陣列格式的 keywords
+                            const keywordMatch = combinedStr.match(/\["[^"]+(?:","[^"]+)*"\]/g);
+                            if (keywordMatch) {
+                                try {
+                                    pageKeywords = JSON.parse(keywordMatch[0]);
+                                } catch (e) {
+                                    // 解析失敗就跳過
+                                }
+                            }
+                        } catch (e) {
+                            // 提取失敗就跳過
                         }
                         
-                        // 如果有共同的 clubhouse 標籤
-                        if (clubhouse.length > 0) {
-                            const hasMatch = clubhouse.some(tag => 
-                                pageContent.includes(tag.toLowerCase())
-                            );
-                            if (hasMatch) {
-                                hasCommonAxis = true;
-                                console.log(`    🔖 同 clubhouse: ${page.meta.title.substring(0, 30)}...`);
-                            }
-                        }
-                        
-                        // 如果有共同的 series 標籤
-                        if (series.length > 0) {
-                            const hasMatch = series.some(tag => 
-                                pageContent.includes(tag.toLowerCase())
-                            );
-                            if (hasMatch) {
-                                hasCommonAxis = true;
-                                console.log(`    🔖 同 series: ${page.meta.title.substring(0, 30)}...`);
-                            }
-                        }
-                        
-                        // 如果有共同的 topics 標籤
-                        if (topics.length > 0) {
-                            const hasMatch = topics.some(tag => 
-                                pageContent.includes(tag.toLowerCase())
-                            );
-                            if (hasMatch) {
-                                hasCommonAxis = true;
-                                console.log(`    🔖 同 topics: ${page.meta.title.substring(0, 30)}...`);
+                        // 計算 AI Keywords 重疊數量
+                        let keywordOverlap = 0;
+                        if (ai_kw.length > 0 && pageKeywords.length > 0) {
+                            const currentKeywords = ai_kw.map(k => k.toLowerCase());
+                            keywordOverlap = pageKeywords.filter(pk => 
+                                currentKeywords.some(ck => 
+                                    ck.includes(pk.toLowerCase()) || pk.toLowerCase().includes(ck)
+                                )
+                            ).length;
+                            
+                            if (keywordOverlap >= 2) {
+                                boostReason.push(`${keywordOverlap}個共同關鍵字`);
+                                weight *= 1.5; // 有 2+ 個共同關鍵字,權重 x1.5
                             }
                         }
                         
                         // 同軸文章權重加倍
                         if (hasCommonAxis) {
                             weight *= 2;
+                        }
+                        
+                        // 顯示加成原因
+                        if (boostReason.length > 0) {
+                            console.log(`    🔖 ${page.meta.title.substring(0, 30)}... (${boostReason.join(', ')})`);
                         }
                         
                         return { page, weight };
