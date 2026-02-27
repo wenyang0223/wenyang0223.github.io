@@ -54,9 +54,21 @@
                     const data = await Promise.all(search.results.slice(0, maxResults).map(r => r.data()));
                     
                     const filtered = data.filter(page => {
-                        const pageNormalizedUrl = normalizeUrl(page.url);
-                        return pageNormalizedUrl !== currentNormalizedUrl;
-                    });
+    if (!page.url) return false;
+    
+    const pageNorm = normalizeUrl(page.url);
+    const currNorm = normalizeUrl(currentUrl);
+    
+    // 雙重排除
+    if (pageNorm === currNorm) return false;
+    
+    // 額外比對 slug（防多餘路徑）
+    const pageLast = pageNorm.split('/').pop() || '';
+    const currLast = currNorm.split('/').pop() || '';
+    if (pageLast === currLast && pageLast.length > 3) return false; // 避免太短的 slug 誤判
+    
+    return true;
+});
                     
                     console.log(`  ✅ 找到 ${filtered.length} 篇`);
                     return filtered;
