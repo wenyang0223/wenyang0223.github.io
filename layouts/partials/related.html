@@ -21,7 +21,18 @@
         const toArray = (val) => {
             if (!val) return [];
             if (Array.isArray(val)) return val;
-            if (typeof val === 'string') return [val];
+            
+            // 如果是字串,嘗試解析 JSON
+            if (typeof val === 'string') {
+                try {
+                    const parsed = JSON.parse(val);
+                    if (Array.isArray(parsed)) return parsed;
+                    return [parsed];
+                } catch (e) {
+                    return [val];
+                }
+            }
+            
             return [];
         };
   
