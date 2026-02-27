@@ -249,14 +249,18 @@
                         return false;
                     };
                     
-                    const hasCommonAxis = 
-                        checkAxis(categories, 'category') ||
-                        checkAxis(tags, 'tag') ||
-                        checkAxis(projects, 'project') ||
-                        checkAxis(clubhouse, 'clubhouse') ||
-                        checkAxis(series, 'series') ||
-                        checkAxis(topics, 'topics') ||
-                        checkAxis(highlights, 'highlights');
+                    // 分別檢查各個軸
+                    const hasCommonCategory = checkAxis(categories, 'category');
+                    const hasCommonTag = checkAxis(tags, 'tag');
+                    const hasCommonProject = checkAxis(projects, 'project');
+                    const hasCommonClubhouse = checkAxis(clubhouse, 'clubhouse');
+                    const hasCommonSeries = checkAxis(series, 'series');
+                    const hasCommonTopics = checkAxis(topics, 'topics');
+                    const hasCommonHighlights = checkAxis(highlights, 'highlights');
+                    
+                    const hasCommonAxis = hasCommonCategory || hasCommonTag || hasCommonProject || 
+                                          hasCommonClubhouse || hasCommonSeries || hasCommonTopics || 
+                                          hasCommonHighlights;
                     
                     // 檢查 AI Keywords 相似度
                     let pageKeywords = [];
@@ -292,9 +296,11 @@
                         }
                     }
                     
-                    // 同軸文章權重加倍
-                    if (hasCommonAxis) {
-                        weight *= 2;
+                    // 同軸文章權重加成
+                    if (hasCommonTag) {
+                        weight *= 3.0;  // 同 tag 權重 x3 (特別強化!)
+                    } else if (hasCommonAxis) {
+                        weight *= 2.0;  // 其他軸權重 x2
                     }
                     
                     // 顯示加成原因
