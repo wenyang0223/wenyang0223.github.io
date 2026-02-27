@@ -9,7 +9,7 @@
         const section = document.getElementById('related-posts-section');
         const currentUrl = window.location.pathname;
         
-        // 規範化 URL（移除結尾斜線,統一比對）
+        // 規範化 URL(移除結尾斜線,統一比對)
         const normalizeUrl = (url) => {
             return url.replace(/\/$/, '').toLowerCase();
         };
@@ -26,215 +26,99 @@
         };
   
         const ai_kw = toArray({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const projects = toArray({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
-        const clubhouse = toArray({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
         
-        // 當前文章的發布日期
-        const currentDate = {{ with .Date }}new Date("{{ .Format "2006-01-02" }}"){{ else }}null{{ end }};
-        
-        console.log("📌 當前文章:", currentDate ? currentDate.toISOString().split('T')[0] : '無日期');
+        console.log("🔑 AI Keywords:", ai_kw);
   
         try {
             if (typeof pagefind === 'undefined') {
                 window.pagefind = await import("/pagefind/pagefind.js");
             }
-  
-            const seenUrls = new Set();
-  
-            const searchAndFilter = async (terms, label, maxResults = 20) => {
-                if (!Array.isArray(terms) || terms.length === 0) {
-                    console.log(`⏭️ ${label}: 跳過（無資料）`);
-                    return [];
+            
+            // 🎲 生成隨機種子(基於當前 URL)
+            const generateSeed = (url) => {
+                let hash = 0;
+                for (let i = 0; i < url.length; i++) {
+                    hash = ((hash << 5) - hash) + url.charCodeAt(i);
+                    hash = hash & hash;
                 }
+                return hash;
+            };
+            
+            // 🔀 可預測的隨機排序
+            const seededShuffle = (array, seed) => {
+                const rng = (s) => {
+                    s = Math.sin(s) * 10000;
+                    return s - Math.floor(s);
+                };
                 
-                console.log(`🎯 ${label}: 搜尋 "${terms.join(" ")}"`);
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(rng(seed + i) * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            };
+            
+            const seed = generateSeed(currentNormalizedUrl);
+            console.log("🎲 隨機種子:", seed);
+            
+            let results = [];
+            
+            // 📍 方案 B: 用 AI Keywords 搜尋 20 篇,隨機推薦 3 篇
+            if (ai_kw.length > 0) {
+                console.log("\n🔍 搜尋 AI Keywords 相關文章...");
                 
                 try {
-                    const search = await window.pagefind.search(terms.join(" "));
-                    const data = await Promise.all(search.results.slice(0, maxResults).map(r => r.data()));
+                    const search = await window.pagefind.search(ai_kw.join(" "));
+                    const data = await Promise.all(search.results.slice(0, 20).map(r => r.data()));
                     
+                    console.log(`  ✅ 找到 ${data.length} 篇文章`);
+                    
+                    // 過濾掉當前文章
                     const filtered = data.filter(page => {
-    if (!page.url) return false;
-    
-    const pageNorm = normalizeUrl(page.url);
-    const currNorm = normalizeUrl(currentUrl);
-    
-    // 雙重排除
-    if (pageNorm === currNorm) return false;
-    
-    // 額外比對 slug（防多餘路徑）
-    const pageLast = pageNorm.split('/').pop() || '';
-    const currLast = currNorm.split('/').pop() || '';
-    if (pageLast === currLast && pageLast.length > 3) return false; // 避免太短的 slug 誤判
-    
-    return true;
-});
-                    
-                    console.log(`  ✅ 找到 ${filtered.length} 篇`);
-                    return filtered;
-                } catch (err) {
-                    console.error(`  ❌ ${label} 搜尋失敗:`, err);
-                    return [];
-                }
-            };
-            
-            // 🔍 從標題提取日期（YYYYMMDD 格式）
-            const parseDate = (page) => {
-                try {
-                    // 方法 1: 從標題提取 YYYYMMDD（標題開頭 8 位數字）
-                    const titleMatch = page.meta.title?.match(/^(\d{8})/);
-                    if (titleMatch) {
-                        const dateStr = titleMatch[1]; // 例如 "20251111"
-                        const year = dateStr.substring(0, 4);
-                        const month = dateStr.substring(4, 6);
-                        const day = dateStr.substring(6, 8);
-                        const parsed = new Date(`${year}-${month}-${day}`);
-                        
-                        if (!isNaN(parsed.getTime())) {
-                            return parsed;
-                        }
-                    }
-                    
-                    // 方法 2: 從 URL 提取 /YYYY/MM/DD/
-                    const urlMatch = page.url.match(/\/(\d{4})\/(\d{2})\/(\d{2})\//);
-                    if (urlMatch) {
-                        return new Date(`${urlMatch[1]}-${urlMatch[2]}-${urlMatch[3]}`);
-                    }
-                    
-                    return null;
-                } catch (e) {
-                    return null;
-                }
-            };
-            
-            const results = [];
-            let sequentialResults = {};
-            
-            // 📍 步驟 1：從有順序的軸找前後文
-            console.log("\n📍 步驟 1: 從有順序的軸找前後文");
-            
-            const sequentialAxes = [
-                { name: 'projects', terms: projects },
-                { name: 'clubhouse', terms: clubhouse }
-            ];
-            
-            for (const axis of sequentialAxes) {
-                if (axis.terms.length > 0) {
-                    const found = await searchAndFilter(axis.terms, axis.name);
-                    
-                    if (found.length > 0) {
-                        const withDates = found.map(page => ({
-                            ...page,
-                            parsedDate: parseDate(page)
-                        })).filter(p => p.parsedDate);
-                        
-                        withDates.sort((a, b) => a.parsedDate - b.parsedDate);
-                        sequentialResults[axis.name] = withDates;
-                        
-                        console.log(`  ✅ ${axis.name}: ${withDates.length} 篇有日期`);
-                        
-                        // Debug: 顯示前 3 篇的日期
-                        withDates.slice(0, 3).forEach(p => {
-                            console.log(`     - ${p.meta.title.substring(0, 30)}... (${p.parsedDate.toISOString().split('T')[0]})`);
-                        });
-                    }
-                }
-            }
-            
-            // 從有順序的軸找前後文
-            for (const axisName of Object.keys(sequentialResults)) {
-                if (results.length >= 3) break;
-                
-                const axisArticles = sequentialResults[axisName];
-                console.log(`\n  🔍 ${axisName}: 尋找前後文`);
-                
-                let prevArticle = null;
-                let nextArticle = null;
-                
-                for (const article of axisArticles) {
-                    if (currentDate && article.parsedDate < currentDate) {
-                        prevArticle = article;
-                    } else if (currentDate && article.parsedDate > currentDate && !nextArticle) {
-                        nextArticle = article;
-                        break;
-                    }
-                }
-                
-                console.log(`    📍 前一篇:`, prevArticle ? `${prevArticle.meta.title.substring(0, 30)}... (${prevArticle.parsedDate.toISOString().split('T')[0]})` : '無');
-                console.log(`    📍 後一篇:`, nextArticle ? `${nextArticle.meta.title.substring(0, 30)}... (${nextArticle.parsedDate.toISOString().split('T')[0]})` : '無');
-                
-                // 優先加入後一篇
-                if (nextArticle && results.length < 3) {
-                    const url = normalizeUrl(nextArticle.url);
-                    if (!seenUrls.has(url)) {
-                        results.push(nextArticle);
-                        seenUrls.add(url);
-                        console.log(`    ✅ [${results.length}] 後一篇`);
-                    }
-                }
-                
-                // 再加入前一篇
-                if (prevArticle && results.length < 3) {
-                    const url = normalizeUrl(prevArticle.url);
-                    if (!seenUrls.has(url)) {
-                        results.push(prevArticle);
-                        seenUrls.add(url);
-                        console.log(`    ✅ [${results.length}] 前一篇`);
-                    }
-                }
-            }
-            
-            // 📍 步驟 2：用 AI Keywords 搜尋
-            if (results.length < 3) {
-                console.log("\n📍 步驟 2: AI Keywords");
-                
-                if (ai_kw.length > 0) {
-                    const aiResults = await searchAndFilter(ai_kw, 'AI Keywords');
-                    const filtered = aiResults.filter(article => !seenUrls.has(normalizeUrl(article.url)));
-                    
-                    const needed = 3 - results.length;
-                    const toAdd = filtered.slice(0, needed);
-                    
-                    toAdd.forEach(article => {
-                        results.push(article);
-                        seenUrls.add(normalizeUrl(article.url));
-                        console.log(`  ✅ [${results.length}] AI Keywords 文章`);
+                        const pageNormalizedUrl = normalizeUrl(page.url);
+                        return pageNormalizedUrl !== currentNormalizedUrl;
                     });
-                }
-            }
-            
-            // 📍 步驟 3：從有順序的軸繼續補充
-            if (results.length < 3) {
-                console.log("\n📍 步驟 3: 繼續補充");
-                for (const axisName of Object.keys(sequentialResults)) {
-                    if (results.length >= 3) break;
                     
-                    for (const article of sequentialResults[axisName]) {
-                        if (results.length >= 3) break;
-                        const url = normalizeUrl(article.url);
-                        if (!seenUrls.has(url)) {
-                            results.push(article);
-                            seenUrls.add(url);
-                            console.log(`  ✅ [${results.length}] 從 ${axisName}`);
-                        }
-                    }
+                    console.log(`  ✅ 過濾後剩 ${filtered.length} 篇(排除自己)`);
+                    
+                    // 用種子打亂順序
+                    const shuffled = seededShuffle(filtered, seed);
+                    
+                    // 取前 3 篇
+                    results = shuffled.slice(0, 3);
+                    
+                    console.log(`  ✅ 隨機選出 ${results.length} 篇推薦`);
+                    
+                } catch (err) {
+                    console.error("  ❌ AI Keywords 搜尋失敗:", err);
                 }
             }
             
-            // 📍 步驟 4：保底
+            // 📍 保底機制:如果 AI Keywords 沒有或結果不足
             if (results.length < 3) {
-                console.log("\n📍 步驟 4: 保底");
+                console.log("\n📍 保底機制:補充文章");
                 try {
                     const allSite = await window.pagefind.search("");
-                    const fallback = await Promise.all(allSite.results.slice(0, 20).map(r => r.data()));
-                    const filtered = fallback.filter(page => !seenUrls.has(normalizeUrl(page.url)));
+                    const fallback = await Promise.all(allSite.results.slice(0, 30).map(r => r.data()));
+                    
+                    // 過濾掉當前文章和已推薦的
+                    const existingUrls = new Set(results.map(r => normalizeUrl(r.url)));
+                    const filtered = fallback.filter(page => {
+                        const pageUrl = normalizeUrl(page.url);
+                        return pageUrl !== currentNormalizedUrl && !existingUrls.has(pageUrl);
+                    });
+                    
+                    // 用種子打亂
+                    const shuffled = seededShuffle(filtered, seed);
                     
                     const needed = 3 - results.length;
-                    const toAdd = filtered.slice(0, needed);
+                    const toAdd = shuffled.slice(0, needed);
                     results.push(...toAdd);
+                    
                     console.log(`  ✅ 補充 ${toAdd.length} 篇`);
                 } catch (err) {
-                    console.error("  ❌ 保底失敗:", err);
+                    console.error("  ❌ 保底機制失敗:", err);
                 }
             }
   
@@ -249,7 +133,7 @@
 
                 let cleaned = title;
 
-                // 定義要移除的後綴模式（可擴充）
+                // 定義要移除的後綴模式(可擴充)
                 const sitePatterns = [
                     /[\s｜\|\-–—]*聆聽的河流(?:｜閱讀・書寫・心理・電影)?\s*$/i,
                     /[\s｜\|\-–—]*閱讀・書寫・心理・電影\s*$/i,
@@ -261,8 +145,8 @@
                     cleaned = cleaned.replace(pattern, '').trim();
                 }
 
-                // 如果還有殘餘的分隔符在結尾，也清掉
-                cleaned = cleaned.replace(/[\s｜\|\-–—,:，；]+$/, '').trim();
+                // 如果還有殘餘的分隔符在結尾,也清掉
+                cleaned = cleaned.replace(/[\s｜\|\-–—,:,；]+$/, '').trim();
 
                 return cleaned;
             };
