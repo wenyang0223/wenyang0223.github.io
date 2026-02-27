@@ -18,6 +18,42 @@
         
         console.log("📍 當前頁面 URL:", currentUrl);
   
+        // 加強版：判斷是否為當前頁面
+        const isCurrentPage = (pageUrl) => {
+            if (!pageUrl) return false;
+
+            const normPage = normalizeUrl(pageUrl).replace(/\/index\.html?$/, '');
+            const normCurrent = normalizeUrl(currentUrl).replace(/\/index\.html?$/, '');
+
+            // 方法1：規範化後完整比對
+            if (normPage === normCurrent) return true;
+
+            // 方法2：取最後有意義的 segment (slug)
+            const getSlug = (path) => {
+                const parts = path
+                    .replace(/\/index\.html?$/, '')
+                    .replace(/\/+$/, '')
+                    .split('/')
+                    .filter(Boolean);
+                
+                // 如果最後一段是日期格式，往前取一段（常見 Hugo 結構）
+                if (parts.length >= 2 && parts[parts.length-1].match(/^\d{4}(-\d{2}){0,2}$/)) {
+                    return parts[parts.length-2] || '';
+                }
+                return parts[parts.length-1] || '';
+            };
+
+            const pageSlug = getSlug(normPage);
+            const currSlug = getSlug(normCurrent);
+
+            if (pageSlug && currSlug && pageSlug === currSlug && pageSlug.length > 4) {
+                console.log(`[Slug match] 視為同一頁: ${pageSlug}`);
+                return true;
+            }
+
+            return false;
+        };
+
         const toArray = (val) => {
             if (!val) return [];
             if (Array.isArray(val)) return val;
@@ -83,9 +119,11 @@
                     console.log(`  ✅ 找到 ${data.length} 篇`);
                     
                     data.forEach(page => {
-                        const url = normalizeUrl(page.url);
-                        if (url !== currentNormalizedUrl && !allCandidates.has(url)) {
-                            allCandidates.set(url, page);
+                        const normUrl = normalizeUrl(page.url);
+                        if (!isCurrentPage(page.url) && !allCandidates.has(normUrl)) {
+                            allCandidates.set(normUrl, page);
+                        } else if (isCurrentPage(page.url)) {
+                            console.log(`🚫 早期排除自己 (AI Keywords): ${page.meta.title} (${page.url})`);
                         }
                     });
                 } catch (err) {
@@ -103,9 +141,11 @@
                     console.log(`  ✅ 找到 ${data.length} 篇`);
                     
                     data.forEach(page => {
-                        const url = normalizeUrl(page.url);
-                        if (url !== currentNormalizedUrl && !allCandidates.has(url)) {
-                            allCandidates.set(url, page);
+                        const normUrl = normalizeUrl(page.url);
+                        if (!isCurrentPage(page.url) && !allCandidates.has(normUrl)) {
+                            allCandidates.set(normUrl, page);
+                        } else if (isCurrentPage(page.url)) {
+                            console.log(`🚫 早期排除自己 (Category): ${page.meta.title} (${page.url})`);
                         }
                     });
                 } catch (err) {
@@ -131,9 +171,11 @@
                         console.log(`  ✅ 找到 ${data.length} 篇`);
                         
                         data.forEach(page => {
-                            const url = normalizeUrl(page.url);
-                            if (url !== currentNormalizedUrl && !allCandidates.has(url)) {
-                                allCandidates.set(url, page);
+                            const normUrl = normalizeUrl(page.url);
+                            if (!isCurrentPage(page.url) && !allCandidates.has(normUrl)) {
+                                allCandidates.set(normUrl, page);
+                            } else if (isCurrentPage(page.url)) {
+                                console.log(`🚫 早期排除自己 (${axis.name}): ${page.meta.title} (${page.url})`);
                             }
                         });
                     } catch (err) {
@@ -230,7 +272,7 @@
                 // ⚠️ 重要:立即過濾掉當前文章,避免它出現在任何地方
                 const filteredWeighted = weighted.filter(item => {
                     const itemUrl = normalizeUrl(item.page.url);
-                    const isSelf = itemUrl === currentNormalizedUrl;
+                    const isSelf = isCurrentPage(item.page.url);
                     if (isSelf) {
                         console.log(`\n  ⚠️ 排除自己: ${item.page.meta.title.substring(0, 40)}...`);
                     }
@@ -320,7 +362,7 @@
                     const existingUrls = new Set(results.map(r => normalizeUrl(r.url)));
                     const filtered = fallback.filter(page => {
                         const pageUrl = normalizeUrl(page.url);
-                        return pageUrl !== currentNormalizedUrl && !existingUrls.has(pageUrl);
+                        return !isCurrentPage(page.url) && !existingUrls.has(pageUrl);
                     });
                     
                     // 簡單隨機(用種子)
@@ -342,6 +384,15 @@
                 }
             }
   
+            // 最終防呆：絕對不渲染自己
+            results = results.filter(page => {
+                if (isCurrentPage(page.url)) {
+                    console.warn(`最終階段仍發現自己，已移除: ${page.meta.title}`);
+                    return false;
+                }
+                return true;
+            });
+
             console.log("\n✅ 最終推薦:");
             results.forEach((r, i) => {
                 console.log(`  ${i + 1}. ${r.meta.title.substring(0, 40)}...`);
