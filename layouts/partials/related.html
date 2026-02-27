@@ -227,8 +227,20 @@
                     return { page, weight };
                 });
                 
+                // ⚠️ 重要:立即過濾掉當前文章,避免它出現在任何地方
+                const filteredWeighted = weighted.filter(item => {
+                    const itemUrl = normalizeUrl(item.page.url);
+                    const isSelf = itemUrl === currentNormalizedUrl;
+                    if (isSelf) {
+                        console.log(`\n  ⚠️ 排除自己: ${item.page.meta.title.substring(0, 40)}...`);
+                    }
+                    return !isSelf;
+                });
+                
+                console.log(`  ✅ 排除後剩 ${filteredWeighted.length} 篇候選`);
+                
                 console.log("\n  📊 權重分佈 (前 10 名):");
-                weighted
+                filteredWeighted
                     .sort((a, b) => b.weight - a.weight)
                     .slice(0, 10)
                     .forEach((item, i) => {
@@ -239,29 +251,23 @@
                 
                 // 🎲 選擇推薦文章:第 1 篇選最高權重,第 2-3 篇加權隨機
                 const selectRecommendations = (items, count, seed) => {
-                    const selected = [];
-                    const remaining = [...items];
-                    
-                    // 絕對排除當前文章
-                    const filtered = remaining.filter(item => {
-                        const itemUrl = normalizeUrl(item.page.url);
-                        return itemUrl !== currentNormalizedUrl;
-                    });
-                    
-                    if (filtered.length === 0) {
-                        console.log("  ⚠️ 沒有可推薦的文章(排除自己後)");
+                    if (items.length === 0) {
+                        console.log("  ⚠️ 沒有可推薦的文章");
                         return [];
                     }
                     
-                    // 第 1 篇:選權重最高的
-                    filtered.sort((a, b) => b.weight - a.weight);
-                    selected.push(filtered[0].page);
-                    filtered.splice(0, 1);
+                    const selected = [];
+                    const remaining = [...items];
+                    
+                    // 第 1 篇:選權重最高的(items 已經排除自己了)
+                    remaining.sort((a, b) => b.weight - a.weight);
+                    selected.push(remaining[0].page);
+                    remaining.splice(0, 1);
                     
                     console.log(`  🏆 第 1 篇(最高權重): ${selected[0].meta.title.substring(0, 40)}...`);
                     
                     // 第 2-3 篇:加權隨機選擇
-                    if (filtered.length > 0) {
+                    if (remaining.length > 0) {
                         // 簡單的偽隨機生成器
                         let currentSeed = seed;
                         const random = () => {
@@ -269,19 +275,19 @@
                             return currentSeed / 233280;
                         };
                         
-                        const remainingCount = Math.min(count - 1, filtered.length);
+                        const remainingCount = Math.min(count - 1, remaining.length);
                         
                         for (let i = 0; i < remainingCount; i++) {
                             // 計算總權重
-                            const totalWeight = filtered.reduce((sum, item) => sum + item.weight, 0);
+                            const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
                             
                             // 隨機選一個數字
                             let rand = random() * totalWeight;
                             
                             // 找到對應的項目
                             let selectedIndex = 0;
-                            for (let j = 0; j < filtered.length; j++) {
-                                rand -= filtered[j].weight;
+                            for (let j = 0; j < remaining.length; j++) {
+                                rand -= remaining[j].weight;
                                 if (rand <= 0) {
                                     selectedIndex = j;
                                     break;
@@ -289,16 +295,16 @@
                             }
                             
                             // 選中並移除
-                            selected.push(filtered[selectedIndex].page);
-                            console.log(`  🎲 第 ${selected.length} 篇(加權隨機): ${filtered[selectedIndex].page.meta.title.substring(0, 40)}...`);
-                            filtered.splice(selectedIndex, 1);
+                            selected.push(remaining[selectedIndex].page);
+                            console.log(`  🎲 第 ${selected.length} 篇(加權隨機): ${remaining[selectedIndex].page.meta.title.substring(0, 40)}...`);
+                            remaining.splice(selectedIndex, 1);
                         }
                     }
                     
                     return selected;
                 };
                 
-                results = selectRecommendations(weighted, 3, seed);
+                results = selectRecommendations(filteredWeighted, 3, seed);
                 
                 console.log(`\n  ✅ 選出 ${results.length} 篇推薦 (第1篇=最高權重, 第2-3篇=加權隨機)`);
             }
