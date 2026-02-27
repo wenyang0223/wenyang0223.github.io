@@ -133,6 +133,12 @@
             
             console.log(`\n✅ 合併後共有 ${allCandidates.size} 篇候選文章`);
             
+            // Debug: 列出所有候選文章的標題
+            console.log("\n🔍 候選文章列表:");
+            Array.from(allCandidates.values()).slice(0, 15).forEach((page, i) => {
+                console.log(`  ${i + 1}. ${page.meta.title.substring(0, 50)}...`);
+            });
+            
             if (allCandidates.size > 0) {
                 const candidateArray = Array.from(allCandidates.values());
                 
@@ -144,12 +150,27 @@
                     
                     const pageContent = JSON.stringify(page).toLowerCase();
                     
+                    // Debug: 顯示當前文章和它的 filters
+                    if (index < 5) {
+                        console.log(`\n🔍 檢查文章 ${index + 1}: ${page.meta.title.substring(0, 40)}...`);
+                        console.log(`   filters:`, page.filters);
+                        console.log(`   當前 category:`, categories);
+                    }
+                    
                     // 方法 1: 檢查是否有共同的軸標籤
                     const checkAxis = (axisTags, axisName) => {
                         if (axisTags.length > 0) {
-                            const hasMatch = axisTags.some(tag => 
-                                pageContent.includes(tag.toLowerCase())
-                            );
+                            const hasMatch = axisTags.some(tag => {
+                                const tagLower = tag.toLowerCase();
+                                const found = pageContent.includes(tagLower);
+                                
+                                // Debug
+                                if (index < 5) {
+                                    console.log(`   檢查 ${axisName} "${tag}": ${found ? '✅ 找到' : '❌ 沒找到'}`);
+                                }
+                                
+                                return found;
+                            });
                             if (hasMatch) {
                                 boostReason.push(`同 ${axisName}`);
                                 return true;
