@@ -298,7 +298,7 @@
                     
                     // 同軸文章權重加成
                     if (hasCommonTag) {
-                        weight *= 5.0;  // 同 tag 權重 x5 (超強加成!)
+                        weight *= 4.0;  // 同 tag 權重 x4 (平衡版)
                     } else if (hasCommonAxis) {
                         weight *= 2.0;  // 其他軸權重 x2
                     }
@@ -330,7 +330,7 @@
                         console.log(`    ${i + 1}. 權重 ${item.weight.toFixed(1)}: ${item.page.meta.title.substring(0, 40)}...`);
                     });
                 
-                // 🎲 選擇推薦文章
+                // 🎲 選擇推薦文章:確保多樣性
                 const selectRecommendations = (items, count, seed) => {
                     if (items.length === 0) {
                         console.log("  ⚠️ 沒有可推薦的文章");
@@ -343,21 +343,99 @@
                     // 第 1 篇:選權重最高的
                     remaining.sort((a, b) => b.weight - a.weight);
                     selected.push(remaining[0].page);
+                    const firstPageTags = tags; // 記住第一篇的 tags
                     remaining.splice(0, 1);
                     
                     console.log(`  🏆 第 1 篇(最高權重): ${selected[0].meta.title.substring(0, 40)}...`);
                     
-                    // 第 2-3 篇:加權隨機選擇
+                    // 簡單的偽隨機生成器
+                    let currentSeed = seed;
+                    const random = () => {
+                        currentSeed = (currentSeed * 9301 + 49297) % 233280;
+                        return currentSeed / 233280;
+                    };
+                    
+                    // 檢查文章是否跟已選文章有相同 tag
+                    const hasSameTag = (pageContent, selectedTags) => {
+                        if (!selectedTags || selectedTags.length === 0) return false;
+                        const content = JSON.stringify(pageContent).toLowerCase();
+                        return selectedTags.some(tag => content.includes(tag.toLowerCase()));
+                    };
+                    
+                    // 第 2 篇:加權隨機,但統計同 tag 數量
                     if (remaining.length > 0) {
-                        let currentSeed = seed;
-                        const random = () => {
-                            currentSeed = (currentSeed * 9301 + 49297) % 233280;
-                            return currentSeed / 233280;
-                        };
+                        const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
+                        let rand = random() * totalWeight;
                         
-                        const remainingCount = Math.min(count - 1, remaining.length);
+                        let selectedIndex = 0;
+                        for (let j = 0; j < remaining.length; j++) {
+                            rand -= remaining[j].weight;
+                            if (rand <= 0) {
+                                selectedIndex = j;
+                                break;
+                            }
+                        }
                         
-                        for (let i = 0; i < remainingCount; i++) {
+                        selected.push(remaining[selectedIndex].page);
+                        console.log(`  🎲 第 2 篇(加權隨機): ${remaining[selectedIndex].page.meta.title.substring(0, 40)}...`);
+                        remaining.splice(selectedIndex, 1);
+                    }
+                    
+                    // 第 3 篇:優先選不同 tag 的文章,確保多樣性
+                    if (remaining.length > 0) {
+                        // 統計已選文章中有多少同 tag
+                        let sameTagCount = 0;
+                        for (const selectedPage of selected) {
+                            if (hasSameTag(selectedPage, firstPageTags)) {
+                                sameTagCount++;
+                            }
+                        }
+                        
+                        // 如果前 2 篇都是同 tag,第 3 篇強制選不同的
+                        if (sameTagCount >= 2) {
+                            console.log(`  ⚠️ 前 ${sameTagCount} 篇都是同 tag,第 3 篇選擇不同類型`);
+                            
+                            // 找出不同 tag 的文章
+                            const differentTag = remaining.filter(item => 
+                                !hasSameTag(item.page, firstPageTags)
+                            );
+                            
+                            if (differentTag.length > 0) {
+                                // 從不同 tag 中加權隨機選
+                                const totalWeight = differentTag.reduce((sum, item) => sum + item.weight, 0);
+                                let rand = random() * totalWeight;
+                                
+                                let selectedIndex = 0;
+                                for (let j = 0; j < differentTag.length; j++) {
+                                    rand -= differentTag[j].weight;
+                                    if (rand <= 0) {
+                                        selectedIndex = j;
+                                        break;
+                                    }
+                                }
+                                
+                                selected.push(differentTag[selectedIndex].page);
+                                console.log(`  🌟 第 3 篇(不同類型): ${differentTag[selectedIndex].page.meta.title.substring(0, 40)}...`);
+                            } else {
+                                // 如果找不到不同 tag 的,就正常加權隨機
+                                console.log(`  ⚠️ 找不到不同 tag 的文章,正常選擇`);
+                                const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
+                                let rand = random() * totalWeight;
+                                
+                                let selectedIndex = 0;
+                                for (let j = 0; j < remaining.length; j++) {
+                                    rand -= remaining[j].weight;
+                                    if (rand <= 0) {
+                                        selectedIndex = j;
+                                        break;
+                                    }
+                                }
+                                
+                                selected.push(remaining[selectedIndex].page);
+                                console.log(`  🎲 第 3 篇(加權隨機): ${remaining[selectedIndex].page.meta.title.substring(0, 40)}...`);
+                            }
+                        } else {
+                            // 前面不是都同 tag,正常加權隨機
                             const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
                             let rand = random() * totalWeight;
                             
@@ -371,8 +449,7 @@
                             }
                             
                             selected.push(remaining[selectedIndex].page);
-                            console.log(`  🎲 第 ${selected.length} 篇(加權隨機): ${remaining[selectedIndex].page.meta.title.substring(0, 40)}...`);
-                            remaining.splice(selectedIndex, 1);
+                            console.log(`  🎲 第 3 篇(加權隨機): ${remaining[selectedIndex].page.meta.title.substring(0, 40)}...`);
                         }
                     }
                     
