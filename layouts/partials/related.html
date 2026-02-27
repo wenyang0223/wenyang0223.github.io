@@ -26,8 +26,13 @@
         };
   
         const ai_kw = toArray({{ with .Params.ai_keywords }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const projects = toArray({{ with .Params.projects }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const clubhouse = toArray({{ with .Params.clubhouse }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const series = toArray({{ with .Params.series }}{{ . | jsonify }}{{ else }}null{{ end }});
+        const topics = toArray({{ with .Params.topics }}{{ . | jsonify }}{{ else }}null{{ end }});
         
         console.log("🔑 AI Keywords:", ai_kw);
+        console.log("📂 當前軸:", { projects, clubhouse, series, topics });
   
         try {
             if (typeof pagefind === 'undefined') {
@@ -64,13 +69,13 @@
             
             let results = [];
             
-            // 📍 方案 B: 用 AI Keywords 搜尋 20 篇,隨機推薦 3 篇
+            // 📍 方案 B+: 用 AI Keywords 搜尋 10 篇,加權隨機推薦 3 篇
             if (ai_kw.length > 0) {
                 console.log("\n🔍 搜尋 AI Keywords 相關文章...");
                 
                 try {
                     const search = await window.pagefind.search(ai_kw.join(" "));
-                    const data = await Promise.all(search.results.slice(0, 20).map(r => r.data()));
+                    const data = await Promise.all(search.results.slice(0, 10).map(r => r.data()));
                     
                     console.log(`  ✅ 找到 ${data.length} 篇文章`);
                     
@@ -82,13 +87,113 @@
                     
                     console.log(`  ✅ 過濾後剩 ${filtered.length} 篇(排除自己)`);
                     
-                    // 用種子打亂順序
-                    const shuffled = seededShuffle(filtered, seed);
+                    // 🎯 計算每篇文章的權重
+                    const weighted = filtered.map((page, index) => {
+                        // 基礎權重:Pagefind 排名越前面權重越高
+                        // 第 1 篇權重 10, 第 2 篇權重 9... 第 10 篇權重 1
+                        let weight = 10 - index;
+                        
+                        // 檢查是否有共同的軸標籤(projects, clubhouse, series, topics)
+                        const pageContent = JSON.stringify(page).toLowerCase();
+                        let hasCommonAxis = false;
+                        
+                        // 如果有共同的 project 標籤
+                        if (projects.length > 0) {
+                            const hasMatch = projects.some(tag => 
+                                pageContent.includes(tag.toLowerCase())
+                            );
+                            if (hasMatch) {
+                                hasCommonAxis = true;
+                                console.log(`    🔖 同 project: ${page.meta.title.substring(0, 30)}...`);
+                            }
+                        }
+                        
+                        // 如果有共同的 clubhouse 標籤
+                        if (clubhouse.length > 0) {
+                            const hasMatch = clubhouse.some(tag => 
+                                pageContent.includes(tag.toLowerCase())
+                            );
+                            if (hasMatch) {
+                                hasCommonAxis = true;
+                                console.log(`    🔖 同 clubhouse: ${page.meta.title.substring(0, 30)}...`);
+                            }
+                        }
+                        
+                        // 如果有共同的 series 標籤
+                        if (series.length > 0) {
+                            const hasMatch = series.some(tag => 
+                                pageContent.includes(tag.toLowerCase())
+                            );
+                            if (hasMatch) {
+                                hasCommonAxis = true;
+                                console.log(`    🔖 同 series: ${page.meta.title.substring(0, 30)}...`);
+                            }
+                        }
+                        
+                        // 如果有共同的 topics 標籤
+                        if (topics.length > 0) {
+                            const hasMatch = topics.some(tag => 
+                                pageContent.includes(tag.toLowerCase())
+                            );
+                            if (hasMatch) {
+                                hasCommonAxis = true;
+                                console.log(`    🔖 同 topics: ${page.meta.title.substring(0, 30)}...`);
+                            }
+                        }
+                        
+                        // 同軸文章權重加倍
+                        if (hasCommonAxis) {
+                            weight *= 2;
+                        }
+                        
+                        return { page, weight };
+                    });
                     
-                    // 取前 3 篇
-                    results = shuffled.slice(0, 3);
+                    console.log("\n  📊 權重分佈:");
+                    weighted.forEach((item, i) => {
+                        console.log(`    ${i + 1}. 權重 ${item.weight}: ${item.page.meta.title.substring(0, 30)}...`);
+                    });
                     
-                    console.log(`  ✅ 隨機選出 ${results.length} 篇推薦`);
+                    // 🎲 加權隨機選取 3 篇
+                    const weightedRandomSelect = (items, count, seed) => {
+                        const selected = [];
+                        const remaining = [...items];
+                        
+                        // 簡單的偽隨機生成器
+                        let currentSeed = seed;
+                        const random = () => {
+                            currentSeed = (currentSeed * 9301 + 49297) % 233280;
+                            return currentSeed / 233280;
+                        };
+                        
+                        for (let i = 0; i < count && remaining.length > 0; i++) {
+                            // 計算總權重
+                            const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
+                            
+                            // 隨機選一個數字
+                            let rand = random() * totalWeight;
+                            
+                            // 找到對應的項目
+                            let selectedIndex = 0;
+                            for (let j = 0; j < remaining.length; j++) {
+                                rand -= remaining[j].weight;
+                                if (rand <= 0) {
+                                    selectedIndex = j;
+                                    break;
+                                }
+                            }
+                            
+                            // 選中並移除
+                            selected.push(remaining[selectedIndex].page);
+                            remaining.splice(selectedIndex, 1);
+                        }
+                        
+                        return selected;
+                    };
+                    
+                    results = weightedRandomSelect(weighted, 3, seed);
+                    
+                    console.log(`\n  ✅ 加權隨機選出 ${results.length} 篇推薦`);
                     
                 } catch (err) {
                     console.error("  ❌ AI Keywords 搜尋失敗:", err);
