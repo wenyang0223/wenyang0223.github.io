@@ -17,18 +17,38 @@
         const currentNormalizedUrl = normalizeUrl(currentUrl);
         
         console.log("📍 當前頁面 URL:", currentUrl);
+        console.log("📍 規範化 URL:", currentNormalizedUrl);
   
-        // 加強版：判斷是否為當前頁面
+        // 🔒 加強版：判斷是否為當前頁面 (三重檢查)
         const isCurrentPage = (pageUrl) => {
             if (!pageUrl) return false;
 
             const normPage = normalizeUrl(pageUrl).replace(/\/index\.html?$/, '');
-            const normCurrent = normalizeUrl(currentUrl).replace(/\/index\.html?$/, '');
+            const normCurrent = currentNormalizedUrl.replace(/\/index\.html?$/, '');
 
             // 方法1：規範化後完整比對
-            if (normPage === normCurrent) return true;
+            if (normPage === normCurrent) {
+                return true;
+            }
 
-            // 方法2：取最後有意義的 segment (slug)
+            // 方法2：比對 URL 的最後兩段 (例如 /blog/文章名/)
+            const getLastTwoSegments = (path) => {
+                const parts = path
+                    .replace(/\/index\.html?$/, '')
+                    .replace(/\/+$/, '')
+                    .split('/')
+                    .filter(Boolean);
+                return parts.slice(-2).join('/');
+            };
+
+            const pageLast2 = getLastTwoSegments(normPage);
+            const currLast2 = getLastTwoSegments(normCurrent);
+
+            if (pageLast2 && currLast2 && pageLast2 === currLast2 && pageLast2.length > 5) {
+                return true;
+            }
+
+            // 方法3：取最後有意義的 segment (slug) - 加強版
             const getSlug = (path) => {
                 const parts = path
                     .replace(/\/index\.html?$/, '')
@@ -36,18 +56,20 @@
                     .split('/')
                     .filter(Boolean);
                 
-                // 如果最後一段是日期格式，往前取一段（常見 Hugo 結構）
-                if (parts.length >= 2 && parts[parts.length-1].match(/^\d{4}(-\d{2}){0,2}$/)) {
-                    return parts[parts.length-2] || '';
+                // URL decode (處理中文等編碼)
+                const lastPart = parts[parts.length-1] || '';
+                try {
+                    return decodeURIComponent(lastPart);
+                } catch (e) {
+                    return lastPart;
                 }
-                return parts[parts.length-1] || '';
             };
 
             const pageSlug = getSlug(normPage);
             const currSlug = getSlug(normCurrent);
 
-            if (pageSlug && currSlug && pageSlug === currSlug && pageSlug.length > 4) {
-                console.log(`[Slug match] 視為同一頁: ${pageSlug}`);
+            // slug 要夠長(>10) 且完全一致
+            if (pageSlug && currSlug && pageSlug === currSlug && pageSlug.length > 10) {
                 return true;
             }
 
@@ -104,7 +126,7 @@
             
             let results = [];
             
-            // 📍 方案 B: 多重搜尋策略
+            // 📍 多重搜尋策略
             console.log("\n🔍 開始多重搜尋策略...");
             
             const allCandidates = new Map(); // 用 Map 去重,key 是 URL
@@ -119,11 +141,13 @@
                     console.log(`  ✅ 找到 ${data.length} 篇`);
                     
                     data.forEach(page => {
+                        if (isCurrentPage(page.url)) {
+                            console.log(`  🚫 排除自己 (AI Keywords): ${page.meta.title.substring(0, 30)}...`);
+                            return;
+                        }
                         const normUrl = normalizeUrl(page.url);
-                        if (!isCurrentPage(page.url) && !allCandidates.has(normUrl)) {
+                        if (!allCandidates.has(normUrl)) {
                             allCandidates.set(normUrl, page);
-                        } else if (isCurrentPage(page.url)) {
-                            console.log(`🚫 早期排除自己 (AI Keywords): ${page.meta.title} (${page.url})`);
                         }
                     });
                 } catch (err) {
@@ -141,11 +165,13 @@
                     console.log(`  ✅ 找到 ${data.length} 篇`);
                     
                     data.forEach(page => {
+                        if (isCurrentPage(page.url)) {
+                            console.log(`  🚫 排除自己 (Category): ${page.meta.title.substring(0, 30)}...`);
+                            return;
+                        }
                         const normUrl = normalizeUrl(page.url);
-                        if (!isCurrentPage(page.url) && !allCandidates.has(normUrl)) {
+                        if (!allCandidates.has(normUrl)) {
                             allCandidates.set(normUrl, page);
-                        } else if (isCurrentPage(page.url)) {
-                            console.log(`🚫 早期排除自己 (Category): ${page.meta.title} (${page.url})`);
                         }
                     });
                 } catch (err) {
@@ -171,11 +197,13 @@
                         console.log(`  ✅ 找到 ${data.length} 篇`);
                         
                         data.forEach(page => {
+                            if (isCurrentPage(page.url)) {
+                                console.log(`  🚫 排除自己 (${axis.name}): ${page.meta.title.substring(0, 30)}...`);
+                                return;
+                            }
                             const normUrl = normalizeUrl(page.url);
-                            if (!isCurrentPage(page.url) && !allCandidates.has(normUrl)) {
+                            if (!allCandidates.has(normUrl)) {
                                 allCandidates.set(normUrl, page);
-                            } else if (isCurrentPage(page.url)) {
-                                console.log(`🚫 早期排除自己 (${axis.name}): ${page.meta.title} (${page.url})`);
                             }
                         });
                     } catch (err) {
@@ -192,12 +220,12 @@
                 // 🎯 計算每篇文章的權重
                 const weighted = candidateArray.map((page, index) => {
                     // 基礎權重: 從搜尋結果順序決定
-                    let weight = Math.max(5, 20 - index); // 最低權重 5
+                    let weight = Math.max(5, 20 - index);
                     let boostReason = [];
                     
                     const pageContent = JSON.stringify(page).toLowerCase();
                     
-                    // 方法 1: 檢查是否有共同的軸標籤
+                    // 檢查是否有共同的軸標籤
                     const checkAxis = (axisTags, axisName) => {
                         if (axisTags.length > 0) {
                             const hasMatch = axisTags.some(tag => {
@@ -221,14 +249,13 @@
                         checkAxis(topics, 'topics') ||
                         checkAxis(highlights, 'highlights');
                     
-                    // 方法 2: 檢查 AI Keywords 相似度
+                    // 檢查 AI Keywords 相似度
                     let pageKeywords = [];
                     try {
                         const filtersStr = JSON.stringify(page.filters || {});
                         const metaStr = JSON.stringify(page.meta || {});
                         const combinedStr = filtersStr + metaStr;
                         
-                        // 嘗試匹配 JSON 陣列格式的 keywords
                         const keywordMatch = combinedStr.match(/\["[^"]+(?:","[^"]+)*"\]/g);
                         if (keywordMatch) {
                             try {
@@ -269,14 +296,13 @@
                     return { page, weight };
                 });
                 
-                // ⚠️ 重要:立即過濾掉當前文章,避免它出現在任何地方
+                // 🔒 第二重防護:過濾掉當前文章
                 const filteredWeighted = weighted.filter(item => {
-                    const itemUrl = normalizeUrl(item.page.url);
-                    const isSelf = isCurrentPage(item.page.url);
-                    if (isSelf) {
-                        console.log(`\n  ⚠️ 排除自己: ${item.page.meta.title.substring(0, 40)}...`);
+                    if (isCurrentPage(item.page.url)) {
+                        console.log(`\n  ⚠️ 第二重防護排除自己: ${item.page.meta.title.substring(0, 40)}...`);
+                        return false;
                     }
-                    return !isSelf;
+                    return true;
                 });
                 
                 console.log(`  ✅ 排除後剩 ${filteredWeighted.length} 篇候選`);
@@ -289,9 +315,7 @@
                         console.log(`    ${i + 1}. 權重 ${item.weight.toFixed(1)}: ${item.page.meta.title.substring(0, 40)}...`);
                     });
                 
-                // 🎲 選擇推薦文章:第 1 篇選最高權重,第 2-3 篇加權隨機
-                
-                // 🎲 選擇推薦文章:第 1 篇選最高權重,第 2-3 篇加權隨機
+                // 🎲 選擇推薦文章
                 const selectRecommendations = (items, count, seed) => {
                     if (items.length === 0) {
                         console.log("  ⚠️ 沒有可推薦的文章");
@@ -301,7 +325,7 @@
                     const selected = [];
                     const remaining = [...items];
                     
-                    // 第 1 篇:選權重最高的(items 已經排除自己了)
+                    // 第 1 篇:選權重最高的
                     remaining.sort((a, b) => b.weight - a.weight);
                     selected.push(remaining[0].page);
                     remaining.splice(0, 1);
@@ -310,7 +334,6 @@
                     
                     // 第 2-3 篇:加權隨機選擇
                     if (remaining.length > 0) {
-                        // 簡單的偽隨機生成器
                         let currentSeed = seed;
                         const random = () => {
                             currentSeed = (currentSeed * 9301 + 49297) % 233280;
@@ -320,13 +343,9 @@
                         const remainingCount = Math.min(count - 1, remaining.length);
                         
                         for (let i = 0; i < remainingCount; i++) {
-                            // 計算總權重
                             const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
-                            
-                            // 隨機選一個數字
                             let rand = random() * totalWeight;
                             
-                            // 找到對應的項目
                             let selectedIndex = 0;
                             for (let j = 0; j < remaining.length; j++) {
                                 rand -= remaining[j].weight;
@@ -336,7 +355,6 @@
                                 }
                             }
                             
-                            // 選中並移除
                             selected.push(remaining[selectedIndex].page);
                             console.log(`  🎲 第 ${selected.length} 篇(加權隨機): ${remaining[selectedIndex].page.meta.title.substring(0, 40)}...`);
                             remaining.splice(selectedIndex, 1);
@@ -351,21 +369,18 @@
                 console.log(`\n  ✅ 選出 ${results.length} 篇推薦 (第1篇=最高權重, 第2-3篇=加權隨機)`);
             }
             
-            // 📍 保底機制:如果結果不足
+            // 📍 保底機制
             if (results.length < 3) {
                 console.log("\n📍 保底機制:補充文章");
                 try {
                     const allSite = await window.pagefind.search("");
                     const fallback = await Promise.all(allSite.results.slice(0, 30).map(r => r.data()));
                     
-                    // 過濾掉當前文章和已推薦的
                     const existingUrls = new Set(results.map(r => normalizeUrl(r.url)));
                     const filtered = fallback.filter(page => {
-                        const pageUrl = normalizeUrl(page.url);
-                        return !isCurrentPage(page.url) && !existingUrls.has(pageUrl);
+                        return !isCurrentPage(page.url) && !existingUrls.has(normalizeUrl(page.url));
                     });
                     
-                    // 簡單隨機(用種子)
                     let currentSeed = seed;
                     const random = () => {
                         currentSeed = (currentSeed * 9301 + 49297) % 233280;
@@ -373,7 +388,6 @@
                     };
                     
                     const shuffled = filtered.sort(() => random() - 0.5);
-                    
                     const needed = 3 - results.length;
                     const toAdd = shuffled.slice(0, needed);
                     results.push(...toAdd);
@@ -384,10 +398,10 @@
                 }
             }
   
-            // 最終防呆：絕對不渲染自己
+            // 🔒 第三重防護:最終檢查
             results = results.filter(page => {
                 if (isCurrentPage(page.url)) {
-                    console.warn(`最終階段仍發現自己，已移除: ${page.meta.title}`);
+                    console.warn(`⚠️ 第三重防護排除自己: ${page.meta.title}`);
                     return false;
                 }
                 return true;
@@ -401,24 +415,16 @@
             // 清理標題
             const cleanTitle = (title) => {
                 if (!title) return '';
-
                 let cleaned = title;
-
-                // 定義要移除的後綴模式(可擴充)
                 const sitePatterns = [
                     /[\s｜\|\-–—]*聆聽的河流(?:｜閱讀・書寫・心理・電影)?\s*$/i,
                     /[\s｜\|\-–—]*閱讀・書寫・心理・電影\s*$/i,
                     /[\s｜\|\-–—]*聆聽的河流\s*$/i
                 ];
-
-                // 移除後綴
                 for (const pattern of sitePatterns) {
                     cleaned = cleaned.replace(pattern, '').trim();
                 }
-
-                // 如果還有殘餘的分隔符在結尾,也清掉
                 cleaned = cleaned.replace(/[\s｜\|\-–—,:,；]+$/, '').trim();
-
                 return cleaned;
             };
   
