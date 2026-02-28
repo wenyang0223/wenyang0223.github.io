@@ -1,21 +1,27 @@
 <head>
   <meta charset="utf-8">
-<!-- 只在 GitHub Pages 域名時加 redirect（用 JS 檢查 hostname，避免 Vercel 版 loop） -->
-<script>
-  if (window.location.hostname.includes("github.io")) {
-    var target = "https://wenyang.vercel.app" + window.location.pathname + window.location.search + window.location.hash;
-    // 優先用 meta refresh 讓 Google 看到
-    document.write('<meta http-equiv="refresh" content="0; url=' + target + '">');
-    document.write('<link rel="canonical" href="' + target + '">');
-  }
-</script>
 
-<!-- 正常 canonical（給 Vercel 版用） -->
-{{ if .IsHome }}
-  <link rel="canonical" href="https://wenyang.vercel.app/">
-{{ else }}
-  <link rel="canonical" href="https://wenyang.vercel.app{{ .RelPermalink }}">
-{{ end }}
+  <!-- 只在 GitHub Pages 域名時加 redirect（用 JS 檢查 hostname，避免 Vercel 版 loop） -->
+  <script>
+    if (window.location.hostname.includes("github.io")) {
+      var target = "https://wenyang.vercel.app" + window.location.pathname + window.location.search + window.location.hash;
+      // 優先用 meta refresh 讓 Google 看到（0 秒 instant refresh，模擬重定向）
+      var meta = document.createElement('meta');
+      meta.setAttribute('http-equiv', 'refresh');
+      meta.setAttribute('content', '0; url=' + target);
+      document.head.appendChild(meta);
+      
+      // JS 作為後備，確保瀏覽器立即跳轉
+      window.location.replace(target);
+    }
+  </script>
+  
+  <!-- 正常 canonical（給 Vercel 版用，也讓 Google 知道新 URL 是首選） -->
+  {{ if .IsHome }}
+    <link rel="canonical" href="https://wenyang.vercel.app/">
+  {{ else }}
+    <link rel="canonical" href="https://wenyang.vercel.app{{ .RelPermalink }}">
+  {{ end }}
 
   <title>
     {{ if .IsHome }}
