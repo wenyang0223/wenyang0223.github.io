@@ -299,11 +299,6 @@
       ],
       "destination": "https://wenyang.vercel.app/$1",
       "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "destination": "https://wenyang.vercel.app/:path*",
-      "permanent": true
     }
       ],
       "rewrites": [
