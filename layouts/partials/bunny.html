@@ -1,12 +1,13 @@
-<!-- 放在 Hugo 的 layouts/partials/bunny.html -->
-<div class="bunny" id="reading-bunny">
+<!-- 將此文件放在 Hugo 的 layouts/partials/bunny-animation.html -->
+<!-- 整合版：結合開關控制 + 優雅的翻轉邏輯 -->
+
+<div class="bunny" id="reading-bunny" style="display: none;">
     <img src="/images/mao_3.png" alt="bunny">
 </div>
 
 <style>
     .bunny {
         position: fixed;
-        font-size: 40px;
         cursor: pointer;
         user-select: none;
         z-index: 9999;
@@ -16,18 +17,18 @@
     }
 
     .bunny img {
-        width: 60px;  /* 調整圖片大小 */
+        width: 60px;
         height: auto;
         display: block;
     }
 
     .bunny.flipped img {
-        transform: scaleX(-1);   /* 左右翻轉 */
+        transform: scaleX(-1);
     }
 
     @media (max-width: 768px) {
         .bunny img {
-            width: 40px;  /* 手機版更小 */
+            width: 40px;
         }
     }
 </style>
@@ -37,85 +38,104 @@
     const bunny = document.getElementById('reading-bunny');
     if (!bunny) return;
 
-    // 初始位置與速度
+    let isActive = false;  // 預設關閉（配合 header 按鈕）
+    let animationFrameId = null;
+
+    // DVD logo 風格設定
     let x = Math.random() * (window.innerWidth - 100);
     let y = Math.random() * (window.innerHeight - 100);
-    let speedX = 2;   // 水平速度
-    let speedY = 2;   // 垂直速度
+    let speedX = 2;
+    let speedY = 2;
     let directionX = Math.random() > 0.5 ? 1 : -1;
     let directionY = Math.random() > 0.5 ? 1 : -1;
-
-    const bunnySize = 60;  // 與 CSS width 保持一致（必要時調整）
+    
+    const bunnySize = 60;
 
     // 初始位置
     bunny.style.left = x + 'px';
     bunny.style.top = y + 'px';
 
-    // 翻轉函式：每次呼叫就 toggle 一次左右翻轉
-    function flipBunny() {
-        bunny.classList.toggle('flipped');
-    }
-
-    // 初始隨機決定是否翻轉（可選）
+    // 初始隨機翻轉
     if (Math.random() > 0.5) {
         bunny.classList.add('flipped');
     }
 
-    // 點擊時反轉所有方向 + 翻轉一次
-    bunny.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        directionX *= -1;
-        directionY *= -1;
-        flipBunny();  // 點擊也翻一次
-    });
+    // 翻轉函式（使用 toggle，更簡潔）
+    function flipBunny() {
+        bunny.classList.toggle('flipped');
+    }
 
+    // 動畫函數
     function animate() {
-        let hasCollision = false;
+        if (!isActive) return;
+
+        let hasCollision = false;  // 使用旗標避免多次翻轉
 
         // 更新位置
         x += speedX * directionX;
         y += speedY * directionY;
 
-        // 撞左邊
+        // 檢測左右邊界
         if (x <= 0) {
             x = 0;
             directionX = 1;
             hasCollision = true;
-        }
-        // 撞右邊
-        else if (x >= window.innerWidth - bunnySize) {
+        } else if (x >= window.innerWidth - bunnySize) {
             x = window.innerWidth - bunnySize;
             directionX = -1;
             hasCollision = true;
         }
 
-        // 撞上邊
+        // 檢測上下邊界
         if (y <= 0) {
             y = 0;
             directionY = 1;
             hasCollision = true;
-        }
-        // 撞下邊
-        else if (y >= window.innerHeight - bunnySize) {
+        } else if (y >= window.innerHeight - bunnySize) {
             y = window.innerHeight - bunnySize;
             directionY = -1;
             hasCollision = true;
         }
 
-        // 只要有任何碰撞，就翻轉一次
+        // 只要有碰撞就翻轉一次
         if (hasCollision) {
             flipBunny();
         }
 
-        // 套用位置
+        // 更新位置
         bunny.style.left = x + 'px';
         bunny.style.top = y + 'px';
 
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
     }
 
-    // 視窗大小改變時修正位置（避免卡在外面）
+    // 開關動畫函數（給 header 按鈕呼叫）
+    window.toggleBunnyAnimation = function() {
+        isActive = !isActive;
+        
+        if (isActive) {
+            bunny.style.display = 'block';
+            animate();
+        } else {
+            bunny.style.display = 'none';
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+        
+        return isActive;
+    };
+
+    // 點擊兔子改變方向並翻轉
+    bunny.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        directionX *= -1;
+        directionY *= -1;
+        flipBunny();
+    });
+
+    // 視窗大小改變時調整位置
     window.addEventListener('resize', () => {
         if (x > window.innerWidth - bunnySize) {
             x = window.innerWidth - bunnySize;
@@ -124,8 +144,5 @@
             y = window.innerHeight - bunnySize;
         }
     });
-
-    // 啟動動畫
-    animate();
 })();
 </script>

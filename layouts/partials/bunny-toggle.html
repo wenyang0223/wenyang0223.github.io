@@ -1,0 +1,70 @@
+<!-- 將此文件放在 Hugo 的 layouts/partials/bunny-toggle.html -->
+<!-- 這個檔案只包含控制按鈕，放在 header.html 裡面 -->
+
+<button id="bunny-toggle" class="bunny-toggle-btn" aria-label="Toggle bunny animation">
+    <img src="/images/mao_3.png" alt="Toggle Animation">
+</button>
+
+<style>
+    /* Header 控制按鈕樣式（簡潔版）*/
+    .bunny-toggle-btn {
+        background: transparent;
+        border: none;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        padding: 0;
+        transition: opacity 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -3px;    /* 往上移（數字越大越往上）*/
+        margin-right: -3px; /* 往右移（負數是往右，正數是往左）*/
+    }
+
+    .bunny-toggle-btn:hover {
+        opacity: 0.7;
+    }
+
+    .bunny-toggle-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    /* 當動畫開啟時的按鈕狀態 */
+    .bunny-toggle-btn.active {
+        opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        .bunny-toggle-btn {
+            width: 38px;
+            height: 38px;
+        }
+    }
+</style>
+
+<script>
+(function() {
+    const toggleButton = document.getElementById('bunny-toggle');
+    if (!toggleButton) return;
+
+    // 點擊按鈕切換動畫
+    toggleButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 呼叫全域函數來開關動畫
+        if (typeof window.toggleBunnyAnimation === 'function') {
+            const isActive = window.toggleBunnyAnimation();
+            
+            // 更新按鈕狀態
+            if (isActive) {
+                toggleButton.classList.add('active');
+            } else {
+                toggleButton.classList.remove('active');
+            }
+        }
+    });
+})();
+</script>

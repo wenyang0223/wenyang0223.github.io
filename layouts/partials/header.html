@@ -17,8 +17,9 @@
               <a class="nav-link" href="{{ .link | safeURL }}"><i class="{{ .icon }}"></i></a>
             </li>
             {{ end }}
-          </ul>
-        </div>
+
+
+            {{ partial "bunny-toggle.html" . }}
 
         <a class="navbar-brand mx-auto desktop-view" href="{{ .Site.BaseURL }}"><img class="img-fluid"
             src="{{ .Site.Params.logo | absURL }}" alt="{{ .Site.Title }}"></a>
@@ -51,6 +52,8 @@
         </li>
       </ul>
 
+
+      
         {{ if .Site.Params.navButton.enable }}
         {{ "<!-- get start btn -->" | safeHTML }}
         <a href="{{ .Site.Params.navButton.link | absURL }}"
@@ -86,7 +89,8 @@
 
 }
 
-  </style>
+</style>
 
+ 
 </header>
 {{ "<!-- /navigation -->" | safeHTML }}
