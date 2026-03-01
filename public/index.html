@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-tw"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
+
+  
   <script>
-    
     if (window.location.hostname.includes("github.io")) {
-      var targetDomain = "https://wenyang.vercel.app";
+      var target = "https://wenyang.vercel.app" + window.location.pathname + window.location.search + window.location.hash;
       
-      var currentPath = window.location.pathname;
-      var currentSearch = window.location.search;
-      var currentHash = window.location.hash;
+      var meta = document.createElement('meta');
+      meta.setAttribute('http-equiv', 'refresh');
+      meta.setAttribute('content', '0; url=' + target);
+      document.head.appendChild(meta);
       
       
-      window.location.replace(targetDomain + currentPath + currentSearch + currentHash);
+      window.location.replace(target);
     }
   </script>
+  
+  
+  
+    <link rel="canonical" href="https://wenyang.vercel.app/">
+  
+
   <title>
     
       聆聽的河流｜閱讀・書寫・心理・電影
@@ -34,7 +42,7 @@
   <meta name="generator" content="Hugo 0.155.2">
 
   <link rel="sitemap" type="application/xml" title="Sitemap" href="http://localhost:1313/sitemap.xml">
-  <link rel="canonical" href="http://localhost:1313/">
+
   
   
   
@@ -1480,5 +1488,136 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-</script></body>
+</script>
+<div class="bunny" id="reading-bunny">
+    <img src="/images/mao_3.png" alt="bunny">
+</div>
+
+<style>
+    .bunny {
+        position: fixed;
+        font-size: 40px;
+        cursor: pointer;
+        user-select: none;
+        z-index: 9999;
+        pointer-events: auto;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        transition: transform 0.1s ease;
+    }
+
+    .bunny img {
+        width: 60px;   
+        height: auto;
+        display: block;
+    }
+
+    .bunny.flipped img {
+        transform: scaleX(-1);    
+    }
+
+    @media (max-width: 768px) {
+        .bunny img {
+            width: 40px;   
+        }
+    }
+</style>
+
+<script>
+(function() {
+    const bunny = document.getElementById('reading-bunny');
+    if (!bunny) return;
+
+    
+    let x = Math.random() * (window.innerWidth - 100);
+    let y = Math.random() * (window.innerHeight - 100);
+    let speedX = 2;   
+    let speedY = 2;   
+    let directionX = Math.random() > 0.5 ? 1 : -1;
+    let directionY = Math.random() > 0.5 ? 1 : -1;
+
+    const bunnySize = 60;  
+
+    
+    bunny.style.left = x + 'px';
+    bunny.style.top = y + 'px';
+
+    
+    function flipBunny() {
+        bunny.classList.toggle('flipped');
+    }
+
+    
+    if (Math.random() > 0.5) {
+        bunny.classList.add('flipped');
+    }
+
+    
+    bunny.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        directionX *= -1;
+        directionY *= -1;
+        flipBunny();  
+    });
+
+    function animate() {
+        let hasCollision = false;
+
+        
+        x += speedX * directionX;
+        y += speedY * directionY;
+
+        
+        if (x <= 0) {
+            x = 0;
+            directionX = 1;
+            hasCollision = true;
+        }
+        
+        else if (x >= window.innerWidth - bunnySize) {
+            x = window.innerWidth - bunnySize;
+            directionX = -1;
+            hasCollision = true;
+        }
+
+        
+        if (y <= 0) {
+            y = 0;
+            directionY = 1;
+            hasCollision = true;
+        }
+        
+        else if (y >= window.innerHeight - bunnySize) {
+            y = window.innerHeight - bunnySize;
+            directionY = -1;
+            hasCollision = true;
+        }
+
+        
+        if (hasCollision) {
+            flipBunny();
+        }
+
+        
+        bunny.style.left = x + 'px';
+        bunny.style.top = y + 'px';
+
+        requestAnimationFrame(animate);
+    }
+
+    
+    window.addEventListener('resize', () => {
+        if (x > window.innerWidth - bunnySize) {
+            x = window.innerWidth - bunnySize;
+        }
+        if (y > window.innerHeight - bunnySize) {
+            y = window.innerHeight - bunnySize;
+        }
+    });
+
+    
+    animate();
+})();
+</script>
+    </body>
 </html>

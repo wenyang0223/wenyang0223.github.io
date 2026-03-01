@@ -1,0 +1,131 @@
+<!-- 放在 Hugo 的 layouts/partials/bunny.html -->
+<div class="bunny" id="reading-bunny">
+    <img src="/images/mao_3.png" alt="bunny">
+</div>
+
+<style>
+    .bunny {
+        position: fixed;
+        font-size: 40px;
+        cursor: pointer;
+        user-select: none;
+        z-index: 9999;
+        pointer-events: auto;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        transition: transform 0.1s ease;
+    }
+
+    .bunny img {
+        width: 60px;  /* 調整圖片大小 */
+        height: auto;
+        display: block;
+    }
+
+    .bunny.flipped img {
+        transform: scaleX(-1);   /* 左右翻轉 */
+    }
+
+    @media (max-width: 768px) {
+        .bunny img {
+            width: 40px;  /* 手機版更小 */
+        }
+    }
+</style>
+
+<script>
+(function() {
+    const bunny = document.getElementById('reading-bunny');
+    if (!bunny) return;
+
+    // 初始位置與速度
+    let x = Math.random() * (window.innerWidth - 100);
+    let y = Math.random() * (window.innerHeight - 100);
+    let speedX = 2;   // 水平速度
+    let speedY = 2;   // 垂直速度
+    let directionX = Math.random() > 0.5 ? 1 : -1;
+    let directionY = Math.random() > 0.5 ? 1 : -1;
+
+    const bunnySize = 60;  // 與 CSS width 保持一致（必要時調整）
+
+    // 初始位置
+    bunny.style.left = x + 'px';
+    bunny.style.top = y + 'px';
+
+    // 翻轉函式：每次呼叫就 toggle 一次左右翻轉
+    function flipBunny() {
+        bunny.classList.toggle('flipped');
+    }
+
+    // 初始隨機決定是否翻轉（可選）
+    if (Math.random() > 0.5) {
+        bunny.classList.add('flipped');
+    }
+
+    // 點擊時反轉所有方向 + 翻轉一次
+    bunny.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        directionX *= -1;
+        directionY *= -1;
+        flipBunny();  // 點擊也翻一次
+    });
+
+    function animate() {
+        let hasCollision = false;
+
+        // 更新位置
+        x += speedX * directionX;
+        y += speedY * directionY;
+
+        // 撞左邊
+        if (x <= 0) {
+            x = 0;
+            directionX = 1;
+            hasCollision = true;
+        }
+        // 撞右邊
+        else if (x >= window.innerWidth - bunnySize) {
+            x = window.innerWidth - bunnySize;
+            directionX = -1;
+            hasCollision = true;
+        }
+
+        // 撞上邊
+        if (y <= 0) {
+            y = 0;
+            directionY = 1;
+            hasCollision = true;
+        }
+        // 撞下邊
+        else if (y >= window.innerHeight - bunnySize) {
+            y = window.innerHeight - bunnySize;
+            directionY = -1;
+            hasCollision = true;
+        }
+
+        // 只要有任何碰撞，就翻轉一次
+        if (hasCollision) {
+            flipBunny();
+        }
+
+        // 套用位置
+        bunny.style.left = x + 'px';
+        bunny.style.top = y + 'px';
+
+        requestAnimationFrame(animate);
+    }
+
+    // 視窗大小改變時修正位置（避免卡在外面）
+    window.addEventListener('resize', () => {
+        if (x > window.innerWidth - bunnySize) {
+            x = window.innerWidth - bunnySize;
+        }
+        if (y > window.innerHeight - bunnySize) {
+            y = window.innerHeight - bunnySize;
+        }
+    });
+
+    // 啟動動畫
+    animate();
+})();
+</script>
