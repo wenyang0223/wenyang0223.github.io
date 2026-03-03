@@ -1,7 +1,24 @@
-- name: Get latest post info
+name: Discord Notification
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get latest post info
         id: post_info
         run: |
-          # 1. 取得變動的文章檔案路徑 (只找 content 資料夾下的 .md 檔)
+          # 1. 取得變動的文章檔案路徑
           FILEPATH=$(git diff --name-only HEAD^ HEAD | grep "content/.*\.md$" | head -n 1)
           
           if [ -z "$FILEPATH" ]; then
@@ -9,11 +26,10 @@
             exit 0
           fi
 
-          # 2. 抓取標題 (移除 title: 字樣與引號)
+          # 2. 抓取標題
           TITLE=$(grep -m 1 "title:" "$FILEPATH" | sed 's/title: //g' | tr -d '"' | tr -d "'" | xargs)
           
-          # 3. 抓取 Slug (取得檔案名稱，去除 .md 副檔名)
-          # 例如 content/daily-writing/my-post.md -> my-post
+          # 3. 抓取 Slug
           SLUG=$(basename "$FILEPATH" .md)
 
           echo "title=$TITLE" >> $GITHUB_OUTPUT
@@ -26,13 +42,13 @@
           -d '{
             "embeds": [{
               "title": "✨ 聆聽的河流有新文章了！",
-              "description": "📝 **標題：'${{ steps.post_info.outputs.title }}'**\n\n新的文字已經緩緩流入網站，歡迎點擊閱讀。",
-              "url": "https://wenyang.vercel.app/blog/'${{ steps.post_info.outputs.slug }}'/",
+              "description": "📝 **標題：'"${{ steps.post_info.outputs.title }}"'**\n\n新的文字已經緩緩流入網站，歡迎點擊閱讀。",
+              "url": "https://wenyang.vercel.app/blog/'"${{ steps.post_info.outputs.slug }}"'/",
               "color": 3447003,
               "footer": {
                 "text": "來自 GitHub Actions 的自動通知"
               },
-              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+              "timestamp": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"
             }]
           }' \
           ${{ secrets.DISCORD_WEBHOOK }}
