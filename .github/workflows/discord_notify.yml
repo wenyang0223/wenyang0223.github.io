@@ -1,0 +1,45 @@
+name: Discord Notification
+on:
+  push:
+    branches:
+      - main           # 只有推送到主分支才觸發
+    paths:
+      - 'content/**'   # 只有 content 資料夾有變動才觸發，避免改 CSS 也跳通知
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # 取得最近兩次 commit 以比對差異
+
+      - name: Get latest post info
+        id: post_info
+        run: |
+          # 找出本次 push 中新增或修改的文章路徑
+          FILENAME=$(git diff --name-only HEAD^ HEAD | grep "content/" | head -n 1)
+          echo "file=$FILENAME" >> $GITHUB_OUTPUT
+          
+          # 簡單抓取文章內的標題 (假設格式為 title: "標題")
+          TITLE=$(grep -m 1 "title:" "$FILENAME" | sed 's/title: //g' | tr -d '"' | tr -d "'")
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+
+      - name: Send Webhook to Discord
+        if: steps.post_info.outputs.file != ''
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "embeds": [{
+              "title": "✨ 聆聽的河流有新文章了！",
+              "description": "📝 **標題：'${{ steps.post_info.outputs.title }}'**\n\n內容已同步更新至 Vercel 部署中。",
+              "url": "https://your-blog-url.com", 
+              "color": 3447003,
+              "footer": {
+                "text": "來自 GitHub Actions 的自動通知"
+              },
+              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+            }]
+          }' \
+          ${{ secrets.DISCORD_WEBHOOK }}
