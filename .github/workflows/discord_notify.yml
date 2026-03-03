@@ -1,40 +1,33 @@
-name: Discord Notification
-on:
-  push:
-    branches:
-      - main           # 只有推送到主分支才觸發
-    paths:
-      - 'content/**'   # 只有 content 資料夾有變動才觸發，避免改 CSS 也跳通知
-
-jobs:
-  notify:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2 # 取得最近兩次 commit 以比對差異
-
-      - name: Get latest post info
+- name: Get latest post info
         id: post_info
         run: |
-          # 找出本次 push 中新增或修改的文章路徑
-          FILENAME=$(git diff --name-only HEAD^ HEAD | grep "content/" | head -n 1)
-          echo "file=$FILENAME" >> $GITHUB_OUTPUT
+          # 1. 取得變動的文章檔案路徑 (只找 content 資料夾下的 .md 檔)
+          FILEPATH=$(git diff --name-only HEAD^ HEAD | grep "content/.*\.md$" | head -n 1)
           
-          # 簡單抓取文章內的標題 (假設格式為 title: "標題")
-          TITLE=$(grep -m 1 "title:" "$FILENAME" | sed 's/title: //g' | tr -d '"' | tr -d "'")
+          if [ -z "$FILEPATH" ]; then
+            echo "沒有偵測到新文章內容，跳過通知。"
+            exit 0
+          fi
+
+          # 2. 抓取標題 (移除 title: 字樣與引號)
+          TITLE=$(grep -m 1 "title:" "$FILEPATH" | sed 's/title: //g' | tr -d '"' | tr -d "'" | xargs)
+          
+          # 3. 抓取 Slug (取得檔案名稱，去除 .md 副檔名)
+          # 例如 content/daily-writing/my-post.md -> my-post
+          SLUG=$(basename "$FILEPATH" .md)
+
           echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
 
       - name: Send Webhook to Discord
-        if: steps.post_info.outputs.file != ''
+        if: steps.post_info.outputs.slug != ''
         run: |
           curl -H "Content-Type: application/json" \
           -d '{
             "embeds": [{
               "title": "✨ 聆聽的河流有新文章了！",
-              "description": "📝 **標題：'${{ steps.post_info.outputs.title }}'**\n\n內容已同步更新至 Vercel 部署中。",
-              "url": "https://your-blog-url.com", 
+              "description": "📝 **標題：'${{ steps.post_info.outputs.title }}'**\n\n新的文字已經緩緩流入網站，歡迎點擊閱讀。",
+              "url": "https://wenyang.vercel.app/blog/'${{ steps.post_info.outputs.slug }}'/",
               "color": 3447003,
               "footer": {
                 "text": "來自 GitHub Actions 的自動通知"
