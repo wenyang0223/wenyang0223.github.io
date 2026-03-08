@@ -1,6 +1,6 @@
 {{ define "main" }}
 <section class="section-sm">
-  <div class="container pl-1 pr-4">
+  <div class="container">
     <div class="row">
       <div class="col-lg-10 mx-auto">
         
@@ -47,7 +47,7 @@
           {{ end }}
         </div>
 
-        <h2>{{ .Title | markdownify }}</h2>
+        <h2 class="post-title">{{ .Title }}</h2>
         
         <div class="mb-3 text-center">
           <span>By {{if .Params.Author}}{{ .Params.Author }}{{else}}{{.Site.Params.Author}}{{end}}</span>

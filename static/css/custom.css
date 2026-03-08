@@ -1,0 +1,48 @@
+@media (max-width: 767px) {
+    /* 修正文章頁面左右間距 */
+    section.section-sm .container {
+      padding-left: 24px !important;
+      padding-right: 24px !important;
+    }
+  }
+
+@media (max-width: 767px) {
+    .content h1 { font-size: 1.5rem !important; }
+    .content h2 { font-size: 1.35rem !important; }
+    .content h3 { font-size: 1.15rem !important; }
+    .content h4 { font-size: 1rem !important; }
+  }
+
+  .post-title {
+    font-size: 1.8rem;
+    line-height: 1.4;
+  }
+  
+  @media (max-width: 767px) {
+    .post-title {
+      font-size: 1.1rem !important;
+      line-height: 1.4 !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .btn-back-custom {
+      font-size: 13px !important;
+      padding: 5px 12px !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .nav-item {
+      max-width: 45% !important;
+    }
+    
+    .nav-title {
+      font-size: 0.5rem !important;
+      -webkit-line-clamp: 3 !important; /* 改成最多3行 */
+    }
+    
+    .nav-label {
+      font-size: 0.85rem !important;
+    }
+  }
