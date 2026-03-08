@@ -27,7 +27,7 @@
 
   @media (max-width: 767px) {
     .btn-back-custom {
-      font-size: 13px !important;
+      font-size: 14px !important;
       padding: 5px 12px !important;
     }
   }
@@ -38,7 +38,7 @@
     }
     
     .nav-title {
-      font-size: 0.5rem !important;
+      font-size: 0.9rem !important;
       -webkit-line-clamp: 3 !important; /* 改成最多3行 */
     }
     
