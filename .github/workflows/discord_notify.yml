@@ -44,7 +44,7 @@ jobs:
             "embeds": [{
               "title": "✨ 聆聽的河流有新文章了！",
               "description": "📝 **標題：'"${{ steps.post_info.outputs.title }}"'**\n\n新的文字已經緩緩流入網站，歡迎點擊閱讀。",
-              "url": "https://wenyang.vercel.app/blog/'"${{ steps.post_info.outputs.slug }}"'/",
+              "url": "https://listenriver.com/blog/'"${{ steps.post_info.outputs.slug }}"'/",
               "color": 3447003,
               "footer": {
                 "text": "來自 GitHub Actions 的自動通知"
