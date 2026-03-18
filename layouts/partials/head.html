@@ -1,28 +1,9 @@
 <head>
-  <link rel="stylesheet" href="/css/custom.css">
   <meta charset="utf-8">
-
-  <!-- 只在 GitHub Pages 域名時加 redirect（用 JS 檢查 hostname，避免 Vercel 版 loop） -->
-  <script>
-    if (window.location.hostname.includes("github.io")) {
-      var target = "https://listenriver.com" + window.location.pathname + window.location.search + window.location.hash;
-      // 優先用 meta refresh 讓 Google 看到（0 秒 instant refresh，模擬重定向）
-      var meta = document.createElement('meta');
-      meta.setAttribute('http-equiv', 'refresh');
-      meta.setAttribute('content', '0; url=' + target);
-      document.head.appendChild(meta);
-      
-      // JS 作為後備，確保瀏覽器立即跳轉
-      window.location.replace(target);
-    }
-  </script>
-  
-  <!-- 正常 canonical（給 Vercel 版用，也讓 Google 知道新 URL 是首選） -->
-  {{ if .IsHome }}
-    <link rel="canonical" href="https://listenriver.com/">
-  {{ else }}
-    <link rel="canonical" href="https://listenriver.com{{ .RelPermalink }}">
-  {{ end }}
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}">
+  {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+  {{ hugo.Generator }}
 
   <title>
     {{ if .IsHome }}
@@ -31,47 +12,28 @@
       {{ .Title }} | {{ .Site.Title }}
     {{ end }}
   </title>
-  
-    <!-- ✨ 加在這裡：告訴 Pagefind 使用純標題 -->
-    <meta data-pagefind-meta="title" content="{{ .Title }}">
 
-  {{ if .Params.ai_keywords }}
-  <meta data-pagefind-filter="keywords" content="{{ delimit .Params.ai_keywords ", " }}">
-{{ end }}
+  <!-- Canonical -->
+  <link rel="canonical" href="{{ if .IsHome }}https://listenriver.com/{{ else }}https://listenriver.com{{ .RelPermalink }}{{ end }}">
 
-  {{ "" | safeHTML }}
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-  {{ "" | safeHTML }}
-  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}">
-  {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
-  {{ hugo.Generator }}
-
+  <!-- Sitemap -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ .Site.BaseURL }}sitemap.xml">
 
-  
-  {{ "" | safeHTML }}
-  {{ range .Site.Params.plugins.css }}
-  <link rel="stylesheet" href="{{ .URL | absURL }} ">
-  {{ end }}
-
-  {{ "" | safeHTML }}
-  {{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
-  <link rel="stylesheet" href="{{ $styles.Permalink }}" media="screen">
-
-  {{ "" | safeHTML }}
+  <!-- Favicon -->
   <link rel="shortcut icon" href="/favicon.png" type="image/png">
   <link rel="icon" href="/favicon.png" type="image/png">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9L49HVNL4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-P9L49HVNL4');
-  </script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/custom.css">
+  {{ range .Site.Params.plugins.css }}
+  <link rel="stylesheet" href="{{ .URL | absURL }}">
+  {{ end }}
+  {{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
+  <link rel="stylesheet" href="{{ $styles.Permalink }}" media="screen">
 
-  {{ "" | safeHTML }}
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
     .content, .content *, .post-meta, .post-meta * {
@@ -81,46 +43,50 @@
       font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
     }
   </style>
-  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
-  
 
-{{ with .Params.image }}
-  {{ $img := resources.Get . }}
-  {{ with $img }}
-    <img 
-      src="{{ .RelPermalink }}" 
-      alt="{{ $.Title | plainify }}" 
-      data-pagefind-meta="image[src], image_alt[alt]"
-      style="display:none;"
-    >
+  <!-- Waline CSS -->
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9L49HVNL4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P9L49HVNL4');
+  </script>
+
+  <!-- Pagefind -->
+  <meta data-pagefind-meta="title" content="{{ .Title }}">
+  {{ if .Params.ai_keywords }}
+  <meta data-pagefind-filter="keywords" content="{{ delimit .Params.ai_keywords ", " }}">
   {{ end }}
 
-{{ else }}
-  {{ $firstImage := findRE `<img.*?src=["'](.*?)["'].*?>` .Content 1 }}
-  {{ with index $firstImage 0 }}
-    {{ $src := replaceRE `.*src=["'](.*?)["'].*` `$1` . }}
-    <img 
-      src="{{ $src | safeURL }}" 
-      data-pagefind-meta="image[src]"
-      style="display:none;"
-    >
+  <!-- OG Image for Pagefind -->
+  {{ with .Params.image }}
+    {{ $img := resources.Get . }}
+    {{ with $img }}
+      <img src="{{ .RelPermalink }}" alt="{{ $.Title | plainify }}" data-pagefind-meta="image[src], image_alt[alt]" style="display:none;">
+    {{ end }}
+  {{ else }}
+    {{ $firstImage := findRE `<img.*?src=["'](.*?)["'].*?>` .Content 1 }}
+    {{ with index $firstImage 0 }}
+      {{ $src := replaceRE `.*src=["'](.*?)["'].*` `$1` . }}
+      <img src="{{ $src | safeURL }}" data-pagefind-meta="image[src]" style="display:none;">
+    {{ end }}
   {{ end }}
-{{ end }}
 
-{{ if .IsHome }}
-  {{ partial "bunny.html" . }}
-{{ end }}
+  {{ if .IsHome }}
+    {{ partial "bunny.html" . }}
+  {{ end }}
 
-{{ partial "pagefind-metadata.html" . }}
+  {{ partial "pagefind-metadata.html" . }}
 
-<style>
-  a {
-    color: rgba(111, 202, 209, 82);
-  }
-  a[href^="mailto:"] {
-  color: #45afb7da;
-  font-weight: bold;
-}
-</style>
+  <!-- Global Styles -->
+  <style>
+    a { color: rgba(111, 202, 209, 82); }
+    a[href^="mailto:"] { color: #45afb7da; font-weight: bold; }
+  </style>
 
 </head>
