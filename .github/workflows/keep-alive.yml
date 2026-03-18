@@ -1,0 +1,12 @@
+name: Keep Alive
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping 按讚API
+        run: curl https://wenyang-counters-and-likes.vercel.app/api/counter?slug=ping
+      - name: Ping Waline
+        run: curl https://wenyang-waline.vercel.app/api/count
