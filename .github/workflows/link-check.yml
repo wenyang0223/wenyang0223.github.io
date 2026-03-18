@@ -32,7 +32,6 @@ jobs:
             --verbose
             --no-progress
             --format markdown
-            --output ./lychee-report.md
             --exclude "localhost|127\.0\.0\.1|^#|^mailto:|^tel:|//twitter\.com|//x\.com|cdn\.jsdelivr\.net"
             --max-requests 30
             --timeout 20
@@ -45,6 +44,6 @@ jobs:
         uses: peter-evans/create-issue-from-file@v6
         with:
           title: '🔗 Dead links found - Run #${{ github.run_number }}'
-          content-filepath: ./lychee-report.md
+          content-filepath: ./lychee/out.md
           labels: bug, automation, links
           assignees: wenyang0223
