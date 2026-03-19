@@ -291,15 +291,8 @@
       "source": "/blog/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/%E8%81%86%E8%81%BD%E7%96%BC%E7%97%9B2",
       "destination": "/blog/%E6%9B%B8%E6%91%98/%E6%9B%B8%E6%91%98%E8%81%86%E8%81%BD%E7%96%BC%E7%97%9B",
       "permanent": true
-    },
-    {
-      "source": "/(.*)",
-      "has": [
-        { "type": "host", "value": "wenyang.vercel.app" }
-      ],
-      "destination": "https://listenriver.com/$1",
-      "permanent": true
     }
+
       ],
       "rewrites": [
         { "source": "/api/:path*", "destination": "/api/:path*" },
