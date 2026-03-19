@@ -112,7 +112,7 @@ icon = "ti-thumb-up" # themify icon : https://themify.me/themify-icons
 link = "https://gravatar.com/enthusiastically4d7178ae68"
 
 # --- 核心路徑設定 (放在最外層) ---
-uglyURLs = true
+uglyURLs = false
 disablePathToLower = true
 removePathAccents = false
 
