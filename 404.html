@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
   <meta charset="utf-8">
-  <title>正在前往新站點...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>正在前往新站點 - 聆聽的河流</title>
   <script>
-    // 1. 設定你的目標網址
+    // === 改成你的新主站 ===
     var targetDomain = "https://listenriver.com";
-    
-    // 2. 獲取當前的路徑（例如 /blog/閱讀書摘/xxx）
+
+    // 取得目前路徑（例如 /blog/閱讀心得/xxx）
     var currentPath = window.location.pathname;
-    
-    // 3. 組合並跳轉
-    // 這會把 github.io/path 變成 vercel.app/path
-    // 然後 Vercel 的 vercel.json 會再處理剩下的標題修改
-    window.location.replace(targetDomain + currentPath + window.location.search);
+
+    // 如果路徑是根目錄，就直接跳首頁
+    if (currentPath === "/" || currentPath === "") {
+      window.location.replace(targetDomain + "/");
+    } else {
+      // 把 github.io 的舊路徑直接接到新站（新站如果沒有完全一樣的短路徑，會顯示 404 或你自己的 404 頁）
+      window.location.replace(targetDomain + currentPath + window.location.search);
+    }
   </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=https://listenriver.com/">
+  </noscript>
 </head>
 <body>
-  <p>頁面已搬遷，正在自動跳轉...</p>
+  <p>網站已搬遷至 <strong>https://listenriver.com</strong></p>
+  <p>正在自動跳轉，請稍候...</p>
+  <p>若沒有自動跳轉，請 <a href="https://listenriver.com/">點此前往新站</a></p>
 </body>
 </html>
