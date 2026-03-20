@@ -8,16 +8,6 @@
 
   "redirects": [
     {
-      "source": "/tags/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/",
-      "destination": "/tags/%E6%9B%B8%E6%91%98/",
-      "permanent": true
-    },
-    {
-      "source": "/categories/%E9%96%B1%E8%AE%80%E6%9B%B8%E6%91%98/:path*/",
-      "destination": "/categories/%E6%9B%B8%E6%91%98/:path*/",
-      "permanent": true
-    },
-    {
       "source": "/:path*.html",
       "destination": "/:path*/",
       "permanent": true
