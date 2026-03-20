@@ -49,7 +49,7 @@ summaryLength = "10"
   # main menu
   [[menu.main]]
   name = "Home"
-  URL = "blog"
+  URL = "/"
   weight = 1
 
   [[menu.main]]
