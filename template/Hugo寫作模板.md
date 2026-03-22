@@ -1,12 +1,17 @@
 ---
+ai_keywords:
 title:
 date: "{{date:YYYY-MM-DD}}"
 draft: false
 image:
 description:
-categories:
 tags:
 type:
+categories:
+highlights:
+series:
+clubhouse:
+topics:
 ---
 
 內文
