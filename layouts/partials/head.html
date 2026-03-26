@@ -13,6 +13,10 @@
     {{ end }}
   </title>
 
+  {{ if or (eq .Kind "taxonomy") (eq .Kind "term") }}
+  <meta name="robots" content="noindex, follow">
+{{ end }}
+
   <!-- Canonical -->
   <link rel="canonical" href="{{ if .IsHome }}https://listenriver.com/{{ else }}https://listenriver.com{{ .RelPermalink }}{{ end }}">
 

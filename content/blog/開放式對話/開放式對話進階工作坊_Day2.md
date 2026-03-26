@@ -6,7 +6,9 @@ ai_keywords:
 - 關係受苦
 - 治療實踐
 categories:
+- 開放式對話
 - 講座筆記
+
 date: 2020-11-15
 description: null
 draft: false
@@ -15,7 +17,7 @@ tags:
 - 開放式對話
 - 講座筆記
 title: 開放式對話進階工作坊Day 2
-topics: 開放式對話
+
 type: post
 ---
 

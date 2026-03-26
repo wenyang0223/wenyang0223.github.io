@@ -5,8 +5,14 @@ ai_keywords:
 - 家庭社群網絡
 - 心理諮商
 - 非口語溝通
+
+
+title: 開放式對話進階工作坊Day1
+
 categories:
+- 開放式對話
 - 講座筆記
+
 date: 2020-11-14
 description: null
 draft: false
@@ -14,8 +20,8 @@ image: images/講座筆記/開放式對話進階/0001.jpg
 tags:
 - 開放式對話
 - 講座筆記
-title: 開放式對話進階工作坊Day1
-topics: 開放式對話
+
+
 type: post
 ---
 
