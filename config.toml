@@ -136,6 +136,8 @@ timeZone = "Asia/Taipei"
 
 
 
+[permalinks]
+blog = "/:sections/:title/"
 
 ####taxonomies
 
@@ -144,11 +146,12 @@ category = "categories"   #閱讀＆筆記
 
 tag = "tags"
 
-topic = "topics"          #主題文章
-series = "series"         #個人反思
-project = "projects"      #Projects
-clubhouse = "clubhouse"   #會所模式
-highlights = "highlights" #精選文章
+#topic = "topics"          #主題文章
+#series = "series"         #個人反思
+#project = "projects"      #Projects
+#clubhouse = "clubhouse"   #會所模式
+
+# highlights = "highlights" #精選文章
 
 [imaging]
   quality = 80
