@@ -136,8 +136,8 @@ timeZone = "Asia/Taipei"
 
 
 
-[permalinks]
-blog = "/:sections/:title/"
+#[permalinks]
+#blog = "/:sections/:title/"
 
 ####taxonomies
 
