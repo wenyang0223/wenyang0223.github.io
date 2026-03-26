@@ -7,7 +7,7 @@
 
       {{ if $img }}
         {{/* 2. 轉檔為 WebP 並縮小尺寸到 600px，首頁載入更快 */}}
-        {{- $webp := $img.Resize "600x webp" -}}
+        {{- $webp := $img.Resize "800x webp" -}}
         <a href="{{ .Permalink }}">
           <img src="{{ $webp.RelPermalink }}" class="card-img-top" alt="{{ .Title | markdownify }}">
         </a>
