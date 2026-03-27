@@ -25,26 +25,46 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary  mb-3 footer-title">閱讀＆筆記</h4>
+        <h4 class="text-primary mb-3 footer-title">閱讀＆筆記</h4>
         <ul class="list-unstyled footer-list">
-          {{ range .Site.Taxonomies.categories }}
-          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ range $name, $items := .Site.Taxonomies.categories }}
+            {{ if in (slice "書摘" "講座心得" "講座筆記" "閱讀心得" "電影心得") $name }}
+            <li class="footer-item">
+              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
+                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+              </a>
+            </li>
+            {{ end }}
           {{ end }}
         </ul>
       </div>
+
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary  mb-3 footer-title">個人反思</h4>
+        <h4 class="text-primary mb-3 footer-title">個人反思</h4>
         <ul class="list-unstyled footer-list">
-          {{ range .Site.Taxonomies.series }}
-          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ range $name, $items := .Site.Taxonomies.categories }}
+            {{ if in (slice "日常書寫" "自我成長" "親密關係") $name }}
+            <li class="footer-item">
+              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
+                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+              </a>
+            </li>
+            {{ end }}
           {{ end }}
         </ul>
       </div>
+
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary  mb-3 footer-title">會所模式</h4>
+        <h4 class="text-primary mb-3 footer-title"><a href="/blog/會所模式/" style="color: inherit;">會所模式</a></h4>
         <ul class="list-unstyled footer-list">
-          {{ range .Site.Taxonomies.clubhouse }}
-          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ range $name, $items := .Site.Taxonomies.categories }}
+            {{ if in (slice "會所實習" "會所工作手冊" "會所工作日誌") $name }}
+            <li class="footer-item">
+              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
+                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+              </a>
+            </li>
+            {{ end }}
           {{ end }}
         </ul>
       </div>
@@ -52,26 +72,46 @@
 
     <div class="row mt-3">
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary  mb-3 footer-title">主題文章</h4>
+        <h4 class="text-primary mb-3 footer-title">主題文章</h4>
         <ul class="list-unstyled footer-list">
-          {{ range .Site.Taxonomies.topics }}
-          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ range $name, $items := .Site.Taxonomies.categories }}
+            {{ if in (slice "一行禪師" "創傷知情" "受苦的倒影" "邁向助人工作" "開放式對話") $name }}
+            <li class="footer-item">
+              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
+                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+              </a>
+            </li>
+            {{ end }}
           {{ end }}
         </ul>
       </div>
+
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary  mb-3 footer-title">精選文章</h4>
+        <h4 class="text-primary mb-3 footer-title">精選文章</h4>
         <ul class="list-unstyled footer-list">
-          {{ range .Site.Taxonomies.highlights }}
-          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ range $name, $items := .Site.Taxonomies.categories }}
+            {{ if in (slice "成為一個人" "精選文章") $name }}
+            <li class="footer-item">
+              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
+                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+              </a>
+            </li>
+            {{ end }}
           {{ end }}
         </ul>
       </div>
+
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary  mb-3 footer-title">Projects</h4>
+        <h4 class="text-primary mb-3 footer-title">Projects</h4>
         <ul class="list-unstyled footer-list">
-          {{ range .Site.Taxonomies.projects }}
-          <li class="footer-item"><a class="text-dark" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="footer-count">({{ .Count }})</span></a></li>
+          {{ range $name, $items := .Site.Taxonomies.categories }}
+            {{ if in (slice "素描" "聆聽疼痛計畫") $name }}
+            <li class="footer-item">
+              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
+                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+              </a>
+            </li>
+            {{ end }}
           {{ end }}
         </ul>
       </div>
