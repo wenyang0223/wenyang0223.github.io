@@ -76,21 +76,23 @@
 
   <div class="widget">
     <h4 class="widget-title">
-      <a href="/blog/會所模式/" style="color: inherit;">會所模式</a>
+      <a href="/categories/會所模式/" style="color: inherit;">會所模式</a>
     </h4>
     <ul class="list-unstyled">
-      {{/* 取得「會所模式」這個 Section 的頁面物件 */}}
-      {{ $ho_mo_section := .Site.GetPage "section" "blog/會所模式" }}
-      
-      {{/* 遍歷該 Section 底下的子 Section (即那三個資料夾) */}}
-      {{ range $ho_mo_section.Sections }}
-        <li class="mb-2">
-          <a href="{{ .Permalink }}" class="d-flex align-items-center position-relative" style="justify-content: center;">
-            <span>{{ .Title }}</span>
-            {{/* 自動計算該子資料夾下的文章數量 */}}
-            <small class="text-muted position-absolute" style="right: 0;">({{ len .Pages }})</small>
-          </a>
-        </li>
+      {{ $targetCats := slice "會所實習" "會所工作日誌" "會所工作手冊" }}
+      {{ $allCats := .Site.Taxonomies.categories }}
+      {{ range $catName := $targetCats }}
+        {{ $cat := index $allCats $catName }}
+        {{ if $cat }}
+          <li class="mb-2">
+            <a href="{{ "/categories/" | relLangURL }}{{ $catName | urlize }}/"
+               class="d-flex align-items-center position-relative"
+               style="justify-content: center;">
+              <span>{{ $catName }}</span>
+              <small class="text-muted position-absolute" style="right: 0;">({{ len $cat.Pages }})</small>
+            </a>
+          </li>
+        {{ end }}
       {{ end }}
     </ul>
   </div>

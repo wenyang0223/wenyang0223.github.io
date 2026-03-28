@@ -5,6 +5,10 @@
   {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
   {{ hugo.Generator }}
 
+  {{- if and (or (eq .Kind "taxonomy") (eq .Kind "term")) (eq .Type "tags") -}}
+  <meta name="robots" content="noindex, follow">
+{{- end -}}
+
   <title>
     {{ if .IsHome }}
       {{ .Site.Title }}
@@ -13,9 +17,7 @@
     {{ end }}
   </title>
 
-  {{ if or (eq .Kind "taxonomy") (eq .Kind "term") }}
-  <meta name="robots" content="noindex, follow">
-{{ end }}
+
 
 
   <!-- Canonical -->
