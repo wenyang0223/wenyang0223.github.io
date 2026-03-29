@@ -80,6 +80,17 @@ copyright = "| copyright &copy; 2020 [Themefisher](https://themefisher.com) All 
 
 custom_css = ["css/custom.css"]
 
+# 啟用 Hugo 內建壓縮（重要！）
+minify = true
+
+# 啟用圖片處理（之後會用到）
+imaging = { resampleFilter = "Lanczos", quality = 85 }
+
+# Vercel 專用：讓 build 更快
+buildDrafts = false
+buildExpired = false
+
+
 # vercel analytics
 vercel_analytics = true
 vercel_speed_insights = true
