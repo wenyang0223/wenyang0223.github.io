@@ -7,7 +7,7 @@
 
   {{- if and (or (eq .Kind "taxonomy") (eq .Kind "term")) (eq .Type "tags") -}}
   <meta name="robots" content="noindex, follow">
-  {{- end -}}
+{{- end -}}
 
   <title>
     {{ if .IsHome }}
@@ -16,6 +16,22 @@
       {{ .Title }} | {{ .Site.Title }}
     {{ end }}
   </title>
+
+
+<!-- Vercel Web Analytics -->
+{{ if .Site.Params.vercel_analytics }}
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+{{ end }}
+
+{{ if .Site.Params.vercel_speed_insights }}
+<script>
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+{{ end }}
 
   <!-- Canonical -->
   <link rel="canonical" href="{{ if .IsHome }}https://listenriver.com/{{ else }}https://listenriver.com{{ .RelPermalink }}{{ end }}">
@@ -27,70 +43,33 @@
   <link rel="shortcut icon" href="/favicon.png" type="image/png">
   <link rel="icon" href="/favicon.png" type="image/png">
 
-  <!-- 關鍵 CSS：同步載入，首屏排版需要 -->
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/custom.css">
+  {{ range .Site.Params.plugins.css }}
+  <link rel="stylesheet" href="{{ .URL | absURL }}">
+  {{ end }}
   {{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
   <link rel="stylesheet" href="{{ $styles.Permalink }}" media="screen">
 
-  {{/* Bootstrap 和 themify-icons 必須同步，navbar 排版依賴；其餘非同步 */}}
-  {{ range .Site.Params.plugins.css }}
-    {{ if or (in .URL "bootstrap") (in .URL "themify") }}
-  <link rel="stylesheet" href="{{ .URL | absURL }}">
-    {{ else }}
-  <link rel="preload" as="style" href="{{ .URL | absURL }}" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ .URL | absURL }}"></noscript>
-    {{ end }}
-  {{ end }}
-
-  <!-- custom.css 非同步 -->
-  <link rel="preload" as="style" href="{{ .Site.BaseURL }}css/custom.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ .Site.BaseURL }}css/custom.css"></noscript>
-
-  <!-- Google Fonts：非同步載入，不阻擋渲染 -->
-  <!-- 字體載入前用系統字體顯示，載入完再切換（FOUT） -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap">
-  </noscript>
-
-  <!-- 字體 fallback：字體還沒載入時用系統字體，版面不跑掉 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* 系統字體 fallback，字體載入前不會閃爍空白 */
-    body {
-      font-family: 'Open Sans', 'Noto Sans TC', -apple-system, 'PingFang TC', 
-                   'Microsoft JhengHei', sans-serif;
-    }
     .content, .content *, .post-meta, .post-meta * {
-      font-family: 'Open Sans', 'Noto Sans TC', -apple-system, 'PingFang TC',
-                   'Microsoft JhengHei', sans-serif;
+      font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
     }
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Open Sans', 'Noto Sans TC', -apple-system, 'PingFang TC',
-                   'Microsoft JhengHei', sans-serif;
-    }
-    /* 防止 CLS：logo 圖片預留空間，不硬設寬度避免撐破 navbar */
-    .navbar-brand img {
-      max-width: 100%;
-      height: auto;
-      aspect-ratio: 1476 / 129;
+      font-family: 'Open Sans', 'Noto Sans TC', sans-serif !important;
     }
   </style>
 
-  <!-- Waline CSS：非同步 -->
+  <!-- Waline CSS -->
   <link rel="preconnect" href="https://unpkg.com">
-  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css"
-    media="print" onload="this.media='all'">
-
-  <!-- Global Styles -->
-  <style>
-    a { color: rgba(111, 202, 209, 0.82); }
-    a[href^="mailto:"] { color: #45afb7da; font-weight: bold; }
-  </style>
-
-  <!-- Google Analytics：async 已經不阻擋，保持不變 -->
+  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" 
+  media="print" onload="this.media='all'">
+  
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9L49HVNL4"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -99,22 +78,7 @@
     gtag('config', 'G-P9L49HVNL4');
   </script>
 
-  <!-- Vercel Analytics -->
-  {{ if .Site.Params.vercel_analytics }}
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/insights/script.js"></script>
-  {{ end }}
-
-  {{ if .Site.Params.vercel_speed_insights }}
-  <script>
-    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/speed-insights/script.js"></script>
-  {{ end }}
-
-  <!-- Pagefind metadata -->
+  <!-- Pagefind -->
   <meta data-pagefind-meta="title" content="{{ .Title }}">
   {{ if .Params.ai_keywords }}
   <meta data-pagefind-filter="keywords" content="{{ delimit .Params.ai_keywords ", " }}">
@@ -139,5 +103,12 @@
   {{ end }}
 
   {{ partial "pagefind-metadata.html" . }}
+
+  <!-- Global Styles -->
+  <style>
+    a { color: rgba(111, 202, 209, 82); }
+    a[href^="mailto:"] { color: #45afb7da; font-weight: bold; }
+  </style>
+
 
 </head>
