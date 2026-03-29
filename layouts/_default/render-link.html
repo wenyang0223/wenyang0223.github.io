@@ -1,18 +1,37 @@
 {{- $u := urls.Parse .Destination -}}
 {{- $href := .Destination -}}
+{{- $isInternal := false -}}
 
 {{- if strings.HasSuffix $u.Path ".md" -}}
+  {{- $isInternal = true -}}
   {{- $page := .Page.GetPage $u.Path -}}
+  
   {{- if $page -}}
     {{- $href = $page.RelPermalink -}}
   {{- else -}}
-    {{/* 備用方案：如果相對路徑找不到，試著去掉 .md 找 */}}
+    {{/* 備用方案 1：如果相對路徑找不到，試著去掉 .md 找 */}}
     {{- $path := strings.TrimSuffix ".md" $u.Path -}}
     {{- $page = .Page.GetPage $path -}}
     {{- if $page -}}
       {{- $href = $page.RelPermalink -}}
+    {{- else -}}
+      {{/* 終極保險：如果 Hugo 都找不到，就直接把網址的 .md 拔掉避免 404 */}}
+      {{- $href = strings.TrimSuffix ".md" .Destination -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
 
-<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if strings.HasPrefix .Destination "http" }} target="_blank" rel="noopener"{{ end }}>{{ .Text | safeHTML }}</a>
+{{/* 這裡決定要不要開新分頁：
+  1. 如果是外部連結（以 http 開頭）➔ 開新分頁
+  2. 如果是內部連結（原本是 .md 檔案）➔ 開新分頁
+*/}}
+{{- $shouldBlank := false -}}
+{{- if or (strings.HasPrefix .Destination "http") $isInternal -}}
+  {{- $shouldBlank = true -}}
+{{- end -}}
+
+<a href="{{ $href | safeURL }}"
+   {{ with .Title }} title="{{ . }}"{{ end }}
+   {{ if $shouldBlank }} target="_blank" rel="noopener"{{ end }}>
+   {{- .Text | safeHTML -}}
+</a>
