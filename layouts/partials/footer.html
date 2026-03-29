@@ -23,13 +23,17 @@
 
 <footer>
   <div class="container">
+    
+    <!-- 第一行（維持原本 footer 的 col 排版） -->
     <div class="row">
+
+      <!-- 1. 閱讀＆筆記（flat list，與 sidebar 完全相同） -->
       <div class="col-lg-4 col-md-6 mb-4">
         <h4 class="text-primary mb-3 footer-title">閱讀＆筆記</h4>
         <ul class="list-unstyled footer-list">
           {{ range $name, $items := .Site.Taxonomies.categories }}
-            {{ if in (slice "書摘" "講座心得" "講座筆記" "閱讀心得" "電影心得") $name }}
-            <li class="footer-item">
+            {{ if in (slice "日常書寫" "閱讀心得" "書摘" "電影心得" "講座心得" "講座筆記") $name }}
+            <li class="footer-item" style="margin-bottom: 20px;">
               <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
                 {{ $name }} <span class="footer-count">({{ len $items }})</span>
               </a>
@@ -39,14 +43,30 @@
         </ul>
       </div>
 
+      <!-- 2. 自我成長（主類別可點擊 + 子類別，與 sidebar 完全相同） -->
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary mb-3 footer-title">個人反思</h4>
+        {{ $allCats := .Site.Taxonomies.categories }}
+        {{ $mainCat := index $allCats "自我成長" }}
+        
+        <h4 class="text-primary mb-3 footer-title">
+          <a href="/categories/自我成長/" style="color: inherit;">
+            自我成長 
+            {{ if $mainCat }}
+              <span class="footer-count">({{ len $mainCat.Pages }})</span>
+            {{ else }}
+              <span class="footer-count">(0)</span>
+            {{ end }}
+          </a>
+        </h4>
+        
         <ul class="list-unstyled footer-list">
-          {{ range $name, $items := .Site.Taxonomies.categories }}
-            {{ if in (slice "日常書寫" "自我成長" "親密關係") $name }}
-            <li class="footer-item">
-              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
-                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+          {{ $targetCats := slice "親密關係" "成為一個人" "一行禪師" }}
+          {{ range $catName := $targetCats }}
+            {{ $cat := index $allCats $catName }}
+            {{ if $cat }}
+            <li class="footer-item" style="margin-bottom: 20px;">
+              <a class="text-dark" href="{{ `/categories/` | relLangURL }}{{ $catName | urlize }}/">
+                {{ $catName }} <span class="footer-count">({{ len $cat.Pages }})</span>
               </a>
             </li>
             {{ end }}
@@ -54,31 +74,66 @@
         </ul>
       </div>
 
+      <!-- 3. 邁向助人工作（主類別可點擊 + 子類別，與 sidebar 完全相同） -->
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary mb-3 footer-title"><a href="/blog/會所模式/" style="color: inherit;">會所模式</a></h4>
+        {{ $allCats := .Site.Taxonomies.categories }}
+        {{ $mainCat := index $allCats "邁向助人工作" }}
+        
+        <h4 class="text-primary mb-3 footer-title">
+          <a href="/categories/邁向助人工作/" style="color: inherit;">
+            邁向助人工作
+            {{ if $mainCat }}
+              <span class="footer-count">({{ len $mainCat.Pages }})</span>
+            {{ else }}
+              <span class="footer-count">(0)</span>
+            {{ end }}
+          </a>
+        </h4>
+        
         <ul class="list-unstyled footer-list">
-          {{ range $name, $items := .Site.Taxonomies.categories }}
-            {{ if in (slice "會所實習" "會所工作手冊" "會所工作日誌") $name }}
-            <li class="footer-item">
-              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
-                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+          {{ $targetCats := slice "開放式對話" "創傷知情" "家族治療" "受苦的倒影" "建制民族誌" }}
+          {{ range $catName := $targetCats }}
+            {{ $cat := index $allCats $catName }}
+            {{ if $cat }}
+            <li class="footer-item" style="margin-bottom: 20px;">
+              <a class="text-dark" href="{{ `/categories/` | relLangURL }}{{ $catName | urlize }}/">
+                {{ $catName }} <span class="footer-count">({{ len $cat.Pages }})</span>
               </a>
             </li>
             {{ end }}
           {{ end }}
         </ul>
       </div>
+
     </div>
 
+    <!-- 第二行（維持原本 footer 的 mt-3 與 col 排版） -->
     <div class="row mt-3">
+
+      <!-- 4. 會所模式（主類別可點擊 + 子類別，與 sidebar 完全相同） -->
       <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary mb-3 footer-title">主題文章</h4>
+        {{ $allCats := .Site.Taxonomies.categories }}
+        {{ $mainCat := index $allCats "會所模式" }}
+        
+        <h4 class="text-primary mb-3 footer-title">
+          <a href="/categories/會所模式/" style="color: inherit;">
+            會所模式
+            {{ if $mainCat }}
+              <span class="footer-count">({{ len $mainCat.Pages }})</span>
+            {{ else }}
+              <span class="footer-count">(0)</span>
+            {{ end }}
+          </a>
+        </h4>
+        
         <ul class="list-unstyled footer-list">
-          {{ range $name, $items := .Site.Taxonomies.categories }}
-            {{ if in (slice "一行禪師" "創傷知情" "受苦的倒影" "邁向助人工作" "開放式對話") $name }}
-            <li class="footer-item">
-              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
-                {{ $name }} <span class="footer-count">({{ len $items }})</span>
+          {{ $targetCats := slice "會所實習" "會所工作日誌" "會所工作手冊" }}
+          {{ range $catName := $targetCats }}
+            {{ $cat := index $allCats $catName }}
+            {{ if $cat }}
+            <li class="footer-item" style="margin-bottom: 20px;">
+              <a class="text-dark" href="{{ `/categories/` | relLangURL }}{{ $catName | urlize }}/">
+                {{ $catName }} <span class="footer-count">({{ len $cat.Pages }})</span>
               </a>
             </li>
             {{ end }}
@@ -86,27 +141,13 @@
         </ul>
       </div>
 
-      <div class="col-lg-4 col-md-6 mb-4">
-        <h4 class="text-primary mb-3 footer-title">精選文章</h4>
-        <ul class="list-unstyled footer-list">
-          {{ range $name, $items := .Site.Taxonomies.categories }}
-            {{ if in (slice "成為一個人" "精選文章") $name }}
-            <li class="footer-item">
-              <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
-                {{ $name }} <span class="footer-count">({{ len $items }})</span>
-              </a>
-            </li>
-            {{ end }}
-          {{ end }}
-        </ul>
-      </div>
-
+      <!-- 5. Projects（flat list，與 sidebar 完全相同） -->
       <div class="col-lg-4 col-md-6 mb-4">
         <h4 class="text-primary mb-3 footer-title">Projects</h4>
         <ul class="list-unstyled footer-list">
           {{ range $name, $items := .Site.Taxonomies.categories }}
-            {{ if in (slice "素描" "聆聽疼痛計畫") $name }}
-            <li class="footer-item">
+            {{ if in (slice "素描" "聆聽疼痛計畫" "精選文章") $name }}
+            <li class="footer-item"style="margin-bottom: 20px;">
               <a class="text-dark" href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}">
                 {{ $name }} <span class="footer-count">({{ len $items }})</span>
               </a>
@@ -115,7 +156,13 @@
           {{ end }}
         </ul>
       </div>
+
+      <!-- 第六欄留空（維持原本 footer 的三欄結構） -->
+      <div class="col-lg-4 col-md-6 mb-4"></div>
+
     </div>
+  </div>
+</footer>
 
 
     {{ if .IsHome }}

@@ -15,7 +15,7 @@
     <ul class="list-unstyled">
       {{ range $name, $items := .Site.Taxonomies.categories }}
         {{ if in (slice "日常書寫" "閱讀心得" "書摘" "電影心得" "講座心得" "講座筆記" ) $name }}
-        <li class="mb-2">
+        <li style="margin-bottom: 16px;">
           <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" class="d-flex align-items-center position-relative" style="justify-content: center;">
             <span>{{ $name }}</span>
             <small class="text-muted position-absolute" style="right: 0;">({{ len $items }})</small>
@@ -47,7 +47,7 @@
       {{ range $catName := $targetCats }}
         {{ $cat := index $allCats $catName }}
         {{ if $cat }}
-          <li class="mb-2">
+        <li style="margin-bottom: 16px;">
             <a href="{{ "/categories/" | relLangURL }}{{ $catName | urlize }}/"
                class="d-flex align-items-center position-relative"
                style="justify-content: center;">
@@ -76,11 +76,11 @@
     </h4>
     
     <ul class="list-unstyled">
-      {{ $targetCats := slice "開放式對話" "創傷知情" "受苦的倒影" "建制民族誌"}}
+      {{ $targetCats := slice "開放式對話" "創傷知情" "家族治療" "受苦的倒影" "建制民族誌"}}
       {{ range $catName := $targetCats }}
         {{ $cat := index $allCats $catName }}
         {{ if $cat }}
-          <li class="mb-2">
+        <li style="margin-bottom: 16px;">
             <a href="{{ "/categories/" | relLangURL }}{{ $catName | urlize }}/"
                class="d-flex align-items-center position-relative"
                style="justify-content: center;">
@@ -113,7 +113,7 @@
       {{ range $catName := $targetCats }}
         {{ $cat := index $allCats $catName }}
         {{ if $cat }}
-          <li class="mb-2">
+        <li style="margin-bottom: 16px;">
             <a href="{{ "/categories/" | relLangURL }}{{ $catName | urlize }}/"
                class="d-flex align-items-center position-relative"
                style="justify-content: center;">
@@ -131,7 +131,7 @@
     <ul class="list-unstyled">
       {{ range $name, $items := .Site.Taxonomies.categories }}
         {{ if in (slice "素描" "聆聽疼痛計畫" "精選文章") $name }}
-        <li class="mb-2">
+        <li style="margin-bottom: 16px;">
           <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" class="d-flex align-items-center position-relative" style="justify-content: center;">
             <span>{{ $name }}</span>
             <small class="text-muted position-absolute" style="right: 0;">({{ len $items }})</small>
