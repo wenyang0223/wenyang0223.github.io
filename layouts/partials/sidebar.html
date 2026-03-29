@@ -14,7 +14,7 @@
     <h4 class="widget-title">閱讀＆筆記</h4>
     <ul class="list-unstyled">
       {{ range $name, $items := .Site.Taxonomies.categories }}
-        {{ if in (slice "日常書寫" "閱讀心得" "書摘" "電影心得" "講座心得" "講座筆記" "精選文章") $name }}
+        {{ if in (slice "日常書寫" "閱讀心得" "書摘" "電影心得" "講座心得" "講座筆記" ) $name }}
         <li class="mb-2">
           <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" class="d-flex align-items-center position-relative" style="justify-content: center;">
             <span>{{ $name }}</span>
@@ -26,6 +26,7 @@
     </ul>
   </div>
 
+  
   <div class="widget">
     {{ $allCats := .Site.Taxonomies.categories }}
     {{ $mainCat := index $allCats "自我成長" }}
@@ -75,7 +76,7 @@
     </h4>
     
     <ul class="list-unstyled">
-      {{ $targetCats := slice "開放式對話" "創傷知情" "受苦的倒影"}}
+      {{ $targetCats := slice "開放式對話" "創傷知情" "受苦的倒影" "建制民族誌"}}
       {{ range $catName := $targetCats }}
         {{ $cat := index $allCats $catName }}
         {{ if $cat }}
@@ -129,7 +130,7 @@
     <h4 class="widget-title">Projects</h4>
     <ul class="list-unstyled">
       {{ range $name, $items := .Site.Taxonomies.categories }}
-        {{ if in (slice "素描" "聆聽疼痛計畫") $name }}
+        {{ if in (slice "素描" "聆聽疼痛計畫" "精選文章") $name }}
         <li class="mb-2">
           <a href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}" class="d-flex align-items-center position-relative" style="justify-content: center;">
             <span>{{ $name }}</span>
