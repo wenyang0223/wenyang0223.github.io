@@ -80,14 +80,14 @@ copyright = "| copyright &copy; 2020 [Themefisher](https://themefisher.com) All 
 
 custom_css = ["css/custom.css"]
 
+# vercel analytics
+vercel_analytics = true
+vercel_speed_insights = true
+
 # Preloader
 [params.preloader]
 enable = false
 preloader = "" # use .png , .svg or .gif format
-
-# vercel analytics
-[params.vercel_analytics]
-  enable = true
 
 # search
 [params.search]

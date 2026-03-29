@@ -26,6 +26,13 @@
 <script defer src="/_vercel/insights/script.js"></script>
 {{ end }}
 
+{{ if .Site.Params.vercel_speed_insights }}
+<script>
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+{{ end }}
+
   <!-- Canonical -->
   <link rel="canonical" href="{{ if .IsHome }}https://listenriver.com/{{ else }}https://listenriver.com{{ .RelPermalink }}{{ end }}">
 
