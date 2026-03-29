@@ -85,6 +85,10 @@ custom_css = ["css/custom.css"]
 enable = false
 preloader = "" # use .png , .svg or .gif format
 
+# vercel analytics
+[params.vercel_analytics]
+  enable = true
+
 # search
 [params.search]
 enable = false

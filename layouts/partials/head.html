@@ -18,7 +18,13 @@
   </title>
 
 
-
+<!-- Vercel Web Analytics -->
+{{ if .Site.Params.vercel_analytics }}
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+{{ end }}
 
   <!-- Canonical -->
   <link rel="canonical" href="{{ if .IsHome }}https://listenriver.com/{{ else }}https://listenriver.com{{ .RelPermalink }}{{ end }}">
@@ -96,7 +102,5 @@
     a[href^="mailto:"] { color: #45afb7da; font-weight: bold; }
   </style>
 
-<!-- Vercel Web Analytics -->
-<script src="https://vercel.com/script.js" defer></script>
 
 </head>
