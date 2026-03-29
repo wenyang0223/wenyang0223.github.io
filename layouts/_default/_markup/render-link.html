@@ -1,0 +1,27 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+{{- $isInternal := false -}}
+
+{{- if strings.HasSuffix $u.Path ".md" -}}
+  {{- $isInternal = true -}}
+  {{- $page := .Page.GetPage $u.Path -}}
+  {{- if $page -}}
+    {{- $href = $page.RelPermalink -}}
+  {{- else -}}
+    {{- $path := strings.TrimSuffix ".md" $u.Path -}}
+    {{- $page = .Page.GetPage $path -}}
+    {{- if $page -}}
+      {{- $href = $page.RelPermalink -}}
+    {{- else -}}
+      {{- $href = strings.TrimSuffix ".md" .Destination -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $shouldBlank := or (strings.HasPrefix .Destination "http") $isInternal -}}
+
+<a href="{{ $href | safeURL }}"
+   {{- with .Title }} title="{{ . }}"{{ end }}
+   {{- if $shouldBlank }} target="_blank" rel="noopener noreferrer"{{ end }}>
+   {{- .Text | safeHTML -}}
+</a>
